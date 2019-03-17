@@ -1,0 +1,30 @@
+ 
+ 
+.search_space{
+	margin-right: 0px; 
+ }
+ 
+.boxes{
+	height: 445px;
+	background-color: #dd4b39;
+	border: 1px #fff dotted;
+ }
+ 
+.search_boxes{
+	height:170px;
+	background-color: #3c3130;
+	border: 1px #fff dotted;
+ }
+ 
+.search_top{
+	margin-top:5%;
+}
+
+.txt_cntr{
+	text-align: center;
+}
+
+.search_front{
+	margin-top:1%;
+	width: 30%;
+}
