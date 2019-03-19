@@ -7,7 +7,7 @@ $lesson=$this->uri->segment(3);
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-            E-Learning Slider > Light Vehicle > Lesson Three - Outside The City Limits
+        E-Learning Slider > <?php echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -165,8 +165,8 @@ $lesson=$this->uri->segment(3);
                 <h2 class="heading">
                     <span class="slide_title"></span>
                     <br />
-                    <small class="smallFont">Lesson Three
-                        <span class="darkSmallFont">| Outside The City Limits</span>
+                    <small class="smallFont">Lesson <?php  echo $lesson_data['0']['lesson_order'];?>
+                        <span class="darkSmallFont">| <?php echo $lesson_data['0']['lesson_name']; ?></span>
                     </small>
                 </h2>
 

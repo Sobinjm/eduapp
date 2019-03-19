@@ -17,6 +17,11 @@ class Dashboard extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('admin/dashboard');
+		if($this->session->userdata('role') == 1){
+			redirect('admin/course');
+		}
+		else{
+			$this->load->view('admin/dashboard');
+		}
 	}
 }
