@@ -175,7 +175,7 @@ $lesson=$this->uri->segment(3);
         <!--Content Wrapper-->
         <div class="blockClass contentWrapper">
             <div class="container">
-            <?php if(sizeof($result) <1){echo "<h3>There are no coursed added to this lesson yet.</h3>";}?>
+            <?php if(sizeof($result) <1){echo "<h3>There are no slides added to this lesson yet.</h3>";}?>
                 <h2 class="heading">
                     <span class="slide_title"></span>
                     <br />
