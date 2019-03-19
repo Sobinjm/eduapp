@@ -31,6 +31,7 @@ class Lesson extends CI_Controller {
 		$assigned_course = $this->mdashboard_model->getmycourses($student_id);
 		$course_info = $this->mdashboard_model->course_info($assigned_course['0']['course']);
 		$data['course_info']=$course_info;
+		$data['lesson_data']=$this->mlesson_model->getlessonid($lesson_id);
 		// $data=$qry;
 		$this->load->view('front/lesson',$data);
 	}
