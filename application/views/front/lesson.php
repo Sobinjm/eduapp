@@ -65,7 +65,10 @@ $lesson=$this->uri->segment(3);
                             <?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?>
                         </div>
                         <?php 
-                            if(sizeof($result) >=1){?>
+                            if(sizeof($result) >=1 ){
+                                if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio')
+                                {
+                                ?>
                              <!--Absolute Overlay-->
                             <div class="overlay">
                                 <button class="blockClass fontButton fontButtonAbsolute" id="start">Start Now
@@ -74,6 +77,14 @@ $lesson=$this->uri->segment(3);
                                 <button class="blockClass fontButton fontButtonAbsolute" id="next" style="display: none;">Next</button>
                             </div>
                             <?php 
+                            }
+                            else{
+                                ?>
+                                    <div class="overlay">
+                                        <button class="blockClass fontButton fontButtonAbsolute" id="next">Next</button>
+                                    </div>
+                                <?php
+                            }
                             }
                             ?>
                 <!-- Script for the video player -->
