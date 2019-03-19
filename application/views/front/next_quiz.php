@@ -8,6 +8,8 @@ $quiz=$result[$quiz_id[0]];
 
 $q1=json_decode($quiz['right_answer']);
 
+$d1=json_decode($quiz['drag_drop']);
+$d1=(array)$d1;
 $q1=(array)$q1;  
 // print_r($q1);
 if($quiz_count==$quiz_id[0]+1)
@@ -105,6 +107,94 @@ else if($quiz_type=='right_answer'){
 
     <img src="'.base_url().'front/images/videoBg.jpg" />
 ';
+
+}
+else{
+
+$var='
+<!--Absolute Overlay-->
+               <div class="overlay">
+                   <!--Left Instruction-->
+                <div class="instruction">
+                       <i class="fa fa-question-circle coloredI" aria-hidden="true"></i>
+                       Please select the correct answer to following question
+                   </div>
+                   <!--Left Instruction-->
+                   <div class="holder">
+                    <ul>
+                        
+                        <li>
+                       <a draggable="true" href="" id="two"  class="centerBlockContainer with4Buttons">
+                           <span class="buttonLabels">B</span>
+                           '.$d1['question_two']->matching_answer.'
+                       </a>
+                        </li>
+                        <li>
+                       <a draggable="true" href="" id="one"  class="centerBlockContainer with4Buttons">
+                           <span class="buttonLabels">A</span>
+                           '.$d1['question_one']->matching_answer.'
+                       </a>
+                        </li>
+                        <li>
+                       <a draggable="true" href="" id="three" class="centerBlockContainer with4Buttons">
+                           <span class="buttonLabels">C</span>
+                           '.$d1['question_three']->matching_answer.'
+                       </a>
+                        </li>
+                        
+                    </ul>
+                    </div>
+                  
+
+                   <!--Buttons--> 
+                   <div class="blockClass v_Buttons v_Buttons4Part ans">
+                   <ul>
+                      <li> <a class="v_ButtonBlock v_ButtonDanger bin" id="bin1" data-ans="">
+                         </a>
+                        </li>
+                        <li> <a  class="v_ButtonBlock v_ButtonDanger">
+                           <span class="buttonLabels">A</span>
+                           '.$d1['question_one']->question.'
+                            </a>
+                        </li>
+
+                   </ul>
+                   <ul>
+                       <li>
+                       <a  class="v_ButtonBlock bin" id="bin2" data-ans="">
+                          
+                       </a>
+                        </li>
+                        <li>
+                       <a  class="v_ButtonBlock v_ButtonSuccess">
+                           <span class="buttonLabels">C</span>
+                           '.$d1['question_two']->question.'
+                       </a>
+                       </li>
+
+                   </ul>
+                   <ul>
+                    <li>
+                       <a  class="v_ButtonBlock" id="bin3" data-ans="">
+                           
+                           
+                       </a>
+                    </li>
+                    <li>
+                       <a  class="v_ButtonBlock">
+                           <span class="buttonLabels">D</span>
+                           '.$d1['question_three']->question.'
+                       </a>
+                    </li>
+                       </ul>
+                      
+                   </div>
+                   <!--Buttons-->
+               </div>
+               <!--Absolute Overlay-->
+               <img src="'.base_url().'front/images/videoBg.jpg" />
+';
+
 
 }
             $data['data']=$var;

@@ -418,7 +418,7 @@ header {
 .videoFrame {
     background: #000000;
     text-align: center;
-    width: 700px;
+    width: 50%;
     margin: 0 auto;
     position: relative;
 }

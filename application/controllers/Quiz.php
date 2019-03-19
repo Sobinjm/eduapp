@@ -14,6 +14,7 @@ class Quiz extends CI_Controller {
 			}
         $this->load->model('student/Mdashboard', 'mdashboard_model');
         $this->load->model('admin/Mquiz', 'mquiz_model');	
+        $this->load->model('admin/Mlesson', 'mlesson_model');
 	}
 	
 	
@@ -43,7 +44,7 @@ class Quiz extends CI_Controller {
 		print_r($getalllessons);
 		echo '</pre>';
 		*/
-		$this->load->view('front/lesson_six', $data);
+		$this->load->view('front/test_quiz', $data);
     }
     public function next_quiz()
 	{
@@ -51,6 +52,26 @@ class Quiz extends CI_Controller {
         $lessonid = $this->input->get('lesson_no');
         $data['result']=$this->mquiz_model->getQuizForLesson($lessonid);
         $this->load->view('front/next_quiz', $data);
+    }
+    public function update_score()
+    {
+        $student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
+        $lesson_id=$_GET['lesson_id'];
+        $assign_id=$_GET['assign_id'];
+        $score=$_GET['score'];
+        $score_value='~'.$lesson_id.'=>'.$score;
+        $update_data=array(
+			'score'=>$score_value
+        );
+        // $this->mquiz_model->update_score($assigned_id,$update_data);
+        $data['result'] = $this->mquiz_model->update_score($assign_id,$update_data);
+        $update_data2=array(
+			'completed_lessons'=>$lesson_id
+        );
+        $data['result'] = $this->mlesson_model->update_completion($assign_id,$update_data2);
+		// $data['sl_no']=$slider_number;
+        $this->load->view('front/score',$data);
+
     }
     public function getlesson()
 		{

@@ -72,6 +72,11 @@ class Mlesson extends CI_Model
 			return $query->result_array();
 		}
 		
-		
+		function update_completion($id,$up_data){
+			$this->db->where('id',$id);
+			$this->db->update('ad_assignments',$up_data);
+			
+		}
+
 		
 	}

@@ -24,6 +24,13 @@ class Mquiz extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_quiz WHERE lessonid = '".$lessonid."' ORDER BY quiz_id ASC");	
 			return $query->result_array();
 		}
+
+		function update_score($id,$up_data){
+			$this->db->where('id',$id);
+			$this->db->update('ad_assignments',$up_data);
+			// return $query->result_array();
+		}
+
 	
 		
 		

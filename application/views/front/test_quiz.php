@@ -1,49 +1,7 @@
-
-
-
-
- <style>
-                .holder ul li {
-                    margin:10px;
-                    padding: 10px;
-                    display:inline;
-                    
-                }
-                .holder ul li a{
-                line-height: 64px;
-                }
-                .ans ul li{
-                    margin:10px;
-                    padding: 10px;
-                    display:inline;
-                    /* float:left; */
-                    
-                    
-                }
-                .ans ul li a{
-                    width: 40% !important;
-                    margin-bottom:0px !important;
-                }
-                </style>
-
-
 <?php
 $this->load->view('front/header');
-$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
-$assigned_course = $this->mdashboard_model->getmycourses($student_id);
-// print_r($assigned_course);
 ?>
-<input type="hidden" id="assign_id" value="<?php echo $assigned_course[0]['id'] ; ?>">
-<input type="hidden" id="lesson_id" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>">
-<style>
-    .correct{
-        background-color:green !important;
-    }
-    .wrong{
-        background-color:red !important;
-    }
-    </style>
-<input type="hidden" id="score" value="0">
+
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
@@ -65,11 +23,138 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
     <section class="blockClass mainSection">
         <!--Video Wrapper-->
         <div class="blockClass videoFrameWrapper">
-            <div class="videoFrame" id="content_div">
-                <img src="<?php echo base_url(); ?>front/images/quiz.jpg" />
+            <div class="videoFrame" >
+                
+            <style>
+                .holder ul li {
+                    margin:10px;
+                    padding: 10px;
+                    display:inline;
+                    
+                }
+                .ans ul li{
+                    margin:10px;
+                    padding: 10px;
+                    display:inline;
+                    /* float:left; */
+                    
+                    
+                }
+                .ans ul li a{
+                    width: 40% !important;
+                    margin-bottom:0px !important;
+                }
+                </style>
+ <!--Absolute Overlay-->
+                <div class="overlay">
+                    <!--Left Instruction-->
+                    <div class="instruction">
+                        <i class="fa fa-question-circle coloredI" aria-hidden="true"></i>
+                        Please select the correct answer to following question
+                    </div>
+                    <!--Left Instruction-->
+                    <div class="holder">
+    <ul>
+       
+<li>
+                        <a draggable="true" href="" id="one" class="centerBlockContainer with4Buttons">
+                            <span class="buttonLabels">A</span>
+                            If you feel sleepy
+                        </a>
+</li>
+<li>
+                        <a draggable="true" href="" id="two"  class="centerBlockContainer with4Buttons">
+                            <span class="buttonLabels">B</span>
+                            If you feel sleepy
+                        </a>
+</li><br>
+<li>
+                        <a draggable="true" href="" id="three" class="centerBlockContainer with4Buttons">
+                            <span class="buttonLabels">C</span>
+                            If you feel sleepy
+                        </a>
+</li>
+    <li>
+                        <a draggable="true" href="" id="four" class="centerBlockContainer with4Buttons">
+                            <span class="buttonLabels">D</span>
+                            If you feel sleepy
+                        </a>
+</li>
+</ul>
+</div>
+                    <!--Center Block-->
+                    <div class="centerBlockContainer with4Buttons" id="bin">
+                        <span class="absoluteContent">What is the best decision when you feel sleepy?</span>
+                    </div>
+                    <!--Center Block-->
+
+                    <!--Buttons--> 
+                    <div class="blockClass v_Buttons v_Buttons4Part ans">
+                    <ul>
+                       <li> <a class="v_ButtonBlock v_ButtonDanger bin" id="bin1">
+                            
+                        </a>
+            </li>
+            <li> <a  class="v_ButtonBlock v_ButtonDanger">
+                            <span class="buttonLabels">A</span>
+                            If you feel sleepy, stop and rest where it is safe to do so.
+                        </a>
+            </li>
+
+                    </ul>
+                    <ul>
+                        <li>
+                        <a  class="v_ButtonBlock bin" id="bin2">
+                           
+                        </a>
+            </li>
+                <li>
+                        <a  class="v_ButtonBlock v_ButtonSuccess">
+                            <span class="buttonLabels">C</span>
+                            If you feel sleepy, stop and rest where it is safe to do so.
+                        </a>
+                        </li>
+
+                    </ul>
+<ul>
+    <li>
+                        <a  class="v_ButtonBlock" id="bin3">
+                            
+                            
+                        </a>
+            </li>
+            <li>
+                        <a  class="v_ButtonBlock">
+                            <span class="buttonLabels">D</span>
+                            If you feel sleepy, stop and rest where it is safe to do so.
+                        </a>
+            </li>
+                        </ul>
+                        <ul>
+    <li>
+                        <a  class="v_ButtonBlock" id="bin4">
+                            
+                            
+                        </a>
+            </li>
+            <li>
+                        <a  class="v_ButtonBlock">
+                            <span class="buttonLabels">D</span>
+                            If you feel sleepy, stop and rest where it is safe to do so.
+                        </a>
+            </li>
+                        </ul>
+                    </div>
+                    <!--Buttons-->
+                </div>
+                <!--Absolute Overlay-->
+
+
+                <img src="<?php echo base_url(); ?>front/images/videoBg.jpg" />
             </div>
         </div>
         <!--Video Wrapper-->
+ 
 
         <!--Content Wrapper-->
         <div class="blockClass contentWrapper">
@@ -93,7 +178,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
                     <!--Left-->
 
                     <!--Right-->
-                    <button class=" next_quiz blockClass fontButton fontButtonInline">Start Questions
+                    <button onclick="javascript:window.location.href='seven'" class="blockClass fontButton fontButtonInline">Next Questions
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </button>
                     <!--Right-->
@@ -110,122 +195,13 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
         <!--Content Wrapper-->
     </section>
     <!--Section-->
+
 <?php
 $this->load->view('front/footer');
 ?>
 
-
-
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){  
-        var quiz_count=0; 
-        var score=0;
-var base_url='<?php echo base_url(); ?>';
-$(document).on('click','.ans_btn2',function()
-{
-    $('.ans_btn2').attr("disabled", "disabled");
-    
-    if($(this).attr('data-answer')=='yes')
-    {
-        score= $('#score').val();
-        score++;
-        $('#score').val(score);
-        $(this).addClass(' v_ButtonSuccess');
-    }
-    else{
-        $(this).addClass(' v_ButtonDanger');
-        $("[data-answer=yes]").addClass('v_ButtonSuccess');
-    }
-});
-$(document).on('click','.ans_btn',function()
-{
-    // alert();
-    $('.ans_btn').attr("disabled", "disabled");
-    
-    var choose=$(this).attr('data-value');
-    var ans = $('#quiz1_ans').val();
-    if(choose==ans)
-    {   
-       score= $('#score').val();
-        $(this).addClass(' correct');
-        score++;
-        $('#score').val(score);
-        // alert(score+'->'+ans);
-    }
-    else{
-        $(this).addClass(' wrong');
-        $("[data-value=true]").addClass('correct');
-    }
-});
-$(".next_quiz").click(function()
-{       
-    // alert();
-    
- $.ajax({
-     type: "GET",
-     url: base_url + "/index.php/quiz/next_quiz/", 
-     data: {quiz_id: quiz_count, lesson_no:2},
-     contentType: 'text',
-     success: 
-          function(result){
-            //   alert(JSON.stringify(result));
-              var obj=JSON.parse(result);
-              $('#content_div').html(obj.data);
-            //   alert(obj.data);
-              if(obj.final==false)
-                {
-                    $(".next_quiz").html('Next Question');
-                }
-                else{
-                    $(".next_quiz").html('Finish');
-                    $(".next_quiz").attr('id','finish');
-                    $(".next_quiz").removeClass("next_quiz").addClass('finish_btn');
-                }
-                test();
-                quiz_count++;
-            // alert(JSON.stringify(result));  //as a debugging message.
-          },
-          error:function(ex){
-            alert(JSON.stringify(ex));
-          }
-      });// you have missed this bracket
-//  return false;
-// alert();
-});
 
-
-});
-</script>
-
-<script>
-$(document).on('click','#finish',function()
-{
-// alert();
-var base_url='<?php echo base_url(); ?>';
-var lessonID=$('#lesson_id').val();
-var assignID=$('#assign_id').val();
-var scoreValue=$('#score').val();
-alert(lessonID+'---'+assignID);
-$.ajax({
-                                 type: "GET",
-                                 url: base_url + "/index.php/quiz/update_score/", 
-                                 data: {lesson_id : lessonID, assign_id : assignID,score:scoreValue},
-                                 contentType: 'json',
-                                 success: function(result){
-                                    alert(JSON.stringify(result));
-                                 },
-                                 error:function(ex){
-                                    alert(JSON.stringify(ex));
-                                }
-                            });
-   
-
-});
 var addEvent = (function () {
   if (document.addEventListener) {
     return function (el, type, fn) {
@@ -276,10 +252,7 @@ addEvent(window, 'click', function (event) {
   
 })();
 
-function test()
-{
-    var mark=0;
-// alert();
+
   var eat = ['yum!', 'gulp', 'burp!', 'nom'];
   var yum = document.createElement('p');
   var msie = /*@cc_on!@*/0;
@@ -297,6 +270,7 @@ function test()
     });
   }
 
+  var bin4 = document.querySelector('#bin4');
 
   var bin1 = document.querySelector('#bin1');
 
@@ -304,7 +278,37 @@ function test()
 
   var bin3 = document.querySelector('#bin3');
 
-  
+  addEvent(bin4, 'dragover', function (e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    this.className = 'v_ButtonBlock over';
+    e.dataTransfer.dropEffect = 'cv_ButtonBlock copy';
+    return false;
+  });
+
+  // to get IE to work
+  addEvent(bin4, 'dragenter', function (e) {
+    this.className = 'v_ButtonBlock over';
+    return false;
+  });
+
+  addEvent(bin4, 'dragleave', function () {
+    this.className = 'v_ButtonBlock ';
+  });
+
+  addEvent(bin4, 'drop', function (e) {
+    if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
+
+    var el = document.getElementById(e.dataTransfer.getData('Text'));
+    
+    el.parentNode.removeChild(el);
+    bin4.appendChild(el);
+
+    // stupid nom text + fade effect
+    bin4.className = 'v_ButtonBlock';
+    
+    return false;
+  });
+
   
 
   addEvent(bin1, 'dragover', function (e) {
@@ -326,7 +330,7 @@ function test()
 
   addEvent(bin1, 'drop', function (e) {
     if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
-   
+
     var el = document.getElementById(e.dataTransfer.getData('Text'));
     
     el.parentNode.removeChild(el);
@@ -334,15 +338,7 @@ function test()
 
     // stupid nom text + fade effect
     bin1.className = 'v_ButtonBlock';
-    if(el.id=='one')
-    {
-        
-        mark++;
-        if(mark==3)
-        {
-            score();
-        }
-    }
+    
     return false;
   });
 
@@ -374,15 +370,7 @@ function test()
 
     // stupid nom text + fade effect
     bin2.className = 'v_ButtonBlock';
-    if(el.id=='two')
-    {
-        
-        mark++;
-        if(mark==3)
-        {
-            score();
-        }
-    }
+    
     return false;
   });
 
@@ -414,25 +402,9 @@ function test()
 
     // stupid nom text + fade effect
     bin3.className = 'v_ButtonBlock';
-    if(el.id=='three')
-    {
-        
-        mark++;
-        
-        if(mark==3)
-        {
-            score();
-        }
-    }
+    
     return false;
   });
-}
-function score()
-{
-    var score=$('#score').val();
-    score++;
-        $('#score').val(score);
-        // alert($('#score').val());
-}
+
 
 </script>
