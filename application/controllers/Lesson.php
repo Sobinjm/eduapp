@@ -17,7 +17,6 @@ class Lesson extends CI_Controller {
 		$this->load->model('student/Mdashboard', 'mdashboard_model');	
 	}
 	
-	
 	public function index()
 	{
 		$this->load->view('front/lesson');
