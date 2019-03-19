@@ -220,25 +220,30 @@
 									<p class="wrapper"></p>
 									<div class="row">
 										<div class="col-lg-2 ci_info_right ci_info_left" style="background-color:orange;"><span class="float-left" style="color:red;font-size: 32px;border-right: 10px orange solid;"><?php echo count($getalllessons); ?></span>Lesson<p>Required</p> </div>
-										<div class="col-lg-2 ci_info_right" style="background-color:orange;"><span class="float-left" style="color:red;font-size: 32px;border-right: 10px orange solid;">2</span>Lesson<p> Completed</p></div>
-										<div class="col-lg-2 ci_info_right" style="background-color:orange;"><span class="float-left" style="color:red;font-size: 32px;border-right: 10px orange solid;">2</span>Lesson<p> Completed</p></div>
+										<div class="col-lg-2 ci_info_right" style="background-color:orange;"><span class="float-left" style="color:red;font-size: 32px;border-right: 10px orange solid;"><?php echo $assigned_course['0']['completed_lessons'] ?></span>Lesson<p> Completed</p></div>
 										<div class="col-lg-6 ci_info_right" style="background-color:#425259;">
 											<div class="row">
 												<div class="col-lg-6 col-md-6 col-sm-12">
 													<p>Progress:</p>
 												</div>
 												<div class="col-lg-6 col-md-6 col-sm-12">
-													<p class="pull-right">%25 Completed</p>
+													<p class="pull-right"><?php 
+														$total_lessons=count($getalllessons);
+														$lessons_completed=$assigned_course['0']['completed_lessons'];
+														$percentage=($lessons_completed/$total_lessons)*100;
+														$per= number_format((float)$percentage,2,'.','');
+														echo $per;
+													?></p>
 												</div>
 												<div class="col-lg-12 col-md-12 col-sm-12">
 													<div class="progress">
-														<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:25%;background-color:orange;">
+														<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?php echo $per; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $per; ?>%;background-color:orange;">
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%;background-color:orange;">
+										<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="<?php ?>" aria-valuemin="0" aria-valuemax="100" style="width:25%;background-color:orange;">
 										</div>
 									</div>
 								<?php //} ?>

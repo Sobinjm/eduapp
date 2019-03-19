@@ -7,7 +7,7 @@ $lesson=$this->uri->segment(3);
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-            E-Learning Slider > Light Vehicle > Lesson Three - Outside The City Limits
+        E-Learning Slider > <?php echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -30,6 +30,8 @@ $lesson=$this->uri->segment(3);
                     </div>
                         <div id="vid_div" align="center" class="embed-responsive embed-responsive-16by9">
                             <?php 
+                            if(sizeof($result) >=1){
+                            
                                 if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio' )
                                 {                                   
                             ?>
@@ -43,26 +45,48 @@ $lesson=$this->uri->segment(3);
                                 </a>
                               </p>
                             </video>
+                            
                             <?php
                                 } 
                                 else
                                 {
                             ?>      
                                 <img src="<?php echo base_url().$result['0']['slide_file']; ?>" class="img-responsive"/>
+                                <div class="overlay">
+                                    <button class="blockClass fontButton fontButtonAbsolute" id="next">Next</button>
+                                </div>
                             <?php       
                                 }
+                            }
+                            
                             ?>
                         </div>
                         <div class="table_padding bordered_video_desc">
-                            <?php echo $result[0]['slide_description']; ?>
+                            <?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?>
                         </div>
-                <!--Absolute Overlay-->
-                <div class="overlay">
-                    <button class="blockClass fontButton fontButtonAbsolute" id="start">Start Now
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button>
-                    <button class="blockClass fontButton fontButtonAbsolute" id="next" style="display: none;">Next</button>
-                </div>
+                        <?php 
+                            if(sizeof($result) >=1 ){
+                                if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio')
+                                {
+                                ?>
+                             <!--Absolute Overlay-->
+                            <div class="overlay">
+                                <button class="blockClass fontButton fontButtonAbsolute" id="start">Start Now
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </button>
+                                <button class="blockClass fontButton fontButtonAbsolute" id="next" style="display: none;">Next</button>
+                            </div>
+                            <?php 
+                            }
+                            else{
+                                ?>
+                                    <div class="overlay">
+                                        <button class="blockClass fontButton fontButtonAbsolute" id="next">Next</button>
+                                    </div>
+                                <?php
+                            }
+                            }
+                            ?>
                 <!-- Script for the video player -->
 
                  <div class="bottom_right" style="display: none;">
@@ -162,11 +186,12 @@ $lesson=$this->uri->segment(3);
         <!--Content Wrapper-->
         <div class="blockClass contentWrapper">
             <div class="container">
+            <?php if(sizeof($result) <1){echo "<h3>There are no slides added to this lesson yet.</h3>";}?>
                 <h2 class="heading">
                     <span class="slide_title"></span>
                     <br />
-                    <small class="smallFont">Lesson Three
-                        <span class="darkSmallFont">| Outside The City Limits</span>
+                    <small class="smallFont">Lesson <?php  echo $lesson_data['0']['lesson_order'];?>
+                        <span class="darkSmallFont">| <?php echo $lesson_data['0']['lesson_name']; ?></span>
                     </small>
                 </h2>
 
