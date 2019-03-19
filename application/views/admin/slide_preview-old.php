@@ -10,7 +10,6 @@
 		text-align: left;
 	}	
   </style>
-  
 <div class="container">  
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

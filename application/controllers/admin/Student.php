@@ -28,9 +28,18 @@ class Student extends CI_Controller {
 		$data['result']  	=	$this->mstudent_model->getProfileInformation($student_id);
 		$mycourses			=	$this->mstudent_model->getAssignedCourse($student_id);
 		$data['courses'] 	=	$mycourses;
-		$mylessons 		 	=  	$this->mstudent_model->getallmylessons($mycourses['0']['id']);
-		$data['mylessons'] 	=	$mylessons;
+		if(!empty($mycourses))
+		{
+			$mylessons 		 	=  	$this->mstudent_model->getallmylessons($mycourses['0']['id']);
+		$data['mylessons'] 	=	$mylessons ? $mylessons : 0;
 		$data['lessons'] 	=	$this->mstudent_model->getallcourse();
+		}
+		else{
+			$mylessons 		 	=  	0;
+		$data['mylessons'] 	=	$mylessons ? $mylessons : 0;
+		$data['lessons'] 	=	$this->mstudent_model->getallcourse();
+		}
+		
 		$this->load->view('admin/profile', $data);
 	}
 	

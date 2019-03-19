@@ -48,7 +48,6 @@ class Lesson extends CI_Controller {
 		$this->load->view('admin/lesson_view',$data);
 	}
 	
-	
 	public function preview()
 	{
 		$slideid = $this->crc_encrypt->decode($this->uri->segment(4));
@@ -226,7 +225,6 @@ class Lesson extends CI_Controller {
 							exit();
 						}
 				}
-
 				else 
 				{
 					$target_file_galry = $no_file_upload;
@@ -260,7 +258,6 @@ class Lesson extends CI_Controller {
 				}	
 		}
 	}
-	
 	
 	public function getlesson()
 		{

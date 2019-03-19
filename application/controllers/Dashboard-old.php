@@ -30,7 +30,6 @@ class Dashboard extends CI_Controller {
 		$data['course_info'] 		= $course_info;
 		$data['getalllessons'] 		= $getalllessons;
 		}
-		
 		else 
 		{
 			$data['course_info'] 		= '';

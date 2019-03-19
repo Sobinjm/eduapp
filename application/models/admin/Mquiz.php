@@ -19,6 +19,13 @@ class Mquiz extends CI_Model
 			$this->db->insert('ad_quiz',$insert_data);
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+		function getQuizForLesson($lessonid)
+		{
+			$query = $this->db->query("SELECT * FROM ad_quiz WHERE lessonid = '".$lessonid."' ORDER BY quiz_id ASC");	
+			return $query->result_array();
+		}
+	
+		
 		
 		
 		

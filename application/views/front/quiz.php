@@ -23,7 +23,7 @@ $this->load->view('front/header');
     <section class="blockClass mainSection">
         <!--Video Wrapper-->
         <div class="blockClass videoFrameWrapper">
-            <div class="videoFrame" id="content_div">
+            <div class="videoFrame">
                 <!--Absolute Overlay-->
                 <div class="overlay">
                     <!--Left Instruction-->

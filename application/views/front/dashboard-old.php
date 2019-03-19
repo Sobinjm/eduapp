@@ -20,7 +20,6 @@
 </head>
 <body>
     <!--Header-->
-    
    <header class="blockClass">
         <div class="container">
             <!--Logo-->
@@ -245,7 +244,6 @@
 							<hr/>
                             <div class="blockClass contentBlocks">
                                 <h4>
-                                	
                                     E-Learning Slider:
                                 </h4>
 								<div class="row">

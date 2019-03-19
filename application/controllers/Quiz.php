@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Quiz extends CI_Controller {
 
 	
 	function __construct()
@@ -12,7 +12,8 @@ class Dashboard extends CI_Controller {
 			{ 
 				redirect('login');
 			}
-		$this->load->model('student/Mdashboard', 'mdashboard_model');
+        $this->load->model('student/Mdashboard', 'mdashboard_model');
+        $this->load->model('admin/Mquiz', 'mquiz_model');	
 	}
 	
 	
@@ -30,7 +31,6 @@ class Dashboard extends CI_Controller {
 		$data['course_info'] 		= $course_info;
 		$data['getalllessons'] 		= $getalllessons;
 		}
-		
 		else 
 		{
 			$data['course_info'] 		= '';
@@ -43,8 +43,37 @@ class Dashboard extends CI_Controller {
 		print_r($getalllessons);
 		echo '</pre>';
 		*/
-		$this->load->view('front/dashboard', $data);
-	}
+		$this->load->view('front/lesson_six', $data);
+    }
+    public function next_quiz()
+	{
+        $data['quiz_id'] = $this->input->get('quiz_id');
+        $lessonid = $this->input->get('lesson_no');
+        $data['result']=$this->mquiz_model->getQuizForLesson($lessonid);
+        $this->load->view('front/next_quiz', $data);
+    }
+    public function getlesson()
+		{
+			$id = $this->security->xss_clean($this->input->post('id'));
+			if(empty($id))
+			{
+				echo 'empty_id';	
+			}
+			else 
+			{
+				$data = $this->crc_encrypt->decode($id);
+				$query = $this->mlesson_model->getlessonid($data);
+				if($query)
+				{		
+					echo json_encode($query);
+				}
+				else 
+				{
+					echo 'error';
+				}
+			}
+			
+		}	
 	
 	
 		

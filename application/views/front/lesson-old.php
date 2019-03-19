@@ -23,32 +23,16 @@ $this->load->view('front/header');
     <section class="blockClass mainSection">
         <!--Video Wrapper-->
         <div class="blockClass videoFrameWrapper">
-            <div class="videoFrame" id="content_div">
+            <div class="videoFrame">
                 <!--Absolute Overlay-->
                 <div class="overlay">
-                    <!--Left Instruction-->
-                    <div class="instruction">
-                        <i class="fa fa-question-circle coloredI" aria-hidden="true"></i>
-                        Please choose the correct answer:
-                    </div>
-                    <!--Left Instruction-->
-
-                    <!--Center Block-->
-                    <div class="centerBlockContainer with2Buttons">
-                        <span class="absoluteContent">Never stop on the hard shoulder of a motorway when you feel tired</span>
-                    </div>
-                    <!--Center Block-->
-
-                    <!--Buttons-->
-                    <div class="blockClass v_Buttons v_Buttons2Part">
-                        <button class="fontButton">True</button>
-                        <button class="fontButton">False</button>
-                    </div>
-                    <!--Buttons-->
+                    <button class="blockClass fontButton fontButtonAbsolute">Start Now
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </button>
                 </div>
                 <!--Absolute Overlay-->
 
-                <img src="<?php echo base_url(); ?>front/images/videoBg.jpg" />
+                <img src="<?php echo base_url(); ?>front/images/videoImage.jpg" />
             </div>
         </div>
         <!--Video Wrapper-->
@@ -75,7 +59,10 @@ $this->load->view('front/header');
                     <!--Left-->
 
                     <!--Right-->
-                    <button onclick="javascript:window.location.href='six'" class="blockClass fontButton fontButtonInline">Next Questions
+                    <!-- <button onclick="javascript:window.location.href='<?php echo base_url(); ?>quiz/view'" class="blockClass fontButton fontButtonInline">Next Slide
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </button> -->
+                    <button id="send" class="next_quiz blockClass fontButton fontButtonInline">Next Slide
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </button>
                     <!--Right-->
@@ -83,16 +70,39 @@ $this->load->view('front/header');
 
                 <div class="blockClass mainContentWrapper">
                     <h4 class="heading">Transcript</h4>
-                    <p class="paraSmall">
-                        To begin the questions please click in start questions
-                    </p>
+                    <p class="paraSmall">To begin your lesson please click start now</p>
                 </div>
             </div>
         </div>
         <!--Content Wrapper-->
     </section>
     <!--Section-->
-
 <?php
-$this->load->view('front/footer');
+$this->load->view('front/inner-footer');
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){  
+        var quiz_count=0; 
+var base_url='<?php echo base_url(); ?>';
+$(".next_quiz").click(function()
+{       
+    quiz_count++;
+ $.ajax({
+     type: "GET",
+     url: base_url + "/index.php/quiz/next_quiz/", 
+     data: {quiz_id: quiz_count, lesson_no:2},
+     contentType: 'text',
+     success: 
+          function(data){
+            alert(JSON.stringify(data));  //as a debugging message.
+          },
+          error:function(ex){
+            alert(JSON.stringify(ex));
+          }
+      });// you have missed this bracket
+//  return false;
+// alert();
+});
+});
+</script>

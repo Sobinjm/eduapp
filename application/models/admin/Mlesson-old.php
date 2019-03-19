@@ -8,7 +8,6 @@ class Mlesson extends CI_Model
 			$this->load->database();
 		}
 		
-		
 		function getAlllesson()
 		{
 			$query = $this->db->query("SELECT * FROM ad_lessons ORDER BY created_on DESC");	
@@ -28,17 +27,12 @@ class Mlesson extends CI_Model
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
 		
-		//function for updating the slides completed
-		function update_slides($id,$up_data){
-			$this->db->where('id',$id);
-			$this->db->update('ad_assignments',$up_data);
-		}
-
 		function delete_lesson($data)
 		{
 			$this->db->delete('ad_lessons',$data);
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+		
 		
 		function getlessonforcourse($courseid,$language)
 		{
