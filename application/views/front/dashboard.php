@@ -216,6 +216,9 @@
 									</div>
 									<p>
 										<b>Course Informations:</b>
+										<?php 
+										// print_r($getalllessons); 
+										?>
 									</p>
 									<p class="wrapper"></p>
 									<div class="row">
@@ -257,22 +260,55 @@
 									<?php 
 									if(!empty($assigned_course) && $assigned_course !== '') 
 										{ 
+											// print_r($assigned_course);
 											foreach($getalllessons as $getl)
 											{
 									?>
 									 <div class= "col-xl-3 col-lg-3 col-md-6 col-sm-12">
 										<div class="blockClass">
 											<div class="fourColumnBlock" style="background: url(<?php echo base_url(); ?><?php echo $getl['icon_file']; ?>) center no-repeat; background-size: cover;">
-												<div class="serialNo">
-													<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
+												
+												<?php 
+													if($assigned_course[0]['completed_lessons']==$getl['id'])
+													{
+														?>
+														<div class="serialNo" style="background:green;">
+													<a  href="#!" style="color:white; text-decoration: none;"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
 													<br/> Lesson</a>
+													<?php
+													}
+													else{
+														?>
+														<div class="serialNo">
+														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
+													<br/> Lesson</a>
+														<?php
+													}
+													?>
 												</div>
 												<div class="lessionDetailsLabel">
-													<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;">
+												<?php 
+													if($assigned_course[0]['completed_lessons']==$getl['id'])
+													{
+														?>
+													<a  href="#!" style="color:white; background-color:green; text-decoration: none;">
 													<?php 
 													echo $getl['lesson_name'];
 													?>
 													</a>
+													<?php
+													}
+													else{
+														?>
+														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;">
+													<?php 
+													echo $getl['lesson_name'];
+													?>
+													</a>
+														<?php
+													}
+													?>
+													
 												</div>
 												<div class="lessionDetails">
 													<span>
@@ -282,9 +318,26 @@
 														<i class="fa fa-clock-o" aria-hidden="true"></i> 60 min
 													</span>
 												</div>
-												<div class="lessStatus">
-													<i class="fa fa-clock-o" aria-hidden="true"></i> Pending!
+												<?php 
+													if($assigned_course[0]['completed_lessons']==$getl['id'])
+													{
+														?>
+												<div class="lessStatus" style="background:green;">
+													<i class="fa fa-clock-o" aria-hidden="true"></i>
+													Completed
 												</div>
+												<?php
+												
+													}
+													else{
+														?>
+														<div class="lessStatus" >
+															<i class="fa fa-clock-o" aria-hidden="true"></i>
+															Pending!
+														</div>
+														<?php
+														}
+													?>
 											</div>
 										</div>
 									</div>                      

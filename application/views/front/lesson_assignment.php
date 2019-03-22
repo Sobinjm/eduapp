@@ -217,7 +217,8 @@ $.ajax({
                                  data: {lesson_id : lessonID, assign_id : assignID,score:scoreValue},
                                  contentType: 'json',
                                  success: function(result){
-                                    alert(JSON.stringify(result));
+                                    // alert(JSON.stringify(result));
+                                    window.location.href =base_url +"/dashboard";
                                  },
                                  error:function(ex){
                                     alert(JSON.stringify(ex));
