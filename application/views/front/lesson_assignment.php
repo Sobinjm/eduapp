@@ -32,9 +32,11 @@ $this->load->view('front/header');
 $student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 $assigned_course = $this->mdashboard_model->getmycourses($student_id);
 // print_r($assigned_course);
+// print_r($course_info);
 ?>
 <input type="hidden" id="assign_id" value="<?php echo $assigned_course[0]['id'] ; ?>">
-<input type="hidden" id="lesson_id" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>">
+<!-- <input type="hidden" id="lesson_id" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>"> -->
+<input type="hidden" id="lesson_id" value="<?php  echo $data[0]['lesson_order']; ?>">
 <style>
     .correct{
         background-color:green !important;
@@ -47,7 +49,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-            E-Learning Slider > Light Vehicle > Lesson Three - Outside The City Limits
+            E-Learning Slider > <?php echo $course_info[0]['course_name']; ?> > <?php echo $data[0]['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -75,10 +77,10 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
         <div class="blockClass contentWrapper">
             <div class="container">
                 <h2 class="heading">
-                    Safety check before setting out
+                <?php echo $data[0]['lesson_name'] ?>
                     <br />
-                    <small class="smallFont">Lesson Three
-                        <span class="darkSmallFont">| Outside The City Limits</span>
+                    <small class="smallFont">Lesson <?php echo $data[0]['lesson_order'] ?>
+                        <!-- <span class="darkSmallFont">| Outside The City Limits</span> -->
                     </small>
                 </h2>
 
@@ -88,7 +90,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
                         <span class="labelIcon">
                             <i class="fa fa-car" aria-hidden="true"></i>
                         </span>
-                        LIGHT VEHICLE
+                        <?php echo $course_info[0]['course_name']; ?>
                     </div>
                     <!--Left-->
 

@@ -29,8 +29,10 @@
 
             <!--Site Links-->
 			<?php 
+			$timeout=0;
 			if (!$this->session->has_userdata('logged_in') || $this->session->userdata('logged_in') !== TRUE)
 			{ 
+				
 			?>
 			<div class="siteLinksContainer">
                <?php if($this->uri->segment(1) == 'admin') { ?>
@@ -131,6 +133,7 @@
 										$today  = new DateTime();
 										if($starting_date > $today) 
 										{
+											
 									?>
 									<button type="button" class="btn btn-secondary" style="width: 100%;">
 										Your next class will be on:</br> 
@@ -153,6 +156,7 @@
 										}
 										else if($ending_date < $today)
 										{
+											$timeout=1;
 									?>
 									<button type="button" class="btn btn-secondary" style="width: 100%;">
 										Course expired on:</br> 
@@ -236,6 +240,8 @@
 														$percentage=($lessons_completed/$total_lessons)*100;
 														$per= number_format((float)$percentage,2,'.','');
 														echo $per;
+														// print_r($assigned_course);
+														// print_r($query);
 													?></p>
 												</div>
 												<div class="col-lg-12 col-md-12 col-sm-12">
@@ -261,6 +267,7 @@
 									if(!empty($assigned_course) && $assigned_course !== '') 
 										{ 
 											// print_r($assigned_course);
+											// print_r($getalllessons);
 											foreach($getalllessons as $getl)
 											{
 									?>
@@ -269,45 +276,29 @@
 											<div class="fourColumnBlock" style="background: url(<?php echo base_url(); ?><?php echo $getl['icon_file']; ?>) center no-repeat; background-size: cover;">
 												
 												<?php 
-													if($assigned_course[0]['completed_lessons']==$getl['id'])
+													if($assigned_course[0]['completed_lessons']>=$getl['lesson_order'])
 													{
 														?>
 														<div class="serialNo" style="background:green;">
-													<a  href="#!" style="color:white; text-decoration: none;"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
-													<br/> Lesson</a>
+													 <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
+													<br/> Lesson
 													<?php
 													}
 													else{
+														
 														?>
-														<div class="serialNo">
-														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
-													<br/> Lesson</a>
+														<div class="serialNo"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
+													<br/> Lesson
 														<?php
 													}
 													?>
 												</div>
 												<div class="lessionDetailsLabel">
-												<?php 
-													if($assigned_course[0]['completed_lessons']==$getl['id'])
-													{
-														?>
-													<a  href="#!" style="color:white; background-color:green; text-decoration: none;">
+												
 													<?php 
 													echo $getl['lesson_name'];
 													?>
-													</a>
-													<?php
-													}
-													else{
-														?>
-														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;">
-													<?php 
-													echo $getl['lesson_name'];
-													?>
-													</a>
-														<?php
-													}
-													?>
+													
 													
 												</div>
 												<div class="lessionDetails">
@@ -319,7 +310,18 @@
 													</span>
 												</div>
 												<?php 
-													if($assigned_course[0]['completed_lessons']==$getl['id'])
+												if($timeout!=1)
+												{
+													if(($assigned_course[0]['completed_lessons']+1)==$getl['lesson_order'])
+													{
+													?>
+														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"><div class="lessStatus" style="background:green;">
+														<i class="fa fa-play" aria-hidden="true"></i>
+														Start now
+													</div></a>
+												<?php
+													}
+													else if($assigned_course[0]['completed_lessons']>=$getl['lesson_order'])
 													{
 														?>
 												<div class="lessStatus" style="background:green;">
@@ -337,6 +339,15 @@
 														</div>
 														<?php
 														}
+													}
+													else{
+														?>
+														<div class="lessStatus" style="background:red;">
+															<i class="fa fa-clock-o" aria-hidden="true"></i>
+															Expired!
+														</div>
+														<?php
+													}
 													?>
 											</div>
 										</div>

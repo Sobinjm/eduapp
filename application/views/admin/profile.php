@@ -175,24 +175,15 @@
 								}
 							?>
 						</select>
+						</div>
+						<div class="form-group">
+						<label for="edit_name">Select Language</label>
 						<select class="form-control" name="course_lang" id="course_lang">
-							<?php 
-							if(empty($lessons) && count($lessons) < 1) 
-								{
-							?>
-								<option value="0">No Lessons Found</option>
-							<?php 	
-								}
-							else 
-								{
-									foreach($lessons as $les)
-									{
-							?>
-								<option value="<?php echo $les['id']; ?>"><?php echo $les['course_name']; ?></option>
-							<?php 
-									}
-								}
-							?>
+								<option value="arab">Arab</option>
+								<option value="english">English</option>
+								<option value="malayalam">Malayalam</option>
+								
+						
 						</select>
 					</div>
 				</div>

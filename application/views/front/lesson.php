@@ -15,7 +15,7 @@ $lesson=$this->uri->segment(3);
     <!--Section : Section Heading-->
     <section class="blockClass sectionSubHeading">
         <div class="container">
-            <h3 class="heading">E-Learning Slider:</h3>
+            <h3 class="heading">E-Learning Slider: <?php echo sizeof($result); ?></h3>
             <small class="smallFont">Slider display the course Content slides.</small>
         </div>
     </section>
@@ -30,6 +30,7 @@ $lesson=$this->uri->segment(3);
                     </div>
                         <div id="vid_div" align="center" class="embed-responsive embed-responsive-16by9">
                             <?php 
+                            
                             if(sizeof($result) >=1){
                             
                                 if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio' )
@@ -51,10 +52,16 @@ $lesson=$this->uri->segment(3);
                                 else
                                 {
                             ?>      
-                                <img src="<?php echo base_url().$result['0']['slide_file']; ?>" class="img-responsive"/>
+                                <img src="<?php echo base_url().$result['0']['slide_file']; ?>" class="img-responsive"/> <?php if(sizeof($result) >1 ){
+                                    ?>
                                 <div class="overlay">
-                                    <button class="blockClass fontButton fontButtonAbsolute" id="next">Next</button>
+                                    <button class="blockClass fontButton fontButtonAbsolute d" id="next">Next</button>
                                 </div>
+                                <?php
+                                }
+                                
+                                ?>
+                                
                             <?php       
                                 }
                             }
@@ -62,10 +69,12 @@ $lesson=$this->uri->segment(3);
                             ?>
                         </div>
                         <div class="table_padding bordered_video_desc">
-                            <?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?>
+                            <?php  
+                            // if(sizeof($result)>=1){echo $result[0]['slide_description']; }
+                            ?>
                         </div>
                         <?php 
-                            if(sizeof($result) >=1 ){
+                            if(sizeof($result) >1 ){
                                 if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio')
                                 {
                                 ?>
@@ -74,29 +83,67 @@ $lesson=$this->uri->segment(3);
                                 <button class="blockClass fontButton fontButtonAbsolute" id="start">Start Now
                                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                                 </button>
-                                <button class="blockClass fontButton fontButtonAbsolute" id="next" style="display: none;">Next</button>
+                                <?php 
+                                if(sizeof($result) >=1 ){
+                                    ?>
+                                <button class="blockClass fontButton fontButtonAbsolute c" id="next" style="display: none;">Next</button>
+                                <?php
+
+                                }
+                                
+                                ?>
                             </div>
                             <?php 
                             }
-                            else{
-                                ?>
-                                    <div class="overlay">
-                                        <button class="blockClass fontButton fontButtonAbsolute" id="next">Next</button>
-                                    </div>
+                            // else{
+                                 
+                                   
+                            //         ?>
+                            <!-- //     <div class="overlay">
+                            //             <button class="blockClass fontButton fontButtonAbsolute a" id="next">Next</button>
+                            //         </div> -->
                                 <?php
-                            }
+                            // }
                             }
                             ?>
                 <!-- Script for the video player -->
 
-                 <div class="bottom_right" style="display: none;">
-                     <button class="blockClass fontButton fontButtonAbsolute" id="next_img" style="top:80%;left:89%;">Next
+                 <div class="bottom_right testdiv" <?php  if(sizeof($result) >1 ){ echo'style="display: none;"';}else{  echo'style="display: block;"'; } ?>>
+                 <?php  if(sizeof($result) >1 ){
+                     ?>
+                        <button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </button>
                     <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;display: none;">
                         Goto Quiz
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button></a>
+                    </a>
+                     <?
+
+
+                 }else if(sizeof($result)==1){  echo'<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </button>';
+                    ?>
+                     <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;">
+                        Goto Quiz
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+                    <?php }
+                    else{
+                        // echo sizeof($result);
+                        echo'<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </button>';
+                    ?>
+                     <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;">
+                        Goto Quiz
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+                    <?php
+                    } ?>
+                     
+                   
                  </div>  
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
                 <script>
@@ -117,6 +164,7 @@ $lesson=$this->uri->segment(3);
                     $(document).ready(function(){
                         var base_url='<?php echo base_url();?>';
                         var slider_number=0;
+                        var currentslide=0;
                         var total='<?php echo $length;?>';
                         total=total-1;
                         <?php
@@ -133,7 +181,9 @@ $lesson=$this->uri->segment(3);
                             overlay.css("display","none");
                         });
                        $('#next').click(function(){
+                            currentslide = slider_number;
                             slider_number++;
+                            
                             $.ajax({
                                  type: "GET",
                                  url: base_url + "/index.php/lesson/get_slide/", 
@@ -178,6 +228,57 @@ $lesson=$this->uri->segment(3);
                                 }
                             });
                        });
+
+                       $('#previous').click(function(){
+                        
+                            $.ajax({
+                                 type: "GET",
+                                 url: base_url + "/index.php/lesson/get_nextslide/", 
+                                 data: {slider_no : currentslide, ls_id : lesson_id},
+                                 contentType: 'json',
+                                 success: function(result){
+                                    currentslide--;
+                                    slider_number--;
+                                    var obj=JSON.parse(result);
+                                    var html=obj.data;
+                                    var type=obj.type;
+                                    var last=obj.comp;
+                                    var sl_html=obj.sl_title;
+                                    $('.slide_title').html(sl_html);
+                                    if(type!='image'){
+                                        $('#vid_div').html(html);
+                                        overlay.css("display","block");
+                                        $('#next').css("display","none");
+                                        $('#next_img').css("display","none");
+                                        $('#start').css("display","block");
+                                        $('#last_slide').css("display","none");
+                                    }
+                                    else{
+                                       $('#vid_div').html(html);
+                                       overlay.css("display","none");
+                                        $('#next').css("display","none");
+                                        $('#start').css("display","none");
+                                       $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","block");
+                                        $('#last_slide').css("display","none");
+                                    }
+                                    
+                                    if(currentslide==0){
+                                        $('#next').css("display","none");
+                                        $('#start').css("display","none");
+                                        $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","none");
+                                        $('#last_slide').css("display","block");
+                                    }
+                                    
+                                 },
+                                 error:function(ex){
+                                    alert(JSON.stringify(ex));
+                                }
+                            });
+                       });
+
+
                     });
                 </script>
         </div>
@@ -204,6 +305,7 @@ $lesson=$this->uri->segment(3);
                         <?php 
                                                 echo $course_info['0']['course_name'];
                                             ?>
+                                            <button class="blockClass fontButton " id="previous">Previous</button>
                     </div>
                     <!--Left-->
 
@@ -213,6 +315,9 @@ $lesson=$this->uri->segment(3);
                 </div>
 
                 <div class="blockClass mainContentWrapper">
+                    <h4 class="heading">Description</h4>
+                    <p class="paraSmall"><?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?></p>
+                    <br>
                     <h4 class="heading">Transcript</h4>
                     <p class="paraSmall">To begin your lesson please click start now</p>
                 </div>

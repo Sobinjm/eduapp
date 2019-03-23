@@ -47,7 +47,8 @@ class Student extends CI_Controller {
 	{
 		$this->form_validation->set_rules('course_name', 'Course Name', 'trim|required|max_length[50]');
         $this->form_validation->set_rules('start_date', 'Start Date', 'required|max_length[50]');
-        $this->form_validation->set_rules('end_date', 'End Date', 'required|max_length[50]');
+		$this->form_validation->set_rules('end_date', 'End Date', 'required|max_length[50]');
+		$this->form_validation->set_rules('course_lang', 'Course Language', 'required|max_length[50]');
         if ($this->form_validation->run() == false) 
 		{
 			$response = array(
@@ -64,6 +65,7 @@ class Student extends CI_Controller {
 			$course_name	= $this->security->xss_clean($this->input->post('course_name'));
 			$start_date		= $this->security->xss_clean($this->input->post('start_date'));
 			$end_date		= $this->security->xss_clean($this->input->post('end_date'));
+			$course_lang	= $this->security->xss_clean($this->input->post('course_lang'));
 			
 			if(empty($course_name) || $course_name == '')
 				{
@@ -100,7 +102,8 @@ class Student extends CI_Controller {
 								'course'		=>	$course_name,
 								'start_date'	=>	$start_date,
 								'end_date'	 	=>	$end_date,
-								'assigned_by'	=>	$this->crc_encrypt->decode($this->session->userdata('userid'))
+								'assigned_by'	=>	$this->crc_encrypt->decode($this->session->userdata('userid')),
+								'language'		=>	$course_lang
 							);
 			$query = $this->mstudent_model->assign_course($insert_data);			
 			if($query) 

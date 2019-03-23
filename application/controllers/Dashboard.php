@@ -27,7 +27,10 @@ class Dashboard extends CI_Controller {
 		{
 		$course_info 				= $this->mdashboard_model->course_info($assigned_course['0']['course']);
 		$getalllessons	 			= $this->mdashboard_model->getalllessons($assigned_course['0']['course']);
+		$getalllessons 				= $this->mdashboard_model->getalllessonsbylang($assigned_course['0']['course'],$assigned_course['0']['language']);
+		// $getslidesforlesson			= $this->mslide_model->getslidesforlesson($a);
 		$data['course_info'] 		= $course_info;
+		$data['query']="SELECT * FROM ad_lessons WHERE course_id = '".$assigned_course['0']['course']."' AND publish_status = 2 AND language='".$assigned_course['0']['language']."' ORDER BY lesson_order ASC";
 		$data['getalllessons'] 		= $getalllessons;
 		}
 		

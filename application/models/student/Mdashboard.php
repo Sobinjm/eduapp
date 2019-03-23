@@ -33,5 +33,10 @@ class Mdashboard extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_id = '".$course_id."' AND publish_status = 2 ORDER BY lesson_order ASC");	
 			return $query->result_array();
 		}
+		function getalllessonsbylang($course_id,$language)
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_id = '".$course_id."' AND publish_status = 2 AND language='".$language."' ORDER BY lesson_order ASC");	
+			return $query->result_array();
+		}
 		
 	}	
