@@ -33,9 +33,10 @@ $student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 $assigned_course = $this->mdashboard_model->getmycourses($student_id);
 // print_r($assigned_course);
 // print_r($course_info);
+// print_r($data);
 ?>
 <input type="hidden" id="assign_id" value="<?php echo $assigned_course[0]['id'] ; ?>">
-<!-- <input type="hidden" id="lesson_id" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>"> -->
+<input type="hidden" id="lesson_no" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>">
 <input type="hidden" id="lesson_id" value="<?php  echo $data[0]['lesson_order']; ?>">
 <style>
     .correct{
@@ -167,11 +168,12 @@ $(document).on('click','.ans_btn',function()
 $(".next_quiz").click(function()
 {       
     // alert();
-    
+var lesson_no1=$('#lesson_no').val();
+// alert('<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>');
  $.ajax({
      type: "GET",
      url: base_url + "/index.php/quiz/next_quiz/", 
-     data: {quiz_id: quiz_count, lesson_no:2},
+     data: {quiz_id: quiz_count, lesson_no:lesson_no1},
      contentType: 'text',
      success: 
           function(result){

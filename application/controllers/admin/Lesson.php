@@ -11,7 +11,8 @@ class Lesson extends CI_Controller {
 				redirect('admin/login');
 			}
 		$this->load->model('admin/Mcourse', 'mcourse_model');
-		$this->load->model('admin/Mlesson', 'mlesson_model');		
+		$this->load->model('admin/Mlesson', 'mlesson_model');	
+		$this->load->model('admin/Mcomment', 'mcomment_model');		
 	}
 		
 	public function index()
@@ -51,8 +52,14 @@ class Lesson extends CI_Controller {
 	
 	public function preview()
 	{
+		
 		$slideid = $this->crc_encrypt->decode($this->uri->segment(4));
+		$data['slide_id']=$slideid;
 		$data['result']	=	$this->mlesson_model->getslidebyid($slideid);
+		$data['comments']=	$this->mcomment_model->getslidecomment($slideid);
+		$data['user_data']=$this->crc_encrypt->decode($this->session->userdata('userid'));
+		$data['admin']=$this->session->userdata('admin');
+		$data['faculty']=$this->session->userdata('faculty');
 		$this->load->view('admin/slide_preview',$data);
 	}
 

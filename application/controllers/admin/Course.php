@@ -12,14 +12,167 @@ class Course extends CI_Controller {
 			{ 
 				redirect('admin/login');
 			}
-		$this->load->model('admin/Mcourse', 'mcourse_model');	
+		// $this->load->model('admin/Mcourse', 'mcourse_model');
+		$this->load->model('admin/Mcourse', 'mcourse_model');
+		$this->load->model('admin/Mlesson', 'mlesson_model');	
+		$this->load->model('admin/Mcomment', 'mcomment_model');		
 	}
 	
 	
 	public function index()
 	{
 		$data['result'] = $this->mcourse_model->getAllcourse();
+		$i=0;
+		foreach($data['result'] as $new_data)
+		{
+		$crs_id		= $new_data['id'];
+		$course_lang = json_decode($new_data['course_lang']);
+		if($course_lang->english == '1')
+		{
+			$language	= 'english';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['english'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['english'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['english'] = 'no_lesson';
+				
+				}
+			}
+		}
+		if($course_lang->malayalam == '1')
+		{
+			$language	= 'malayalam';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['malayalam'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->arabic == '1')
+		{
+			$language	= 'arabic';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['arabic'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->urdu == '1')
+		{
+			$language	= 'urdu';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['urdu'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->pashto == '1')
+		{
+			$language	= 'pashto';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['pashto'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';
+					// print_r($data['course_result']);
+				}
+			}
+		}
+		
+			$i++;
+		}	
 		$this->load->view('admin/course', $data);
+		// print_r($data['result']);
+		// print_r($data['course_result']);
 	}
 	
 	public function pending()

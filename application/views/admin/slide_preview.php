@@ -31,14 +31,50 @@
 		<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
 			<div class="box box-danger">
 				<?php 
+				// print_r($comments);
 					if(!empty($result))
 						{ 
 				?>
 				<div class="box-header with-border">
 					<div class="box-header with-border">
+						
+						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<h3 class="box-title"><?php echo $result['0']['slide_title']; ?></h3>
+				  </div>
+					<?php if($this->session->userdata('role')==0)
+					{
+						?>
+					
+						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<button class="btn btn-block btn-danger btn-flat" data-placement="bottom" data-toggle="popover" id="slide_comment" data-container="body" data-placement="right" type="button" data-html="true">Add Comments</button>
+					
+  <div id="popover-content-slide_comment" class="hide">
+	<div>
+	
+	</div>
+		
+
+      <form class="form-inline" name="comment_form" id="comment_form" role="form">
+        <div class="form-group"> 
+				<textarea cols='30' rows='8' name="comment_value" id="comment_value"  onkeyup="testCode(this)" placeholder="Enter the comment"></textarea>
+				<input type="hidden" name="new_comment" id="new_comment" value="">
+	<input type="hidden" name="slide_id" id="slide_id" value="<?php echo $slide_id; ?>">
+	<input type="hidden" name="added_by" id="added_by" value="<?php echo $user_data; ?>">
+          <input class="btn btn-success btn-xs" id="add_comment" type="button" value="Post Comment" /> 
+        </div>
+      </form>
+			
+    </div>
+
+	
+				  </div>
+					<?php
+						}
+						?>
 					</div>	
 					<?php 
+					// print_r($admin);
+					// print_r($this->session->userdata('role'));
 						//echo '<pre>';
 						//print_r( $result['0']);
 						//echo '</pre>';
@@ -75,15 +111,15 @@
 						</div>
 					<script>
 						var options = {};
-						var player = videojs('my-player', options, function onPlayerReady() {
-						  videojs.log('Your player is ready!');
-							// In this context, `this` is the player that was created by Video.js.
-						  this.play();
-							// How about an event listener?
-						  this.on('ended', function() {
-							videojs.log('Awww...over so soon?!');
-						  });
-						});
+						// var player = videojs('my-player', options, function onPlayerReady() {
+						//   videojs.log('Your player is ready!');
+						// 	// In this context, `this` is the player that was created by Video.js.
+						//   this.play();
+						// 	// How about an event listener?
+						//   this.on('ended', function() {
+						// 	videojs.log('Awww...over so soon?!');
+						//   });
+						// });
 					</script>	
 				</div>
 				<?php 
@@ -130,6 +166,51 @@
 					}							
 				?>
 			</div>
+			<button class="btn btn-block btn-danger btn-flat" data-toggle="collapse" data-target="#demo">Show comments</button>
+
+<div id="demo" class="collapse">
+<div class="box box-danger">
+<?php
+
+foreach($comments as $comment)
+{
+	// print_r($comment);
+	// $raw_date = ‘2017-01-03 14:47:41’;
+	$raw_time=strtotime($comment['updated_at']);
+
+// list($date, $time) = explode(‘ ‘, $raw_date);
+?>
+<div class="box-header1 with-border">
+				  <h5 class="box-title"><?php echo '<b>'.$comment['name'].'</b> at '.date("Y-m-d H:i A", $raw_time);;?></h5>
+				</div>
+				<div class="table_padding">
+					<dl class="dl-horizontal">
+						<p><?php echo $comment['comment']; ?></p>
+						<?php
+						if($comment['status']==0)
+						{
+						?>
+						<button id="update_status" data-id="<?php echo $comment['id']; ?>" value="1">Make it Done</button>
+						<?php
+						}
+						else{
+							?>
+
+							<button >Done</button>
+							<?php
+						} ?>
+
+					</dl>	
+				
+				</div>
+
+
+<?php
+}
+
+?>
+</div>
+</div>
 		</div>
 		</div>
     </section>
@@ -148,6 +229,17 @@
 	<script>
 		$(document).ready(function() 
 			{
+				$("[data-toggle=popover]").each(function(i, obj) {
+
+$(this).popover({
+  html: true,
+  content: function() {
+    var id = $(this).attr('id')
+    return $('#popover-content-' + id).html();
+  }
+});
+
+});
 				$('#admin_table').DataTable();
 				
 				$( "#add_form" ).submit(function( event ) {
@@ -315,7 +407,34 @@
 								);
 						})
 				});
-				
+				$('#update_status').click(function()
+				{
+					var comment_id=$(this).attr('data-id');
+					var sts=$(this).val();
+					// alert(comment_id);	
+					var data= {id:comment_id,status:sts};
+					// data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
+					
+					$.ajax({
+									type: "GET",
+									url: "<?php echo base_url(); ?>/index.php/admin/comment/update",
+									data: data, 
+									timeout: 600000,
+									success: function (data) {
+										console.log(data);
+										swal({title: "Message", text: data, type: 
+										"info"}).then(function(){ 
+										   location.reload();
+										   });
+									},
+									error: function (e) {
+										
+										swal(e.responseText);
+										console.log("ERROR : ", e);
+									}
+								});					
+					event.preventDefault();
+				});
 				$('#submit_edit').click(function(){
 					
 					var edit_eid = $('#edit_eid').val();
@@ -401,6 +520,72 @@
 					  var emailReg = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 					  return emailReg.test( $email );
 					}
+
+
+/* comment part */
+
+
+
+
+
+
 				
 			});
+			function testCode(e){
+				console.log(e.value);
+				var valw=e.value;
+				document.getElementById('new_comment').value=valw;
+			}
+		
+$(document).on('click','#add_comment',function(){
+					// alert(document.getElementById('new_comment'));
+					
+					// document.getElementById('new_comment').value='asdfuags;bfuagsdbaskduaskjd';
+					
+					var comment			= document.getElementById('new_comment').value;
+					// alert(comment);
+					console.log(comment);
+					var comment_form= $('#comment_form')[0];
+					var data 					= new FormData(comment_form);  
+					
+				
+					if(comment == '')
+					{	
+						swal('Slide comment should not be empty');
+						$('#new_comment').addClass("error");
+						return false;
+					}
+					else 
+					{
+						$('#new_comment').addClass("success");
+					}
+					
+					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
+					
+						$.ajax({
+									type: "POST",
+									enctype: 'multipart/form-data',
+									url: "<?php echo base_url(); ?>admin/comment/add",
+									data: data,
+									processData: false,
+									contentType: false,
+									cache: false, 
+									timeout: 600000,
+									success: function (data) {
+										console.log(data);
+										swal({title: "Message", text: data, type: 
+										"info"}).then(function(){ 
+										   location.reload();
+										   });
+									},
+									error: function (e) {
+										
+										swal(e.responseText);
+										console.log("ERROR : ", e);
+									}
+								});					
+					event.preventDefault();
+				});
+				
+
 	</script>

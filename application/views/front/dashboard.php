@@ -191,6 +191,7 @@
 						<div class="blockClass blockSeprator noPadding">
 							<div class="whiteBlock whiteBlockContents blockClass">
 							<?php 
+							// print_r($assigned_course);
 								if(isset($assigned_course) && !empty($assigned_course))
 								{
 							?>		
