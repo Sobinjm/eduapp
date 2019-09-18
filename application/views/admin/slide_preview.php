@@ -34,6 +34,7 @@
 				// print_r($comments);
 					if(!empty($result))
 						{ 
+							print_r($result);
 				?>
 				<div class="box-header with-border">
 					<div class="box-header with-border">
@@ -75,9 +76,9 @@
 					<?php 
 					// print_r($admin);
 					// print_r($this->session->userdata('role'));
-						//echo '<pre>';
-						//print_r( $result['0']);
-						//echo '</pre>';
+						// echo '<pre>';
+						// print_r( $result['0']);
+						// echo '</pre>';
 					?>
 					<div class="table_padding">
 					</div>
@@ -106,7 +107,8 @@
 								}
 							?>
 						</div>
-						<div class="table_padding bordered_video_desc">
+						<div class="table_padding bordered_video_desc" <?php if (strpos($result['0']['slide_description'], 'dir="rtl"') !== false) {    echo 'dir="rtl"';
+} ?> >
 							<?php echo $result['0']['slide_description']; ?>
 						</div>
 					<script>
@@ -190,13 +192,13 @@ foreach($comments as $comment)
 						if($comment['status']==0)
 						{
 						?>
-						<button id="update_status" data-id="<?php echo $comment['id']; ?>" value="1">Make it Done</button>
+						<button id="update_status" data-sid="<?php echo $this->crc_encrypt->encode($result['0']['id']); ?>" data-id="<?php echo $comment['id']; ?>" value="1">Done</button>
 						<?php
 						}
 						else{
 							?>
 
-							<button >Done</button>
+							<!-- <button >Done</button> -->
 							<?php
 						} ?>
 
@@ -411,13 +413,14 @@ $(this).popover({
 				{
 					var comment_id=$(this).attr('data-id');
 					var sts=$(this).val();
+					var s_id=$(this).attr('data-sid');
 					// alert(comment_id);	
-					var data= {id:comment_id,status:sts};
+					var data= {id:comment_id,status:sts,slide_id:s_id};
 					// data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
 					
 					$.ajax({
 									type: "GET",
-									url: "<?php echo base_url(); ?>/index.php/admin/comment/update",
+									url: "<?php echo base_url(); ?>/admin/comment/update",
 									data: data, 
 									timeout: 600000,
 									success: function (data) {

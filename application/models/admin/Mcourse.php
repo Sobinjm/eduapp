@@ -13,6 +13,12 @@ class Mcourse extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_course ORDER BY created_on DESC");	
 			return $query->result_array();
 		}
+		function getCourseCode($course_id)
+		{
+			$query = $this->db->query("SELECT course_id FROM ad_course WHERE id=".$course_id." ORDER BY created_on DESC");	
+			return $query->result_array();
+		}
+		
 		
 		function getPendingcourse()
 		{
@@ -53,6 +59,13 @@ class Mcourse extends CI_Model
 			$this->db->update('ad_course',$up_data); 
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+		function draft_status($id, $up_data)
+		{
+			$this->db->where('id', $id); 
+			$this->db->update('ad_course',$up_data); 
+			return ($this->db->affected_rows() != 1) ? false : true;
+		}
+		
 		
 		
 		

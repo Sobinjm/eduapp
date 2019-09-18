@@ -199,14 +199,26 @@
 									<?php //foreach($result as $adm) { ?>
 										<div class="blockClass contentBlocks">
 											<span class="titleIcon">
-												<img src="<?php echo base_url(); ?><?php echo $course_info[0]['icon_file']; ?>"  style="height:35px"/>
+												<?php if(isset($course_info[0]['icon_file']))
+												{ ?>
+													<img src="<?php echo base_url(); ?><?php echo $course_info[0]['icon_file']; ?>"  style="height:35px"/>
+													<?php
+												}
+												?>
 											</span>
 											<strong>
-											<?php 
+											<?php
+											if(isset($course_info['0']['course_name'])) 
+											{
 												echo $course_info['0']['course_name'];
+											}
+											else{
+												echo "No Course Assigned";
+											}
 											?>
 											</strong>
-											<br/>TRAINING COURSE
+											<br/>
+											<!-- TRAINING COURSE -->
 										</div>
 
 									<div class="blockClass contentBlocks">
@@ -215,7 +227,14 @@
 										</h4>
 										<p class="paraSmall">
 										   <?php 
-												echo $course_info['0']['course_desc'];
+										   if(isset($course_info['0']['course_desc'])) 
+										   {
+											   echo $course_info['0']['course_desc'];
+										   }
+										   else{
+											   echo "No Course Assigned";
+										   }
+												
 											?>
 										</p>
 									</div>
@@ -237,10 +256,16 @@
 												<div class="col-lg-6 col-md-6 col-sm-12">
 													<p class="pull-right"><?php 
 														$total_lessons=count($getalllessons);
+														if($total_lessons==0||empty($total_lessons))
+														{
+                                                        $per=0;
+														}
+														else{
 														$lessons_completed=$assigned_course['0']['completed_lessons'];
 														$percentage=($lessons_completed/$total_lessons)*100;
 														$per= number_format((float)$percentage,2,'.','');
 														echo $per;
+														}
 														// print_r($assigned_course);
 														// print_r($query);
 													?></p>

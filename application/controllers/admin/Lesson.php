@@ -12,7 +12,9 @@ class Lesson extends CI_Controller {
 			}
 		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mlesson', 'mlesson_model');	
-		$this->load->model('admin/Mcomment', 'mcomment_model');		
+		$this->load->model('admin/Mcomment', 'mcomment_model');	
+		
+		$this->load->model('admin/Mnotification', 'mnotification_model');	
 	}
 		
 	public function index()
@@ -49,7 +51,14 @@ class Lesson extends CI_Controller {
 		$this->load->view('admin/lesson_view',$data);
 	}
 	
-	
+	public function summary()
+	{
+		$slideid = $this->crc_encrypt->decode($this->uri->segment(4));
+		
+		$data['result']	=	$this->mlesson_model->getslidebyid($slideid);
+		$data['comments']=	$this->mcomment_model->getslidecomment($slideid);
+		$this->load->view('admin/summary',$data);
+	}
 	public function preview()
 	{
 		
@@ -73,11 +82,28 @@ class Lesson extends CI_Controller {
         } 
 		else
 		{
-			$lesson_name 		= $this->security->xss_clean($this->input->post('lesson_name'));
+			$lessons 			= $this->security->xss_clean($this->input->post('lesson_name'));
+			$lesson 			=explode('~',$lessons);
+			$lesson_name 		= $lesson[1];
+			$lesson_id			= $lesson[0];
 			$no_lessons 		= $this->security->xss_clean($this->input->post('no_lessons'));
 			$language 			= $this->security->xss_clean($this->input->post('language'));
 			$course_id 			= $this->security->xss_clean($this->input->post('course_id'));
 			$course_id 			= $this->crc_encrypt->decode($course_id);
+			$course_code1		= $this->mcourse_model->getCourseCode($course_id);
+			if(isset($course_code1[0]['course_id']))
+			{
+				$course_code=$course_code1[0]['course_id'];
+			}
+			else{
+				$response = array(
+					'status'  => 'Failed',
+					'message' => 'Course Code Not Found'
+				);
+				echo json_encode($response);
+				exit();
+			}
+
 			
 			if(isset($_FILES['icon_file']) AND !empty($_FILES["icon_file"]["name"]))
 				{
@@ -85,7 +111,7 @@ class Lesson extends CI_Controller {
 					$file_name	=	$_FILES['icon_file']['name'];
 					$file_size	=	$_FILES['icon_file']['size'];
 					$file_tmp	=	$_FILES['icon_file']['tmp_name'];
-					$file_type	=	$_FILES['icon_file']['type'];
+					$file_type	=	$_FILES['icon_file']['type']; 
 					$file_ext	= 	pathinfo($file_name, PATHINFO_EXTENSION);
 					
 					$expensions	=	array("jpeg","jpg","png","gif");
@@ -131,11 +157,14 @@ class Lesson extends CI_Controller {
 								
 				
 				$insert_data = array(
+								'lesson_id'		=> $lesson_id,
 								'lesson_name'	 =>	$lesson_name,
 								'icon_file'		 =>	$target_file_galry,
 								'course_id'		 => $course_id,	
+								'course_code'	 =>	$course_code,
 								'lesson_order'	 =>	$no_lessons,
 								'language'		 =>	$language,
+								'created_by'	 => $this->crc_encrypt->decode($this->session->userdata('userid')),
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->insert_lesson($insert_data);
@@ -163,8 +192,8 @@ class Lesson extends CI_Controller {
 	
 	public function updatelesson()
 	{
-		$this->form_validation->set_rules('edit_lesson_name', 'Lesson name', 'trim|required');
-        $this->form_validation->set_rules('edit_no_lessons', 'Number of lessons', 'required');
+		$this->form_validation->set_rules('edit_lesson_name', 'Edit Lesson name', 'trim|required');
+        $this->form_validation->set_rules('edit_no_lessons', 'Edit Number of lessons', 'required');
         if ($this->form_validation->run() == false) 
 		{
 			echo 'Form validation failed';
@@ -247,8 +276,27 @@ class Lesson extends CI_Controller {
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
+				// print_r($lesson_id);
+				// exit();
 				if($query) 
-				{		
+				{	
+						if($this->session->userdata('role')=='0')
+						{
+						$user_type="Admin";
+						}
+						else{
+							$user_type='Trainer';
+						}
+						$notification=array(
+							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+							'name'=>$this->session->userdata('name'),
+							'user_type'=>$user_type,
+							'course'=>$lesson_name,
+							'status'=>'Lesson Updated',
+							'url'=>base_url().'admin/course/'
+				
+						);
+				$this->mnotification_model->insert_notification($notification);	
 					$response = array(
 											'status'  => 'success',
 											'message' => 'Lesson updated successfully'
@@ -259,7 +307,7 @@ class Lesson extends CI_Controller {
 				else 
 				{
 					$response = array(
-											'status'  => 'success',
+											'status'  => 'Failed',
 											'message' => 'Sorry, we are not able to update this lesson now.'
 										);
 					echo json_encode($response);
@@ -267,7 +315,29 @@ class Lesson extends CI_Controller {
 				}	
 		}
 	}
-	
+	public function delete()
+	{
+		// $id = $this->security->xss_clean($this->input->post('id'));
+		$id=$_POST['id'];
+		if(empty($id))
+		{
+			echo 'Sorry, we are not able to delete this lesson now.';	
+		}
+		else 
+		{
+			$data = array('id' => $this->crc_encrypt->decode($id));
+			$query = $this->mlesson_model->delete_lesson($data);
+			if($query) 
+			{		
+				echo 'Course deleted successfully.';
+			}
+			else 
+			{
+				echo 'Sorry, we are not able to delete this lesson now.';
+			}
+		}
+		
+	}
 	
 	public function getlesson()
 		{

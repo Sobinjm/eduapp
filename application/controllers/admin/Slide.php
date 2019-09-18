@@ -12,7 +12,9 @@ class Slide extends CI_Controller {
 			}
 		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mlesson', 'mlesson_model');		
-		$this->load->model('admin/Mslide', 'mslide_model');		
+		$this->load->model('admin/Mslide', 'mslide_model');	
+		
+		$this->load->model('admin/Mnotification', 'mnotification_model');	
 	}
 		
 	public function index()
@@ -69,7 +71,7 @@ class Slide extends CI_Controller {
 		{
 			$slide_title 		= $this->security->xss_clean($this->input->post('slide_title'));
 			$select_media 		= $this->security->xss_clean($this->input->post('select_media'));
-			$slide_description	= $this->security->xss_clean($this->input->post('slide_description'));
+			$slide_description	= $this->security->xss_clean($this->input->post('slide_description_new'));
 			$slide_duration 	= $this->security->xss_clean($this->input->post('slide_duration'));
 			$slide_order 		= $this->security->xss_clean($this->input->post('slide_order'));
 			$lessonid	 		= $this->security->xss_clean($this->crc_encrypt->decode($this->input->post('lessonid')));
@@ -160,6 +162,23 @@ class Slide extends CI_Controller {
 				$query = $this->mslide_model->insert_slide($insert_data);
 				if($query) 
 				{		
+					if($this->session->userdata('role')=='0')
+						{
+						$user_type="Admin";
+						}
+						else{
+							$user_type='Trainer';
+						}
+						$notification=array(
+							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+							'name'=>$this->session->userdata('name'),
+							'user_type'=>$user_type,
+							'course'=>$slide_title,
+							'status'=>'Slide Added',
+							'url'=>base_url().'admin/course/'
+				
+						);
+				$this->mnotification_model->insert_notification($notification);	
 					$response = array(
 											'status'  => 'success',
 											'message' => 'Slide added successfully'
@@ -290,20 +309,40 @@ class Slide extends CI_Controller {
 				$query = $this->mslide_model->update_slide($update_data,$edit_slideid);
 				if($query) 
 				{		
+					if($this->session->userdata('role')=='0')
+						{
+						$user_type="Admin";
+						}
+						else{
+							$user_type='Trainer';
+						}
+						$notification=array(
+							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+							'name'=>$this->session->userdata('name'),
+							'user_type'=>$user_type,
+							'course'=>$edit_slide_title,
+							'status'=>'Slide Updated',
+							'url'=>base_url().'admin/lesson/preview/'.$this->crc_encrypt->encode($edit_slideid )
+				
+						);
+				$this->mnotification_model->insert_notification($notification);	
 					$response = array(
 											'status'  => 'success',
 											'message' => 'Slide updated successfully'
 										);
-					echo 'Slide updated successfully';
+					// echo 'Slide updated successfully';
+					print_r($query);
 					exit();
-				}
+				 }
 				else 
 				{
 					$response = array(
 											'status'  => 'success',
-											'message' => 'Sorry, we are not able to add this slide now.'
+											'message' => 'Sorry, we are not able to add this slidasdasde now.'
 										);
-					echo 'Sorry, we are not able to add this slide now.';
+					// echo 'Sorry, we are not able to add this slide now.'.$query;
+					// print_r($update_data);
+					print_r($query);
 					exit();
 				}	
 		}

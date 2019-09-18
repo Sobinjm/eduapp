@@ -10,13 +10,18 @@ class Mlogin extends CI_Model
 		
 		function checkEmail($email)
 		{
-			$query = $this->db->query("SELECT *,COUNT(*) as total FROM ad_student WHERE email = '".$email."'");	
+			$query = $this->db->query("SELECT *,COUNT(*) as total FROM ad_student WHERE email = '".$email."' group by ad_student.id");	
+			return $query->result_array(); 
+		}
+		function checkStudent($sno)
+		{
+			$query = $this->db->query("SELECT *,COUNT(*) as total FROM ad_student WHERE student_idno = '".$sno."' group by ad_student.id");	
 			return $query->result_array(); 
 		}
 		
 		function checkPassword($email,$password)
 		{
-			$query = $this->db->query("SELECT COUNT(*) as total,* FROM ad_student WHERE email = '".$email."' AND password = '".$password."'");	
+			$query = $this->db->query("SELECT COUNT(*) as total,* FROM ad_student WHERE email = '".$email."' AND password = '".$password."' group by ad_student.id");	
 			return $query->result_array(); 
 		}
 		

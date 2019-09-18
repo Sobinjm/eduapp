@@ -7,7 +7,7 @@ $lesson=$this->uri->segment(3);
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-        E-Learning Slider > <?php echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
+        <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider > <?php echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -80,18 +80,7 @@ $lesson=$this->uri->segment(3);
                                 ?>
                              <!--Absolute Overlay-->
                             <div class="overlay">
-                                <button class="blockClass fontButton fontButtonAbsolute" id="start">Start Now
-                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                </button>
-                                <?php 
-                                if(sizeof($result) >=1 ){
-                                    ?>
-                                <button class="blockClass fontButton fontButtonAbsolute c" id="next" style="display: none;">Next</button>
-                                <?php
-
-                                }
-                                
-                                ?>
+                               
                             </div>
                             <?php 
                             }
@@ -111,19 +100,19 @@ $lesson=$this->uri->segment(3);
                  <div class="bottom_right testdiv" <?php  if(sizeof($result) >1 ){ echo'style="display: none;"';}else{  echo'style="display: block;"'; } ?>>
                  <?php  if(sizeof($result) >1 ){
                      ?>
-                        <button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
+                        <!--<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button>
+                    </button>-->
                     <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;display: none;">
                         Goto Quiz
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </a>
-                     <?
+                     <?php
 
 
-                 }else if(sizeof($result)==1){  echo'<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
+                 }else if(sizeof($result)==1){  echo'<!--<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button>';
+                    </button>-->';
                     ?>
                      <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;">
                         Goto Quiz
@@ -132,9 +121,9 @@ $lesson=$this->uri->segment(3);
                     <?php }
                     else{
                         // echo sizeof($result);
-                        echo'<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
+                        echo'<!--<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button>';
+                    </button>-->';
                     ?>
                      <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;">
                         Goto Quiz
@@ -153,19 +142,31 @@ $lesson=$this->uri->segment(3);
                     //     var overlay=$('.overlay');
                     //     overlay.css("display","none");
                     // }  
-
+                    var slider_number=0;
+                        var currentslide=0;
+                        var total=0;
                         function change_vid(){
 
                             var overlay=$('.overlay');
                             $('#start').css('display','none');
                             overlay.css("display","block");
-                            $('#next').css('display','block');
+                            // alert(slider_number+'=='+total);
+                            if(slider_number==total){
+                                        
+                                        $('#last_slide').css("display","block");
+                                        
+                                    }
+                                    else{
+                                        $('#next').css('display','block');
+                                    }
+                            
+                            // $('.start').css('display','block');
                         } 
                     $(document).ready(function(){
                         var base_url='<?php echo base_url();?>';
-                        var slider_number=0;
-                        var currentslide=0;
-                        var total='<?php echo $length;?>';
+                        // var slider_number=0;
+                        // var currentslide=0;
+                         total='<?php echo $length;?>';
                         total=total-1;
                         <?php
                             $lesson_id=$this->crc_encrypt->decode($this->uri->segment(3));
@@ -178,6 +179,14 @@ $lesson=$this->uri->segment(3);
                         $('#start').click(function(){
                             myPlayer=document.getElementById("my-player");
                             myPlayer.play();
+                            $(this).css("display","none");
+                            overlay.css("display","none");
+                            
+                        });
+                        $('.start').click(function(){
+                            myPlayer=document.getElementById("my-player");
+                            myPlayer.play();
+                            $(this).css("display","none");
                             overlay.css("display","none");
                         });
                        $('#next').click(function(){
@@ -186,7 +195,7 @@ $lesson=$this->uri->segment(3);
                             
                             $.ajax({
                                  type: "GET",
-                                 url: base_url + "/index.php/lesson/get_slide/", 
+                                 url: base_url + "/lesson/get_slide/", 
                                  data: {slider_no : slider_number, ls_id : lesson_id},
                                  contentType: 'json',
                                  success: function(result){
@@ -197,17 +206,21 @@ $lesson=$this->uri->segment(3);
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
                                     if(type!='image'){
+                                        // alert(type);
                                         $('#vid_div').html(html);
                                         overlay.css("display","block");
                                         $('#next').css("display","none");
+                                        $('#previous').css("display","block");
                                         $('#next_img').css("display","none");
                                         $('#start').css("display","block");
                                         $('#last_slide').css("display","none");
                                     }
                                     else{
+                                        // alert(slider_number+'=='+total);
                                        $('#vid_div').html(html);
                                        overlay.css("display","none");
-                                        $('#next').css("display","none");
+                                       $('#previous').css("display","block");
+                                        $('#next').css("display","block");
                                         $('#start').css("display","none");
                                        $('.bottom_right').css("display","block");
                                         $('#next_img').css("display","block");
@@ -215,11 +228,22 @@ $lesson=$this->uri->segment(3);
                                     }
                                     
                                     if(slider_number==total){
+                                        if(type!='image'){
                                         $('#next').css("display","none");
+                                        $('#previous').css("display","block");
+                                        $('#start').css("display","block");
+                                        $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","none");
+                                        $('#last_slide').css("display","none");
+                                        }
+                                        else{
+                                            $('#next').css("display","none");
+                                        $('#previous').css("display","block");
                                         $('#start').css("display","none");
                                         $('.bottom_right').css("display","block");
                                         $('#next_img').css("display","none");
                                         $('#last_slide').css("display","block");
+                                        }
                                     }
                                     
                                  },
@@ -233,7 +257,7 @@ $lesson=$this->uri->segment(3);
                         
                             $.ajax({
                                  type: "GET",
-                                 url: base_url + "/index.php/lesson/get_nextslide/", 
+                                 url: base_url + "/lesson/get_nextslide/", 
                                  data: {slider_no : currentslide, ls_id : lesson_id},
                                  contentType: 'json',
                                  success: function(result){
@@ -246,6 +270,7 @@ $lesson=$this->uri->segment(3);
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
                                     if(type!='image'){
+                                        // alert(type);
                                         $('#vid_div').html(html);
                                         overlay.css("display","block");
                                         $('#next').css("display","none");
@@ -254,6 +279,7 @@ $lesson=$this->uri->segment(3);
                                         $('#last_slide').css("display","none");
                                     }
                                     else{
+                                        
                                        $('#vid_div').html(html);
                                        overlay.css("display","none");
                                         $('#next').css("display","none");
@@ -287,6 +313,8 @@ $lesson=$this->uri->segment(3);
         <!--Content Wrapper-->
         <div class="blockClass contentWrapper">
             <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
             <?php if(sizeof($result) <1){echo "<h3>There are no slides added to this lesson yet.</h3>";}?>
                 <h2 class="heading">
                     <span class="slide_title"></span>
@@ -305,7 +333,7 @@ $lesson=$this->uri->segment(3);
                         <?php 
                                                 echo $course_info['0']['course_name'];
                                             ?>
-                                            <button class="blockClass fontButton " id="previous">Previous</button>
+                                            
                     </div>
                     <!--Left-->
 
@@ -313,13 +341,45 @@ $lesson=$this->uri->segment(3);
                     
                     <!--Right-->
                 </div>
+                </div>
+                <style>
+                    .col-lg-8{
+                        width:60%;
+                        display:inline;
+                        float:left;
+                    }
+                    .col-lg-4{
+                        width:40%;
+                        display:inline;
+                        float:left;
+                    }
+                    </style>
+                <div class="col-lg-4">
+                <button class="blockClass fontButton " style="display:none;width:30%; float:left;margin-right:10px;" id="previous">Previous</button>
+                                            <button class="blockClass fontButton " style="width:30%;float:right;" id="start">Start Now
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </button>
+                                <?php 
+                                if(sizeof($result) >=1 ){
+                                    ?>
+                                <button class="blockClass fontButton  c" id="next" style="display:none;width:30%; float:right">Next</button>
+                                <button class="blockClass fontButton " style="width:20%;float:right; display:none" class="start">Reload
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </button>
+                                <?php
+
+                                }
+                                
+                                ?>
+                            </div>
+                </div>
 
                 <div class="blockClass mainContentWrapper">
-                    <h4 class="heading">Description</h4>
+                    <!-- <h4 class="heading">Description</h4>
                     <p class="paraSmall"><?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?></p>
-                    <br>
+                    <br> -->
                     <h4 class="heading">Transcript</h4>
-                    <p class="paraSmall">To begin your lesson please click start now</p>
+                    <p class="paraSmall"><?php if(sizeof($result)>=1){echo $result[0]['slide_description']; }?></p>
                 </div>
             </div>
         </div>

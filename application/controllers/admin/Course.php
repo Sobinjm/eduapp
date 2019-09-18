@@ -15,16 +15,22 @@ class Course extends CI_Controller {
 		// $this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mlesson', 'mlesson_model');	
-		$this->load->model('admin/Mcomment', 'mcomment_model');		
+		$this->load->model('admin/Mcomment', 'mcomment_model');	
+		
+		$this->load->model('admin/Mnotification', 'mnotification_model');
+			
 	}
 	
 	
 	public function index()
 	{
+		
+
 		$data['result'] = $this->mcourse_model->getAllcourse();
 		$i=0;
 		foreach($data['result'] as $new_data)
 		{
+			
 		$crs_id		= $new_data['id'];
 		$course_lang = json_decode($new_data['course_lang']);
 		if($course_lang->english == '1')
@@ -40,10 +46,24 @@ class Course extends CI_Controller {
 				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
 				if($query)
 				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					// print_r($qry);
+
+					// echo "<br>11111<br>";
 					foreach($query as$qry)
 						{
 							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qry['lessons'] as $lsn)
+											{
+												$qry['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
 							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							reset($datas);
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qry;
 						}
 					$data['course_result'][$new_data['id']]['english'] = $datas;
@@ -54,6 +74,9 @@ class Course extends CI_Controller {
 				
 				}
 			}
+			// print_r($data['course_result'][$crs_id]['english']);
+			// echo "<br>".$crs_id."<br><br><br>";
+			
 		}
 		if($course_lang->malayalam == '1')
 		{
@@ -68,10 +91,15 @@ class Course extends CI_Controller {
 				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
 				if($query)
 				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
 					foreach($query as$qry)
 						{
 							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
 							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qry;
 						}
 					$data['course_result'][$new_data['id']]['malayalam'] = $datas;
@@ -96,10 +124,15 @@ class Course extends CI_Controller {
 				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
 				if($query)
 				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
 					foreach($query as$qry)
 						{
 							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
 							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qry;
 						}
 					$data['course_result'][$new_data['id']]['arabic'] = $datas;
@@ -124,10 +157,15 @@ class Course extends CI_Controller {
 				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
 				if($query)
 				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
 					foreach($query as$qry)
 						{
 							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
 							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qry;
 						}
 					$data['course_result'][$new_data['id']]['urdu'] = $datas;
@@ -152,10 +190,15 @@ class Course extends CI_Controller {
 				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
 				if($query)
 				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
 					foreach($query as$qry)
 						{
 							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
 							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qry;
 						}
 					$data['course_result'][$new_data['id']]['pashto'] = $datas;
@@ -178,18 +221,579 @@ class Course extends CI_Controller {
 	public function pending()
 	{
 		$data['result'] = $this->mcourse_model->getPendingcourse();
+		
+		$i=0;
+		foreach($data['result'] as $new_data)
+		{
+			
+		$crs_id		= $new_data['id'];
+		$course_lang = json_decode($new_data['course_lang']);
+		if($course_lang->english == '1')
+		{
+			$language	= 'english';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['english'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					// print_r($qry);
+
+					// echo "<br>11111<br>";
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qry['lessons'] as $lsn)
+											{
+												$qry['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							reset($datas);
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['english'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['english'] = 'no_lesson';
+				
+				}
+			}
+			// print_r($data['course_result'][$crs_id]['english']);
+			// echo "<br>".$crs_id."<br><br><br>";
+			
+		}
+		if($course_lang->malayalam == '1')
+		{
+			$language	= 'malayalam';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['malayalam'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->arabic == '1')
+		{
+			$language	= 'arabic';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['arabic'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->urdu == '1')
+		{
+			$language	= 'urdu';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['urdu'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->pashto == '1')
+		{
+			$language	= 'pashto';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['pashto'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';
+					// print_r($data['course_result']);
+				}
+			}
+		}
+		
+			$i++;
+		}	
 		$this->load->view('admin/course', $data);
 	}
 	
 	public function draft()
 	{
 		$data['result'] = $this->mcourse_model->getDraftcourse();
+		
+		$i=0;
+		foreach($data['result'] as $new_data)
+		{
+			
+		$crs_id		= $new_data['id'];
+		$course_lang = json_decode($new_data['course_lang']);
+		if($course_lang->english == '1')
+		{
+			$language	= 'english';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['english'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					// print_r($qry);
+
+					// echo "<br>11111<br>";
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qry['lessons'] as $lsn)
+											{
+												$qry['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							reset($datas);
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['english'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['english'] = 'no_lesson';
+				
+				}
+			}
+			// print_r($data['course_result'][$crs_id]['english']);
+			// echo "<br>".$crs_id."<br><br><br>";
+			
+		}
+		if($course_lang->malayalam == '1')
+		{
+			$language	= 'malayalam';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['malayalam'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->arabic == '1')
+		{
+			$language	= 'arabic';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['arabic'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->urdu == '1')
+		{
+			$language	= 'urdu';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['urdu'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->pashto == '1')
+		{
+			$language	= 'pashto';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['pashto'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';
+					// print_r($data['course_result']);
+				}
+			}
+		}
+		
+			$i++;
+		}	
 		$this->load->view('admin/course', $data);
 	}
 	
 	public function published()
 	{
 		$data['result'] = $this->mcourse_model->getPublishedcourse();
+		
+		$i=0;
+		foreach($data['result'] as $new_data)
+		{
+			
+		$crs_id		= $new_data['id'];
+		$course_lang = json_decode($new_data['course_lang']);
+		if($course_lang->english == '1')
+		{
+			$language	= 'english';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['english'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					// print_r($qry);
+
+					// echo "<br>11111<br>";
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qry['lessons'] as $lsn)
+											{
+												$qry['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							reset($datas);
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['english'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['english'] = 'no_lesson';
+				
+				}
+			}
+			// print_r($data['course_result'][$crs_id]['english']);
+			// echo "<br>".$crs_id."<br><br><br>";
+			
+		}
+		if($course_lang->malayalam == '1')
+		{
+			$language	= 'malayalam';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['malayalam'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['malayalam'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->arabic == '1')
+		{
+			$language	= 'arabic';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['arabic'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['arabic'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->urdu == '1')
+		{
+			$language	= 'urdu';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['urdu'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['urdu'] = 'no_lesson';
+					
+				}
+			}
+		}
+		if($course_lang->pashto == '1')
+		{
+			$language	= 'pashto';
+		if(empty($crs_id))
+			{
+				$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';	
+				
+			}
+		else 
+			{
+				$query = $this->mlesson_model->getlessonforcourse($crs_id,$language);
+				if($query)
+				{		
+					$datas=array();
+					$qry=array();
+					reset($datas);
+					reset($qry);
+					foreach($query as$qry)
+						{
+							$qry['lessons'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$qry['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							$qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qry;
+						}
+					$data['course_result'][$new_data['id']]['pashto'] = $datas;
+				}
+				else 
+				{
+					$data['course_result'][$new_data['id']]['pashto'] = 'no_lesson';
+					// print_r($data['course_result']);
+				}
+			}
+		}
+		
+			$i++;
+		}	
 		$this->load->view('admin/course', $data);
 	}
 	
@@ -205,10 +809,32 @@ class Course extends CI_Controller {
         } 
 		else
 		{
-			$course_name 		= $this->security->xss_clean($this->input->post('course_name'));
-			$brief_desc 		= $this->security->xss_clean($this->input->post('brief_desc'));
+			$course			= $this->security->xss_clean($this->input->post('course_name'));
+			$course=explode('~',$course);
+			$course_name 		= $course[1];
+			$course_id 		= $course[0];
+			$brief_desc 		= $this->security->xss_clean($this->input->post('brief_descnew'));
 			$no_lessons 		= $this->security->xss_clean($this->input->post('no_lessons'));
 			$publish_status 	= $this->security->xss_clean($this->input->post('publish_status'));
+			if($this->crc_encrypt->decode($this->session->userdata('roll'))==0)
+				{
+					$user_type="Admin";
+				}
+				elseif($this->crc_encrypt->decode($this->session->userdata('user_type'))==1){
+					$user_type="Trainer";
+				}
+				else{
+					$user_type="Student";
+				}
+			$notification=array(
+				'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+				'name'=>$this->session->userdata('name'),
+				'course'=>$course_name,
+				'user_type'=>$user_type,
+				'status'=>'Course Published'
+	
+			);
+			$this->mnotification_model->insert_notification($notification);
 			
 			if(isset($_FILES['icon_file']) && !empty($_FILES['icon_file']['name']))
 				{
@@ -322,11 +948,13 @@ class Course extends CI_Controller {
 					}					
 				
 				$insert_data = array(
+								'course_id'		 =>$course_id,
 								'course_name'	 =>	$course_name,
 								'course_lang'	 =>	json_encode($language),
 								'icon_file'		 =>	$target_file_galry,
 								'course_desc'	 =>	$brief_desc,
 								'lesson_no'		 =>	$no_lessons,
+								'created_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 								'publish_status' => $publish_status
 							);
@@ -364,7 +992,7 @@ class Course extends CI_Controller {
 		{
 			$course_id 			    = $this->crc_encrypt->decode($this->security->xss_clean($this->input->post('edit_eid')));
 			$course_name 			= $this->security->xss_clean($this->input->post('edit_course_name'));
-			$brief_desc 			= $this->security->xss_clean($this->input->post('edit_brief_desc'));
+			$brief_desc 			= $this->security->xss_clean($this->input->post('edit_brief_descnew'));
 			$no_lessons 			= $this->security->xss_clean($this->input->post('edit_no_lessons'));
 			$publish_status 		= $this->security->xss_clean($this->input->post('edit_publish_status'));
 			$no_file_upload		 	= $this->security->xss_clean($this->input->post('no_file_upload'));
@@ -501,9 +1129,28 @@ class Course extends CI_Controller {
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 								'publish_status' => $publish_status
 							);
-				$query = $this->mcourse_model->update_course($course_id,$insert_data);
+			 $query = $this->mcourse_model->update_course($course_id,$insert_data);
+				// print_r($insert_data);
+// exit();
 				if($query) 
 				{		
+					if($this->session->userdata('role')=='0')
+						{
+						$user_type="Admin";
+						}
+						else{
+							$user_type='Trainer';
+						}
+						$notification=array(
+							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+							'name'=>$this->session->userdata('name'),
+							'user_type'=>$user_type,
+							'course'=>$course_name,
+							'status'=>'Course Updated',
+							'url'=>base_url().'admin/course/'
+				
+						);
+				$this->mnotification_model->insert_notification($notification);	
 					$response = array(
 											'status'  => 'success',
 											'message' => 'Course updated successfully'
@@ -514,8 +1161,8 @@ class Course extends CI_Controller {
 				else 
 				{
 					$response = array(
-											'status'  => 'success',
-											'message' => 'Sorry, we are not able to update this course now.'
+											'status'  => 'Failed',
+											'message' => 'Sorry, we are not able to update this course now.'.$query
 										);
 					echo 'Sorry, we are not able to update this course now.';
 					exit();
@@ -567,6 +1214,29 @@ class Course extends CI_Controller {
 				else 
 				{
 					echo 'Sorry, we are not able to approve this course now.';
+				}
+			}
+			
+		}
+		public function draft_status()
+		{
+			$id = $this->security->xss_clean($this->input->post('id'));
+			if(empty($id))
+			{
+				echo 'Sorry, we are not able to draft this course now.';	
+			}
+			else 
+			{
+				$id = $this->crc_encrypt->decode($id);
+				$data = array('publish_status' => '0');
+				$query = $this->mcourse_model->draft_status($id, $data);
+				if($query) 
+				{		
+					echo 'Course drafted successfully.';
+				}
+				else 
+				{
+					echo 'Sorry, we are not able to draft this course now.';
 				}
 			}
 			
@@ -649,7 +1319,14 @@ class Course extends CI_Controller {
 							$html .= 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<button type="button" class="btn btn-flat btn-success pull-right approve_course_main" data-id="'.$this->crc_encrypt->encode($query[0]['id']).'"><i class="fa fa fa-check"></i>&nbsp; Approve Course</button>
 										</div>';
-						}						
+						}	
+						
+						if(($query[0]['publish_status'] == '2' ) && $this->session->role == 0)
+						{
+							$html .= 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+											<button type="button" class="btn btn-flat btn-danger pull-right deapprove_course_main" data-id="'.$this->crc_encrypt->encode($query[0]['id']).'"><i class="fa fa fa-check"></i>&nbsp; Make as draft</button>
+										</div>';
+						}
 					
 					$response = array(
 								'status'	=> 'success',
@@ -713,7 +1390,10 @@ class Course extends CI_Controller {
 			}
 			
 		}
+		public function proxy($id)
+		{
 
+		}
 			
 		
 		

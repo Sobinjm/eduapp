@@ -50,7 +50,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-            E-Learning Slider > <?php echo $course_info[0]['course_name']; ?> > <?php echo $data[0]['lesson_name']; ?>
+           <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider > <?php echo $course_info[0]['course_name']; ?> > <?php echo $data[0]['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -172,7 +172,7 @@ var lesson_no1=$('#lesson_no').val();
 // alert('<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>');
  $.ajax({
      type: "GET",
-     url: base_url + "/index.php/quiz/next_quiz/", 
+     url: base_url + "/quiz/next_quiz/", 
      data: {quiz_id: quiz_count, lesson_no:lesson_no1},
      contentType: 'text',
      success: 
@@ -214,10 +214,10 @@ var base_url='<?php echo base_url(); ?>';
 var lessonID=$('#lesson_id').val();
 var assignID=$('#assign_id').val();
 var scoreValue=$('#score').val();
-alert(lessonID+'---'+assignID);
+// alert(lessonID+'---'+assignID);
 $.ajax({
                                  type: "GET",
-                                 url: base_url + "/index.php/quiz/update_score/", 
+                                 url: base_url + "/quiz/update_score/", 
                                  data: {lesson_id : lessonID, assign_id : assignID,score:scoreValue},
                                  contentType: 'json',
                                  success: function(result){

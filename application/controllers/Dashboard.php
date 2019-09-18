@@ -11,6 +11,8 @@ class Dashboard extends CI_Controller {
 				redirect('login');
 			}
 		$this->load->model('student/Mdashboard', 'mdashboard_model');
+		
+		$this->load->model('admin/Mcourse', 'mcourse_model');
 	}
 	
 	
@@ -23,12 +25,14 @@ class Dashboard extends CI_Controller {
 		$data['assigned_course'] 	= $assigned_course;
 		if(!empty($assigned_course))
 		{
-		$course_info 				= $this->mdashboard_model->course_info($assigned_course['0']['course']);
-		$getalllessons	 			= $this->mdashboard_model->getalllessons($assigned_course['0']['course']);
-		$getalllessons 				= $this->mdashboard_model->getalllessonsbylang($assigned_course['0']['course'],$assigned_course['0']['language']);
+		$course_info 				= $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
+		
+		// $getalllessons	 			= $this->mdashboard_model->getalllessons($assigned_course['0']['course_id']);
+		$getalllessons	 			= $this->mdashboard_model->getalllessons_code($assigned_course['0']['course_code']);
+		// $getalllessons 				= $this->mdashboard_model->getalllessonsbylang_code($assigned_course['0']['course_code'],$assigned_course['0']['language']);
 		// $getslidesforlesson			= $this->mslide_model->getslidesforlesson($a);
 		$data['course_info'] 		= $course_info;
-		$data['query']="SELECT * FROM ad_lessons WHERE course_id = '".$assigned_course['0']['course']."' AND publish_status = 2 AND language='".$assigned_course['0']['language']."' ORDER BY lesson_order ASC";
+		$data['query']="SELECT * FROM ad_lessons WHERE course_id = '".$assigned_course['0']['course_code']."' AND publish_status = 2 AND language='".$assigned_course['0']['language']."' ORDER BY lesson_order ASC";
 		$data['getalllessons'] 		= $getalllessons;
 		}
 		
@@ -37,13 +41,15 @@ class Dashboard extends CI_Controller {
 			$data['course_info'] 		= '';
 			$data['getalllessons'] 		= '';
 		}
-		/*
-		echo '<pre>';
-		print_r($assigned_course);
-		print_r($course_info);
-		print_r($getalllessons);
-		echo '</pre>';
-		*/
+
+		
+		
+		// echo '<pre>';
+		// print_r($assigned_course);
+		// print_r($course_info);
+		// print_r($getalllessons);
+		// echo '</pre>';
+		
 		$this->load->view('front/dashboard', $data);
 	}
 	
