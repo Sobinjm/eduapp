@@ -33,9 +33,9 @@ class Login extends CI_Controller {
 	 
 	public function index()
 	{
+		
 		$this->load->view('admin/login');
 	}
-	
 	public function authenticate()
 	{
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|max_length[50]');
@@ -50,7 +50,7 @@ class Login extends CI_Controller {
 			$email 		 = $this->security->xss_clean($this->input->post('email'));
             $password 	 = $this->security->xss_clean($this->input->post('password'));
             $email_count = $this->madmin_model->checkEmail($email);
-			if($email_count[0]['total'] == 1)
+			if(sizeof($email_count)== 1)
 			{
 				if (password_verify($password, $email_count[0]['password'])) 
 					{

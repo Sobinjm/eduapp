@@ -14,12 +14,12 @@ class Mnotification extends CI_Model
         }
         function getNotifications()
 		{
-			$query = $this->db->query("SELECT * FROM notifications ORDER BY `notifications`.`id` DESC");	
-			return $query->result_array();
+			$query = $this->db->query("SELECT * FROM notifications ORDER BY id DESC");	
+			return $query->result_array(); 
 		}
 		function getTrainerNotifications()
 		{
-			$query = $this->db->query("SELECT * FROM notifications where `status` <>'Login' ORDER BY `notifications`.`id` DESC");	
+			$query = $this->db->query("SELECT * FROM notifications where status <>'Login' ORDER BY id DESC");	
 			return $query->result_array();
 		}
         

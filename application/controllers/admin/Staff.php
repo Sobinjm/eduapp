@@ -37,7 +37,7 @@ class Staff extends CI_Controller {
 			$staff_password = $this->security->xss_clean($this->input->post('staff_password'));
 			
 			$email_count = $this->madmin_model->checkEmail($staff_email);
-			if($email_count[0]['total'] > 0)
+			if(sizeof($email_count)> 0)
 			{
 				echo 'A user with this email already exists.';
 			}
@@ -52,6 +52,8 @@ class Staff extends CI_Controller {
 								'role' => '0'
 								);
 				$query = $this->madmin_model->insert_staff($insert_data);
+				// print_r($query);
+				// die();
 				if($query) 
 				{		
 					echo 'Admin staff added successfully.';

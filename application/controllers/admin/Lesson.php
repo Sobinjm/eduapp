@@ -56,6 +56,8 @@ class Lesson extends CI_Controller {
 		$slideid = $this->crc_encrypt->decode($this->uri->segment(4));
 		
 		$data['result']	=	$this->mlesson_model->getslidebyid($slideid);
+		// print_r($slideid);
+		// die();
 		$data['comments']=	$this->mcomment_model->getslidecomment($slideid);
 		$this->load->view('admin/summary',$data);
 	}

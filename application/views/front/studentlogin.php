@@ -1,6 +1,41 @@
 <?php
 $this->load->view('front/header');
 ?>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Open+Sans+Condensed:300|Raleway' rel='stylesheet' type='text/css'>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+// Ajax post for refresh captcha image.
+$(document).ready(function() {
+$("a.refresh").click(function() {
+    
+// $.ajax({
+// type: "POST",
+// dataType: 'html', 
+// url: "<?php echo base_url(); ?>" + "captcha_controller/captcha_refresh",
+// success: function(res) {
+// if (res)
+// {
+// jQuery("div.image").html(res);
+// }
+// }
+// });
+$.ajax({
+url: "<?php echo base_url(); ?>" + "captcha_controller/captcha_refresh",
+type: 'get',
+  dataType: 'html',        
+  success: function(res) {
+    // alert(res);
+    jQuery("div.image").html(res);
+  },
+  error: function(data) {
+    alert(JSON.stringify(data));
+  }
+});
+});
+});
+</script>
     <!--Section-->
     <section class="blockClass fluidHeightSection studenLoginBg">
         <div class="container">
@@ -32,6 +67,30 @@ $this->load->view('front/header');
                             <input type="text" name="Fnumber" class="blockClass fontInput" placeholder="File Number" />
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </div>
+                        <div class="form-control blockClass">
+                        <div class='image'>
+                        <?php 
+
+                        echo $image;
+echo "</div>";
+
+// Calling for refresh captcha image.
+echo "<a href='#' class ='refresh'><img id = 'ref_symbol' src =".base_url()."img/refresh.png></a>";
+echo "<br>";
+echo "<br>";
+
+// Captcha word field.
+echo form_label('Captcha');
+$data_captcha = array(
+'name' => 'captcha',
+'class' => 'input_box',
+'color' => 'white',
+'placeholder' => '',
+'id' => 'captcha'
+);
+echo form_input($data_captcha);
+?>
+</div>
                         <div class="form-control blockClass">
 							<input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                             <button type="submit"  class="blockClass fontButton">Login</button>

@@ -147,7 +147,7 @@ class Student extends CI_Controller {
 			$emirates_id_no = $this->security->xss_clean($this->input->post('emirates_id_no'));
 			
 			$email_count = $this->mstudent_model->checkEmail($staff_email);
-			if($email_count[0]['total'] > 0)
+			if(sizeof($email_count) > 0)
 			{
 				echo 'A user with this email already exists.';
 			}

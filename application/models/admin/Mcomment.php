@@ -44,7 +44,7 @@ class Mcomment extends CI_Model
 		}
 		function getslidecommentcount($slideid)
 		{
-			$query = $this->db->query("SELECT * FROM ad_slide_comments WHERE status = 0 AND slide_id = '".$slideid."' ORDER BY id ASC limit 1");	
+			$query = $this->db->query("SELECT * FROM ad_slide_comments WHERE status = 0 AND slide_id = '".$slideid."' ORDER BY id ASC ");	
 			return $query->result_array();
 		}
 		

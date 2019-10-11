@@ -252,7 +252,7 @@
 						}
 						*/						
 					}
-					
+					// location.reload();
 					$.post( "<?php echo base_url(); ?>admin/staff/add", { 
 								staff_name: staff_name, 
 								staff_email: staff_email,
@@ -260,7 +260,7 @@
 								staff_password: staff_password,
 								<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
 							}, function(data) {
-								
+								 
 							$( "#add_form" ).trigger("reset");	
 							swal({title: "Message", text: data, type: 
 								"info"}).then(function(){ 
@@ -268,7 +268,7 @@
 								   }
 								);
 							})
-							.fail(function() {
+							.fail(function(data) {
 								swal('Something went wrong. Please check whether you are connected to Internet.');
 							})	
 					event.preventDefault();

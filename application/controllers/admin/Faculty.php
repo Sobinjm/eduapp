@@ -37,7 +37,7 @@ class Faculty extends CI_Controller {
 			$staff_password = $this->security->xss_clean($this->input->post('staff_password'));
 			
 			$email_count = $this->mfaculty_model->checkEmail($staff_email);
-			if($email_count[0]['total'] > 0)
+			if(sizeof($email_count) > 0)
 			{
 				echo 'A user with this email already exists.';
 			}

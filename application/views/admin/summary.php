@@ -42,7 +42,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php
+							<?php 
                             $slno=0;
                             
 									foreach($comments as $comment) {

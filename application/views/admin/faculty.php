@@ -260,8 +260,8 @@
 								   }
 								);
 							})
-							.fail(function() {
-								swal('Something went wrong. Please check whether you are connected to Internet.');
+							.fail(function(data) {
+								swal('Something went wrong. Please check whether you are connected to Internet.'+JSON.stringify(data));
 							})	
 					event.preventDefault();
 				});

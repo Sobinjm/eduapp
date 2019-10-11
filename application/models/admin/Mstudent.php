@@ -10,13 +10,13 @@ class Mstudent extends CI_Model
 		
 		function checkEmail($email)
 		{
-			$query = $this->db->query("SELECT *,COUNT(*) as total FROM ad_student WHERE email = '".$email."'");	
+			$query = $this->db->query("SELECT * FROM ad_student WHERE email = '".$email."'");	
 			return $query->result_array(); 
 		}
 		
 		function checkPassword($email,$password)
 		{
-			$query = $this->db->query("SELECT COUNT(*) as total,* FROM ad_student WHERE email = '".$email."' AND password = '".$password."'");	
+			$query = $this->db->query("SELECT * FROM ad_student WHERE email = '".$email."' AND password = '".$password."'");	
 			return $query->result_array(); 
 		}
 		

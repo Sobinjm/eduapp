@@ -21,6 +21,7 @@ class Login extends CI_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
+		$this->load->helper('captcha');
 		$this->load->model('student/Mlogin', 'mlogin_model');
 		
 		$this->load->model('admin/Mnotification', 'mnotification_model');
@@ -31,8 +32,48 @@ class Login extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('front/studentlogin');
+		$this->captcha_setting();
+		// $this->load->view('front/studentlogin');
 	}
+
+	
+	public function captcha_setting(){
+		$values = array(
+		'word' => '',
+		'word_length' => 8,
+		'img_path' => './images/',
+		'img_url' => base_url() .'images/',
+		'font_path' => base_url() . '/system/fonts/texb.ttf',
+		'img_width' => '150',
+		'img_height' => 50,
+		'expiration' => 3600
+		);
+		$data = create_captcha($values);
+		// print_r($data);
+		// die();
+		$_SESSION['captchaWord'] = $data['word'];
+		
+		// image will store in "$data['image']" index and its send on view page
+		$this->load->view('front/studentlogin', $data);
+		}
+		// For new image on click refresh button.
+		public function captcha_refresh(){
+		$values = array(
+		'word' => '',
+		'word_length' => 8,
+		'img_path' => './images/',
+		'img_url' => base_url() .'images/',
+		'font_path' => base_url() . 'system/fonts/texb.ttf',
+		'img_width' => '150',
+		'img_height' => 50,
+		'expiration' => 3600
+		);
+		$data = create_captcha($values);
+		$_SESSION['captchaWord'] = $data['word'];
+		echo $data['image'];
+		
+		}
+	
 	
 	public function authenticate()
 	{
@@ -68,9 +109,9 @@ class Login extends CI_Controller {
 						}
 						else{
 							if($login->Status->Name=="In Progress")
-							{
+							{ 
 								$checkSno_count=$this->mlogin_model->checkStudent($studentNo);
-								if($checkSno_count[0]['total'] == 1)
+								if(sizeof($checkSno_count)>= 1)
 								{
 									if($checkSno_count[0]['trafficNumber']==$trafficNo && $checkSno_count[0]['fileNumber']==$fileNo)
 									{
@@ -132,7 +173,7 @@ class Login extends CI_Controller {
 									$insert_data = array(
 										'student_id'	=>	$query,
 										'course_code'		=>	$login->LicenseId,
-										'vip'				=> $vip,
+										// 'vip'				=> $vip,
 										'start_date'	=>	 date('m/d/Y h:i a'),
 										'end_date'	 	=>	date('m/d/Y h:i a', strtotime('+6 months')),
 										'assigned_by'	=>	'0',
@@ -177,7 +218,7 @@ class Login extends CI_Controller {
 							}
 							else{
 								$checkSno_count=$this->mlogin_model->checkStudent($studentNo);
-								if($checkSno_count[0]['total'] == 1)
+								if(sizeof($checkSno_count) >= 1)
 								{
 									if($checkSno_count[0]['trafficNumber']==$trafficNo && $checkSno_count[0]['fileNumber']==$fileNo)
 									{
@@ -216,7 +257,7 @@ class Login extends CI_Controller {
 			$email 		 = $this->security->xss_clean($this->input->post('email'));
             $password 	 = $this->security->xss_clean($this->input->post('password'));
             $email_count = $this->mlogin_model->checkEmail($email);
-			if($email_count[0]['total'] == 1)
+			if(sizeof($email_count)>= 1)
 			{
 				if (password_verify($password, $email_count[0]['password'])) 
 					{
