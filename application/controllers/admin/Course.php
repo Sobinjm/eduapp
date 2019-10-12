@@ -26,10 +26,41 @@ class Course extends CI_Controller {
 	{
 		
 
-		$data['result'] = $this->mcourse_model->getAllcourse();
+		// $data['result'] = $this->mcourse_model->getAllcourse();
+		$data['lessons'] = $this->mcourse_model->getAllLessons();
 		$i=0;
+		$slides=null;
+		$index=0;
+		$datas[]=null;
+		$qrys[]=null;
+		foreach($data['lessons'] as $qry)
+						{
+							reset($qrys);
+							reset($datas);
+							$slide[]=$qry;
+							$qrys['slides'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qrys['slides'] as $lsn)
+											{
+												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							
+
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qrys;
+							// $data['lessons'][$qry['id']]=$datas;
+							// echo $qry['id'];
+							// print_r($qrys['slides']);
+							// die();
+							$data['lessons'][$index]['slides']=$qrys['slides'];
+							$data['lessons'][$index]['quiz']=$qrys['quiz'];
+							$index++;
+						}
+						
+/*
 		foreach($data['result'] as $new_data)
-		{
+		{ 
 			
 		$crs_id		= $new_data['id'];
 		$course_lang = json_decode($new_data['course_lang']);
@@ -213,13 +244,47 @@ class Course extends CI_Controller {
 		
 			$i++;
 		}	
-		$this->load->view('admin/course', $data);
+		*/
+		$this->load->view('admin/course', $data); 
 		// print_r($data['result']);
 		// print_r($data['course_result']);
 	}
 	
 	public function pending()
 	{
+
+
+		$data['lessons'] = $this->mcourse_model->getPendingLessons();
+		$i=0;
+		$slides=null;
+		$index=0;
+		$datas[]=null;
+		$qrys[]=null;
+		foreach($data['lessons'] as $qry)
+						{
+							reset($qrys);
+							reset($datas);
+							$slide[]=$qry;
+							$qrys['slides'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qrys['slides'] as $lsn)
+											{
+												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							
+
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qrys;
+							// $data['lessons'][$qry['id']]=$datas;
+							// echo $qry['id'];
+							// print_r($qrys['slides']);
+							// die();
+							$data['lessons'][$index]['slides']=$qrys['slides'];
+							$data['lessons'][$index]['quiz']=$qrys['quiz'];
+							$index++;
+						}
+		/*
 		$data['result'] = $this->mcourse_model->getPendingcourse();
 		
 		$i=0;
@@ -408,11 +473,45 @@ class Course extends CI_Controller {
 		
 			$i++;
 		}	
+		*/
 		$this->load->view('admin/course', $data);
 	}
 	
 	public function draft()
 	{
+		
+
+		$data['lessons'] = $this->mcourse_model->getDraftLessons();
+		$i=0;
+		$slides=null;
+		$index=0;
+		$datas[]=null;
+		$qrys[]=null;
+		foreach($data['lessons'] as $qry)
+						{
+							reset($qrys);
+							reset($datas);
+							$slide[]=$qry;
+							$qrys['slides'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							foreach($qrys['slides'] as $lsn)
+											{
+												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+											}
+							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
+							
+
+							
+							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
+							$datas[] = $qrys;
+							// $data['lessons'][$qry['id']]=$datas;
+							// echo $qry['id'];
+							// print_r($qrys['slides']);
+							// die();
+							$data['lessons'][$index]['slides']=$qrys['slides'];
+							$data['lessons'][$index]['quiz']=$qrys['quiz'];
+							$index++;
+						}
+/*
 		$data['result'] = $this->mcourse_model->getDraftcourse();
 		
 		$i=0;
@@ -601,6 +700,7 @@ class Course extends CI_Controller {
 		
 			$i++;
 		}	
+		*/
 		$this->load->view('admin/course', $data);
 	}
 	

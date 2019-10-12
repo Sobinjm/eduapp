@@ -10,6 +10,7 @@
 	
 	$this->load->model('admin/Mfaculty', 'mfaculty_model');
 	$this->load->model('student/Mapi', 'mapi_model');
+	$this->load->model('admin/Mcourse', 'mcourse_model');
 ?>
   <!-- =============================================== -->
   <?php $this->load->view('admin/header'); ?>
@@ -140,12 +141,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Course Management
+       Lesson Management
         <small></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Course Management</li>
+        <li class="active">Lesson Management</li>
       </ol>
     </section>
 
@@ -162,7 +163,7 @@
 					<h3 class="box-title 5p_border"></h3>
 				  </div>
 				  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default">Add Course</button>
+					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default">Add Lesson</button>
 				  </div> 	
 				</div>
 				<div class="table_padding">
@@ -171,2005 +172,439 @@
 						// print_r($course_result);	
 					
 					?>
+
+
+
+
+
+
+
 					<div id="l_accordion">
-						<?php $i = 1; $j=1; foreach($result as $adm) {  
-							$course_name_d='';
-								// print_r($adm['id']);
-							// print_r($course_result[$adm['id']]);
-							?>
-						<div class="card mb-2">
-							<div class="card-header tab_main_height">
-								<div class="row padd_4e">
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#" class="tab_a_pad " data-toggler="toggle" data-toggler-target="#l_course<?php echo $j; ?>a" data-toggler-collection="#l_accordion"><i class="fa fa-plus-circle"></i> 
-										<?php 
-											echo $adm['course_name'];
-											$course_name_d=$adm['course_name'];
-										?>
-										</a>
-										
-									</div>	
-									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">	
-										<?php 
-										$s='';
-										if($adm['publish_status'] == '0')
-										{
-											echo '<a class="btn btn-danger btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Pending</a>';
-											$s="Pending";
-										}
-										
-										if($adm['publish_status'] == '1')
-										{
-											echo '<a class="btn btn-warning btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Draft</a>';
-											$s="Draft";
-										}
-										
-										if($adm['publish_status'] == '2')
-										{
-											echo '<a class="btn btn-success btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Published</a>';
-											$s="Published";
-										}
-										?>
-									</div>	
-									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-										<a class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now" data-id="<?php echo $this->crc_encrypt->encode($adm['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										<a class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now" data-id="<?php echo $this->crc_encrypt->encode($adm['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>	
-										<a class="lp_buttons lb_bg_one tab_a_pad pull-right view_courses" data-toggle="modal" data-target="#modal-view" data-id="<?php echo $this->crc_encrypt->encode($adm['id']); ?>"><i class="fa fa-eye"></i> View Course</a>
-									</div>
-								</div>
-							</div>
-							<div class="js-toggler <?php if($i === 1){?> is-visible <?php } ?> tab_body_content" id="l_course<?php echo $j; ?>a">
-								<table class="table table-striped">
-									<tr>
-										<th>Language</th>	
-										<th>No. of lessons</th>
-										
-										<th>Action</th>
-									<!-- </tr>
-
-									<a class="btn btn-xs bg-olive  edit_now" data-id="'. $this->crc_encrypt->encode($adm['id']).'" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-														<a class="btn btn-xs bg-olive  l-add_now" data-id="'. $this->crc_encrypt->encode($adm['id']).'" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Add</a>										
-														<a class="lp_buttons lb_bg_one tab_a_pad " data-toggle="modal" data-target="#modal-view_lesson" <i class="fa fa-eye"></i> View Course</a> -->
-									<tbody>
-									<?php 
-										$course_lang = json_decode($adm['course_lang']);
-										
-										if($course_lang->english == '1')
-											{
-													if(isset($course_result[$adm['id']]['english'][0]['updated_on']))
-													{
-														$udate=$course_result[$adm['id']]['english'][0]['updated_on'];
-													}
-													else{
-														$udate=0;
-													}
-													if(isset($course_result[$adm['id']]['english'][0]['created_on']))
-													{
-														$cdate=$course_result[$adm['id']]['english'][0]['created_on'];
-													}
-													else{
-														$cdate=0;
-													}
-												if($course_result[$adm['id']]['english']!='no_lesson')
-												{
-													
-													$cnt=count($course_result[$adm['id']]['english']);
-												}
-												else{
-													$cnt=0;
-												}
-												// print_r($course_result[$adm['id']]['english']);
-												echo '<tr>
-													  <td><a data-toggle="collapse" data-target="#'.$adm['id'].'_english" href="#!" class="pop-details" data-udt="'.date('d-m-Y|h:i:sa',strtotime($udate)).'" data-nolsn="'.$cnt.'" data-dt="'.date('d-m-Y|h:i:sa',strtotime($cdate)).'" data-language="English" data-course="'.$course_name_d.'" data-status="'.$s.'" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-plus-circle"></i>English</a></td>
-													  <td>'.$cnt.'</td>
-													  
-														<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_english" href="#!" class="btn btn-xs bg-olive" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-mail-forward"></i> View | Edit |</a>
-														<button type="button" class="btn btn-xs bg-olive add_course" data-lang="english"  data-id="'.$this->crc_encrypt->encode($adm['id']).'" data-toggle="modal" data-target="#modal-default-new">Add</button>
-														
-									
-									</td>
-									</tr>
-									<tr>
-									<td colspan="3">
-									<div class="collapse" id="'.$adm['id'].'_english">';
-												?>
-
-<div id="c_accordion<?php echo $adm['id'];?>">
-
-						<?php $j++; if(!empty($course_result[$adm['id']]['english'][0]['id'])){  foreach($course_result[$adm['id']]['english'] as $adm_c) {  ?>
-
-						<div class="card mb-2">
-							<div class="card-header tab_main_height">
-								<div class="row padd_4e">
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $adm_c['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $adm_c['lesson_name']; ?></a>
-									</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
-										<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $adm_c['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-										<a>Created By <?php $fname=$this->mfaculty_model->getStaff($course_result[$adm['id']]['english'][0]['created_by']);echo $fname[0]['name']; ?></a>
-		
-
-		
+						<?php //$i = 1; $j=1; foreach($result as $adm) {  ?>
 
 
 
 
 
 
-		<div class="modal fade in" id="modal-add-quiz<?php echo $adm_c['id'].$j; ?>">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Quiz</h4>
-              </div>
-				<div class="modal-body">
-					<form class="form-horizontal add_quiz_form" data-id="<?php echo $adm_c['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $adm_c['id'].$j; ?>">
-						<div class="form-group">
-							<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
-							<div class="col-sm-8">
-							<?php 
-							// print_r($course_result[$adm['id']]['english'][0]);
-							$list_lesson=$course_result[$adm['id']]['english'];
-							// print_r($list_lesson);
-							?>
-								<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $adm_c['id'].$j; ?>" >
-								<?php foreach($list_lesson as $lsn_drop) { 
-								?>
-									<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-								<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
-							<div class="col-sm-8">
-								<select class="form-control quiz_type" data-id="<?php echo $adm_c['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $adm_c['id'].$j; ?>" >
-									<option value="true_or_false">True or False</option>
-									<option value="right_answer">Right Answer</option>
-									<option value="drag_and_drop">Drag and Drop</option>
-									<option value="reorder">Reorder</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="row" id="quiz_display_area_<?php echo $adm_c['id'].$j; ?>">
-							<!---------------Quiz type 1--------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $adm_c['id'].$j; ?>">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="quiz_question_<?php echo $adm_c['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label"></label>
-										<div class="col-sm-8">
-											<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $adm_c['id'].$j; ?>" >
-												<option value="true">True</option>
-												<option value="false">False</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 2-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="ra_question_<?php echo $adm_c['id'].$j; ?>" name="ra_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
-										<div class="col-sm-8">
-											<div class="radio">
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_one_<?php echo $adm_c['id'].$j; ?>" value="video" checked="">
-													Video
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_two_<?php echo $adm_c['id'].$j; ?>" value="image" checked="">
-													Image
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_three_<?php echo $adm_c['id'].$j; ?>" value="audio" checked="">
-													Audio
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
-										<div class="col-sm-8">
-											<input type="file" id="ra_file_<?php echo $adm_c['id'].$j; ?>" name="ra_file">
-											<small>[Respective files corresponding to the media is to be uploaded.]</small>
-											<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="raa_answer_<?php echo $adm_c['id'].$j; ?>" name="raa_answer" placeholder="A Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="raa_correct_answer_<?php echo $adm_c['id'].$j; ?>" value="a" checked>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rab_answer_<?php echo $adm_c['id'].$j; ?>" name="rab_answer" placeholder="B Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rab_correct_answer_<?php echo $adm_c['id'].$j; ?>" value="b">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rac_answer_<?php echo $adm_c['id'].$j; ?>" name="rac_answer" placeholder="C Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rac_correct_answer_<?php echo $adm_c['id'].$j; ?>" value="c">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rad_answer_<?php echo $adm_c['id'].$j; ?>" name="rad_answer" placeholder="D Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rad_correct_answer_<?php echo $adm_c['id'].$j; ?>" value="d">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 3-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_questiom_<?php echo $adm_c['id'].$j; ?>" name="dada_questiom" placeholder="Question A">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_answer_<?php echo $adm_c['id'].$j; ?>" name="dada_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_questiom_<?php echo $adm_c['id'].$j; ?>" name="dadb_questiom" placeholder="Question B">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_answer_<?php echo $adm_c['id'].$j; ?>" name="dadb_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_questiom_<?php echo $adm_c['id'].$j; ?>" name="dadc_questiom" placeholder="Question C">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_answer_<?php echo $adm_c['id'].$j; ?>" name="dadc_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 4-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
-									</div>
-									<div class="form-group">
-										<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoa_answer_<?php echo $adm_c['id'].$j; ?>" name="reoa_answer" placeholder="A Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reob_answer_<?php echo $adm_c['id'].$j; ?>" name="reob_answer" placeholder="B Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoc_answer_<?php echo $adm_c['id'].$j; ?>" name="reoc_answer" placeholder="C Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reod_answer_<?php echo $adm_c['id'].$j; ?>" name="reod_answer" placeholder="D Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-					
-					</div>
-				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
-			  </div>
-			  </form>
-            </div>
-          </div>
-        </div>
-									
-									</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-									</div>
-								</div>
-							</div>
-							<div class="collapse" id="c_course<?php echo $adm_c['id'].$j; ?>a">
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c['lessons']))
-											{
-												
-												foreach($adm_c['lessons'] as $lsn)
-													{
-														// ;
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
-										<td>
-											<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-												<i class="fa fa-fw fa-edit"></i> Edit
-											</a>
-										</td>
-										<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-										<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-								<?php if(!empty($adm_c['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
-										<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No slides added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c['quiz']))
-											{
-												// print_r($adm_c['quiz']);
-												foreach($adm_c['quiz'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
-										<td>
-											<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i> Edit </a>
-										</td>
-										<td>
-										
-										<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-										<td><a class="lp_buttons lb_bg_one tab_a_pad pull-right delete_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										</td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No quiz added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								
-								
-							</div>
-						</div>
-						<?php $j++; }
-											}
-											else{
-												echo "No data found";
-											}
-						?>
-					</div>	
-				
 
-									</div>
-									</td>
-													</tr>
 
-													<?php
-											}
-											
-										if($course_lang->arabic == '1')
-											{
-												if(isset($course_result[$adm['id']]['arabic'][0]['updated_on']))
-										{
-											$udate=$course_result[$adm['id']]['arabic'][0]['updated_on'];
-										}
-										else{
-											$udate=0;
-										}
-										if(isset($course_result[$adm['id']]['arabic'][0]['created_on']))
-										{
-											$cdate=$course_result[$adm['id']]['arabic'][0]['created_on'];
-										}
-										else{
-											$cdate=0;
-										}
-												if($course_result[$adm['id']]['arabic']!='no_lesson')
-												{
-													$cnt=count($course_result[$adm['id']]['arabic']);
-												}
-												else{
-													$cnt=0;
-												}
-												echo '<tr>
-													  <td><a data-toggle="collapse" data-target="#'.$adm['id'].'_arabic" href="#!" class="pop-details"  data-udt="'.date('d-m-Y|h:i:sa',strtotime($udate)).'" data-nolsn="'.$cnt.'" data-dt="'.date('d-m-Y|h:i:sa',strtotime($cdate)).'" data-language="arabic" data-course="'.$course_name_d.'" data-status="'.$s.'" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-plus-circle"></i>Arabic</a></td>
-													  <td>'.$cnt.'</td>
-													  
-														<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_arabic" href="#!" class="btn btn-xs bg-olive" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-mail-forward"></i> View | Edit |</a>
 
-														<button type="button" class="btn btn-xs bg-olive add_course" data-lang="arabic" data-id="'.$this->crc_encrypt->encode($adm['id']).'" data-toggle="modal" data-target="#modal-default-new">Add</button>
-														
-									
-									</td>
-									</tr>
-									<tr>
-									<td colspan="3">
-									<div class="collapse" id="'.$adm['id'].'_arabic">';
-												?>
 
-<div id="c_accordion<?php echo $adm['id'];?>">
 
-						<?php $j++; if(!empty($course_result[$adm['id']]['arabic'][0]['id'])){  foreach($course_result[$adm['id']]['arabic'] as $adm_c) {  ?>
 
-						<div class="card mb-2">
-							<div class="card-header tab_main_height">
-								<div class="row padd_4e">
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $adm_c['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $adm_c['lesson_name']; ?></a>
-									</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
-										<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $adm_c['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-										<a>Created By <?php $fname=$this->mfaculty_model->getStaff($course_result[$adm['id']]['arabic'][0]['created_by']); echo $fname[0]['name']; ?></a>
-		
-		<div class="modal fade in" id="modal-add-quiz<?php echo $adm_c['id'].$j; ?>">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Quiz</h4>
-              </div>
-				<div class="modal-body">
-					<form class="form-horizontal add_quiz_form"  data-id="<?php echo $adm_c['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $adm_c['id'].$j; ?>">
-						<div class="form-group">
-							<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
-							<div class="col-sm-8">
-							<?php 
-							// print_r($course_result[$adm['id']]['english'][0]);
-							$list_lesson=$course_result[$adm['id']]['arabic'];
-							// print_r($list_lesson);
-							?>
-								<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $adm_c['id'].$j; ?>" >
-								<?php foreach($list_lesson as $lsn_drop) { 
-								?>
-									<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-								<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
-							<div class="col-sm-8">
-								<select class="form-control quiz_type" data-id="<?php echo $adm_c['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $adm_c['id'].$j; ?>" >
-									<option value="true_or_false">True or False</option>
-									<option value="right_answer">Right Answer</option>
-									<option value="drag_and_drop">Drag and Drop</option>
-									<option value="reorder">Reorder</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="row" id="quiz_display_area">
-							<!---------------Quiz type 1--------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $adm_c['id'].$j; ?>">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="quiz_question_<?php echo $adm_c['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label"></label>
-										<div class="col-sm-8">
-											<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $adm_c['id'].$j; ?>" >
-												<option value="true">True</option>
-												<option value="false">False</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 2-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="ra_question" name="ra_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
-										<div class="col-sm-8">
-											<div class="radio">
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_one" value="video" checked="">
-													Video
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_two" value="image" checked="">
-													Image
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_three" value="audio" checked="">
-													Audio
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
-										<div class="col-sm-8">
-											<input type="file" id="ra_file" name="ra_file">
-											<small>[Respective files corresponding to the media is to be uploaded.]</small>
-												<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="raa_answer" name="raa_answer" placeholder="A Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="raa_correct_answer" value="a" checked>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rab_answer" name="rab_answer" placeholder="B Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rab_correct_answer" value="b">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rac_answer" name="rac_answer" placeholder="C Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rac_correct_answer" value="c">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rad_answer" name="rad_answer" placeholder="D Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rad_correct_answer" value="d">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 3-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_questiom" name="dada_questiom" placeholder="Question A">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_answer" name="dada_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_questiom" name="dadb_questiom" placeholder="Question B">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_answer" name="dadb_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_questiom" name="dadc_questiom" placeholder="Question C">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_answer" name="dadc_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 4-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
-									</div>
-									<div class="form-group">
-										<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoa_answer" name="reoa_answer" placeholder="A Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reob_answer" name="reob_answer" placeholder="B Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoc_answer" name="reoc_answer" placeholder="C Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reod_answer" name="reod_answer" placeholder="D Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-					
-					</div>
-				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
-			  </div>
-			  </form>
-            </div>
-          </div>
-        </div>	</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-									</div>
-								</div>
-							</div>
-							<div class="collapse" id="c_course<?php echo $adm_c['id'].$j; ?>a">
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c['lessons']))
-											{
-												foreach($adm_c['lessons'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
-										<td>
-											<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-												<i class="fa fa-fw fa-edit"></i> Edit
-											</a>
-										</td>
-										<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-										<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-								<?php if(!empty($adm_c['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
-										<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No slides added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c[0]['quiz']))
-											{
-												foreach($adm_c[0]['quiz'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
-										<td>
-											<i class="fa fa-fw fa-edit"></i> Edit
-										</td>
-										<td><i class="fa fa-fw fa-eye"></i> Preview</td>
-										<td></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No quiz added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								
-								
-							</div>
-						</div>
-						<?php $j++; }
-											}
-											else{
-												echo "No data found";
-											}
-						?>
-					</div>	
-				
 
-									</div>
-									</td>
-													</tr>
 
-													<?php
-											}
-											
-										if($course_lang->urdu == '1')
-											{
-												if(isset($course_result[$adm['id']]['urdu'][0]['updated_on']))
-										{
-											$udate=$course_result[$adm['id']]['urdu'][0]['updated_on'];
-										}
-										else{
-											$udate=0;
-										}
-										if(isset($course_result[$adm['id']]['urdu'][0]['created_on']))
-										{
-											$cdate=$course_result[$adm['id']]['urdu'][0]['created_on'];
-										}
-										else{
-											$cdate=0;
-										}
-												if($course_result[$adm['id']]['urdu']!='no_lesson')
-												{
-													$cnt=count($course_result[$adm['id']]['urdu']);
-												}
-												else{
-													$cnt=0;
-												}
-												echo '<tr>
-												<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_urdu" href="#!" class="pop-details"  data-udt="'.date('d-m-Y|h:i:sa',strtotime($udate)).'" data-nolsn="'.$cnt.'" data-dt="'.date('d-m-Y|h:i:sa',strtotime($cdate)).'" data-language="English" data-course="'.$course_name_d.'" data-status="'.$s.'" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-plus-circle"></i>Urdu</a></td>
-												<td>'.$cnt.'</td>
-												
-												<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_urdu" href="#!" class="btn btn-xs bg-olive" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-mail-forward"></i> View | Edit |</a>
-												<button type="button" class="btn btn-xs bg-olive add_course" data-lang="urdu"  data-id="'.$this->crc_encrypt->encode($adm['id']).'" data-toggle="modal" data-target="#modal-default-new">Add</button>
-												
-							
-							</td>
-							</tr>
-							<tr>
-							<td colspan="3">
-							<div class="collapse" id="'.$adm['id'].'_urdu">';
-										?>
 
-<div id="c_accordion<?php echo $adm['id'];?>">
 
-				<?php $j++; if(!empty($course_result[$adm['id']]['urdu'][0]['id'])){  foreach($course_result[$adm['id']]['urdu'] as $adm_c) {  ?>
 
-				<div class="card mb-2">
-					<div class="card-header tab_main_height">
-						<div class="row padd_4e">
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $adm_c['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $adm_c['lesson_name']; ?></a>
-							</div>	
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
-								<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $adm_c['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-									<a>Created By <?php $fname=$this->mfaculty_model->getStaff($course_result[$adm['id']]['urdu'][0]['created_by']); echo $fname[0]['name']; ?></a>
-		
-		<div class="modal fade in" id="modal-add-quiz<?php echo $adm_c['id'].$j; ?>">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Quiz</h4>
-              </div>
-				<div class="modal-body">
-					<form class="form-horizontal add_quiz_form"  data-id="<?php echo $adm_c['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $adm_c['id'].$j; ?>">
-						<div class="form-group">
-							<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
-							<div class="col-sm-8">
-							<?php 
-							// print_r($course_result[$adm['id']]['english'][0]);
-							$list_lesson=$course_result[$adm['id']]['urdu'];
-							// print_r($list_lesson);
-							?>
-								<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $adm_c['id'].$j; ?>" >
-								<?php foreach($list_lesson as $lsn_drop) { 
-								?>
-									<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-								<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
-							<div class="col-sm-8">
-							<select class="form-control quiz_type" data-id="<?php echo $adm_c['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $adm_c['id'].$j; ?>" >
-									<option value="true_or_false">True or False</option>
-									<option value="right_answer">Right Answer</option>
-									<option value="drag_and_drop">Drag and Drop</option>
-									<option value="reorder">Reorder</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="row" id="quiz_display_area">
-							<!---------------Quiz type 1--------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $adm_c['id'].$j; ?>">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="quiz_question_<?php echo $adm_c['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label"></label>
-										<div class="col-sm-8">
-											<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $adm_c['id'].$j; ?>" >
-												<option value="true">True</option>
-												<option value="false">False</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 2-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="ra_question" name="ra_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
-										<div class="col-sm-8">
-											<div class="radio">
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_one" value="video" checked="">
-													Video
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_two" value="image" checked="">
-													Image
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_three" value="audio" checked="">
-													Audio
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
-										<div class="col-sm-8">
-											<input type="file" id="ra_file" name="ra_file">
-											<small>[Respective files corresponding to the media is to be uploaded.]</small>
-												<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="raa_answer" name="raa_answer" placeholder="A Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="raa_correct_answer" value="a" checked>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rab_answer" name="rab_answer" placeholder="B Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rab_correct_answer" value="b">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rac_answer" name="rac_answer" placeholder="C Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rac_correct_answer" value="c">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rad_answer" name="rad_answer" placeholder="D Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rad_correct_answer" value="d">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 3-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_questiom" name="dada_questiom" placeholder="Question A">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_answer" name="dada_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_questiom" name="dadb_questiom" placeholder="Question B">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_answer" name="dadb_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_questiom" name="dadc_questiom" placeholder="Question C">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_answer" name="dadc_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 4-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
-									</div>
-									<div class="form-group">
-										<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoa_answer" name="reoa_answer" placeholder="A Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reob_answer" name="reob_answer" placeholder="B Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoc_answer" name="reoc_answer" placeholder="C Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reod_answer" name="reod_answer" placeholder="D Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-					
-					</div>
-				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
-			  </div>
-			  </form>
-            </div>
-          </div>
-        </div></div>	
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-								<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-							</div>
-						</div>
-					</div>
-					<div class="collapse" id="c_course<?php echo $adm_c['id'].$j; ?>a">
-						<table class="table table-striped">
-							<tbody>
-							<tr>
-								<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
-							</tr>	
-							<?php 
-								if(!empty($adm_c['lessons']))
-									{
-										foreach($adm_c['lessons'] as $lsn)
-											{
-												// $adm_c['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
 
-							?>
-							<tr>
-								<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
-								<td>
-									<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-										<i class="fa fa-fw fa-edit"></i> Edit
-									</a>
-								</td>
-								<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-								<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-								<?php if(!empty($adm_c['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
-								<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
-							</tr>
-							<?php 
-											}
-									}
-								else
-									{
-							?>
-							<tr>
-								<td colspan="3">No slides added.</td>
-							</tr>
-							<?php 
-									} 
-							?>
-							</tbody>
-						</table>
-						<table class="table table-striped">
-							<tbody>
-							<tr>
-								<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
-							</tr>	
-							<?php 
-								if(!empty($adm_c[0]['quiz']))
-									{
-										foreach($adm_c[0]['quiz'] as $lsn)
-											{
-							?>
-							<tr>
-								<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
-								<td>
-									<i class="fa fa-fw fa-edit"></i> Edit
-								</td>
-								<td><i class="fa fa-fw fa-eye"></i> Preview</td>
-								<td></td>
-							</tr>
-							<?php 
-											}
-									}
-								else
-									{
-							?>
-							<tr>
-								<td colspan="3">No quiz added.</td>
-							</tr>
-							<?php 
-									} 
-							?>
-							</tbody>
-						</table>
-						
-						
-					</div>
-				</div>
-				<?php $j++; }
-									}
-									else{
-										echo "No data found";
-									}
-				?>
+
+
+
+
+							<?php $j=0;  if(!empty($lessons)){  foreach($lessons as $lesson) {   ?>
+
+							<div id="c_accordion<?php echo $lesson['id'];?>">
+
+
+
+<div class="card mb-2">
+	<div class="card-header tab_main_height">
+		<div class="row padd_4e">
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
 			</div>	
-		
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
+				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
+				<a>Created By <?php $fname=$this->mfaculty_model->getStaff($lesson['created_by']); echo $fname[0]['name']; ?></a>
 
-							</div>
-							</td>
-											</tr>
+<div class="modal fade in" id="modal-add-quiz<?php echo $lesson['id'].$j; ?>">
+<div class="modal-dialog modal-md">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">×</span></button>
+<h4 class="modal-title">Add Quiz</h4>
+</div>
+<div class="modal-body">
+<form class="form-horizontal add_quiz_form"  data-id="<?php echo $lesson['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $lesson['id'].$j; ?>">
+<div class="form-group">
+	<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
+	<div class="col-sm-8">
+	<?php 
+	// print_r($course_result[$adm['id']]['english'][0]);
+	$list_lesson=$lessons;
+	// print_r($list_lesson);
+	?>
+		<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $lesson['id'].$j; ?>" >
+		<?php foreach($list_lesson as $lsn_drop) { 
+		?>
+			<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
+		<?php } ?>
+		</select>
+	</div>
+</div>
+<div class="form-group">
+	<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
+	<div class="col-sm-8">
+		<select class="form-control quiz_type" data-id="<?php echo $lesson['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $lesson['id'].$j; ?>" >
+			<option value="true_or_false">True or False</option>
+			<option value="right_answer">Right Answer</option>
+			<option value="drag_and_drop">Drag and Drop</option>
+			<option value="reorder">Reorder</option>
+		</select>
+	</div>
+</div>
 
-											<?php
-											}
-											// print_r($course_result[$adm['id']]);
-										if($course_lang->pashto == '1')
-											{
-												if(isset($course_result[$adm['id']]['pashto'][0]['updated_on']))
-												{
-													$udate=$course_result[$adm['id']]['pashto'][0]['updated_on'];
-												}
-												else{
-													$udate=0;
-												}
-												if(isset($course_result[$adm['id']]['pashto'][0]['created_on']))
-												{
-													$cdate=$course_result[$adm['id']]['pashto'][0]['created_on'];
-												}
-												else{
-													$cdate=0;
-												}
-												if($course_result[$adm['id']]['pashto']!='no_lesson')
-												{
-													$cnt=count($course_result[$adm['id']]['pashto']);
-												}
-												else{
-													$cnt=0;
-												}
-												echo '<tr>
-													  <td><a data-toggle="collapse" data-target="#'.$adm['id'].'_pashto" href="#!"  class="pop-details"  data-udt="'.date('d-m-Y|h:i:sa',strtotime($udate)).'" data-nolsn="'.$cnt.'" data-dt="'.date('d-m-Y|h:i:sa',strtotime($cdate)).'" data-language="Pashto" data-course="'.$course_name_d.'" data-status="'.$s.'" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-plus-circle"></i>Pashto</a></td>
-													  <td>'.$cnt.'</td>
-													  
-														<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_pashto" href="#!" class="btn btn-xs bg-olive" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-mail-forward"></i> View | Edit |</a>
-														<button type="button" class="btn btn-xs bg-olive add_course" data-lang="pashto"  data-id="'.$this->crc_encrypt->encode($adm['id']).'" data-toggle="modal" data-target="#modal-default-new">Add</button>
-														
-									
-									</td>
-									</tr>
-									<tr>
-									<td colspan="3">
-									<div class="collapse" id="'.$adm['id'].'_pashto">';
-												?>
-
-<div id="c_accordion<?php echo $adm['id'];?>">
-
-						<?php $j++; if(!empty($course_result[$adm['id']]['pashto'][0]['id'])){  foreach($course_result[$adm['id']]['pashto'] as $adm_c) {  ?>
-
-						<div class="card mb-2">
-							<div class="card-header tab_main_height">
-								<div class="row padd_4e">
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $adm_c['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $adm_c['lesson_name']; ?></a>
-									</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
-										<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $adm_c['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-										<a> Created By <?php $fname=$this->mfaculty_model->getStaff($course_result[$adm['id']]['pashto'][0]['created_by']);echo $fname[0]['name']; ?></a>
-		
-		<div class="modal fade in" id="modal-add-quiz<?php echo $adm_c['id'].$j; ?>">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Quiz</h4>
-              </div>
-				<div class="modal-body">
-					<form class="form-horizontal add_quiz_form"  data-id="<?php echo $adm_c['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $adm_c['id'].$j; ?>">
-						<div class="form-group">
-							<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
-							<div class="col-sm-8">
-							<?php 
-							// print_r($course_result[$adm['id']]['english'][0]);
-							$list_lesson=$course_result[$adm['id']]['pashto'];
-							// print_r($list_lesson);
-							?>
-								<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $adm_c['id'].$j; ?>" >
-								<?php foreach($list_lesson as $lsn_drop) { 
-								?>
-									<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-								<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
-							<div class="col-sm-8">
-							<select class="form-control quiz_type" data-id="<?php echo $adm_c['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $adm_c['id'].$j; ?>" >
-									<option value="true_or_false">True or False</option>
-									<option value="right_answer">Right Answer</option>
-									<option value="drag_and_drop">Drag and Drop</option>
-									<option value="reorder">Reorder</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="row" id="quiz_display_area">
-							<!---------------Quiz type 1--------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $adm_c['id'].$j; ?>">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="quiz_question_<?php echo $adm_c['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label"></label>
-										<div class="col-sm-8">
-											<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $adm_c['id'].$j; ?>" >
-												<option value="true">True</option>
-												<option value="false">False</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 2-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="ra_question" name="ra_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
-										<div class="col-sm-8">
-											<div class="radio">
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_one" value="video" checked="">
-													Video
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_two" value="image" checked="">
-													Image
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_three" value="audio" checked="">
-													Audio
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
-										<div class="col-sm-8">
-											<input type="file" id="ra_file" name="ra_file">
-											<small>[Respective files corresponding to the media is to be uploaded.]</small>
-												<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="raa_answer" name="raa_answer" placeholder="A Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="raa_correct_answer" value="a" checked>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rab_answer" name="rab_answer" placeholder="B Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rab_correct_answer" value="b">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rac_answer" name="rac_answer" placeholder="C Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rac_correct_answer" value="c">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rad_answer" name="rad_answer" placeholder="D Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rad_correct_answer" value="d">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 3-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_questiom" name="dada_questiom" placeholder="Question A">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_answer" name="dada_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_questiom" name="dadb_questiom" placeholder="Question B">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_answer" name="dadb_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_questiom" name="dadc_questiom" placeholder="Question C">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_answer" name="dadc_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 4-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
-									</div>
-									<div class="form-group">
-										<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoa_answer" name="reoa_answer" placeholder="A Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reob_answer" name="reob_answer" placeholder="B Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoc_answer" name="reoc_answer" placeholder="C Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reod_answer" name="reod_answer" placeholder="D Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-					
+<div class="row" id="quiz_display_area">
+	<!---------------Quiz type 1--------------->
+	<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $lesson['id'].$j; ?>">
+		<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
+			<div class="form-group">
+				<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
+			</div>
+			<div class="form-group">
+				<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
+				<div class="col-sm-8">
+					<textarea class="textarea" id="quiz_question_<?php echo $lesson['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
+					style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="quiz_question" class="col-sm-4 control-label"></label>
+				<div class="col-sm-8">
+					<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $lesson['id'].$j; ?>" >
+						<option value="true">True</option>
+						<option value="false">False</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!---------------Quiz type 2-------------->
+	<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $lesson['id'].$j; ?>" style="display:none;">
+		<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
+			<div class="form-group">
+				<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
+			</div>
+			<div class="form-group">
+				<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
+				<div class="col-sm-8">
+					<textarea class="textarea" id="ra_question" name="ra_question" placeholder="Please type question"
+					style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
+				<div class="col-sm-8">
+					<div class="radio">
+						<label>
+							<input type="radio" name="ra_media" id="ra_media_one" value="video" checked="">
+							Video
+						</label>
+						<label>
+							<input type="radio" name="ra_media" id="ra_media_two" value="image" checked="">
+							Image
+						</label>
+						<label>
+							<input type="radio" name="ra_media" id="ra_three" value="audio" checked="">
+							Audio
+						</label>
 					</div>
 				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
-			  </div>
-			  </form>
-            </div>
-          </div>
-        </div></div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-									</div>
-								</div>
-							</div>
-							<div class="collapse" id="c_course<?php echo $adm_c['id'].$j; ?>a">
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c['lessons']))
-											{
-												foreach($adm_c['lessons'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
-										<td>
-											<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-												<i class="fa fa-fw fa-edit"></i> Edit
-											</a>
-										</td>
-										<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-										<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-								<?php if(!empty($adm_c['iscomment'])){echo 'Admin Comment';}  ; ; ?></a></td>
-										<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No slides added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c[0]['quiz']))
-											{
-												foreach($adm_c[0]['quiz'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
-										<td>
-											<i class="fa fa-fw fa-edit"></i> Edit
-										</td>
-										<td><i class="fa fa-fw fa-eye"></i> Preview</td>
-										<td></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No quiz added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								
-								
-							</div>
-						</div>
-						<?php $j++; }
-											}
-											else{
-												echo "No data found";
-											}
-						?>
-					</div>	
-				
-
-									</div>
-									</td>
-													</tr>
-
-													<?php
-											}
-											
-										if($course_lang->malayalam == '1')
-											{
-												if(isset($course_result[$adm['id']]['malayalam'][0]['updated_on']))
-												{
-													$udate=$course_result[$adm['id']]['malayalam'][0]['updated_on'];
-												}
-												else{
-													$udate=0;
-												}
-												if(isset($course_result[$adm['id']]['malayalam'][0]['created_on']))
-												{
-													$cdate=$course_result[$adm['id']]['malayalam'][0]['created_on'];
-												}
-												else{
-													$cdate=0;
-												}
-												if($course_result[$adm['id']]['malayalam']!='no_lesson')
-												{
-													$cnt=count($course_result[$adm['id']]['malayalam']);
-												}
-												else{
-													$cnt=0;
-												}
-												echo '<tr>
-													  <td><a data-toggle="collapse" data-target="#'.$adm['id'].'_malayalam" href="#!"  class="pop-details"  data-udt="'.date('d-m-Y|h:i:sa',strtotime($udate)).'" data-nolsn="'.$cnt.'" data-dt="'.date('d-m-Y|h:i:sa',strtotime($cdate)).'" data-language="malayalam" data-course="'.$course_name_d.'" data-status="'.$s.'" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-plus-circle"></i>Malayalam</a></td>
-														<td>'.$cnt.'</td>
-													  
-														<td><a data-toggle="collapse" data-target="#'.$adm['id'].'_malayalam" href="#!" class="btn btn-xs bg-olive" data-id="'.$this->crc_encrypt->encode($adm['id']).'"><i class="fa fa-mail-forward"></i> View | Edit |</a>
-														<button type="button" class="btn btn-xs bg-olive add_course" data-lang="malayalam"  data-id="'.$this->crc_encrypt->encode($adm['id']).'" data-toggle="modal" data-target="#modal-default-new">Add</button>														
-									
-									</td>
-									</tr>
-									<tr>
-									<td colspan="3">
-									<div class="collapse" id="'.$adm['id'].'_malayalam">';
-								
-												?>
-
-<div id="c_accordion<?php echo $adm['id'];?>">
-
-						<?php $j++; if(!empty($course_result[$adm['id']]['malayalam'][0]['id'])){  foreach($course_result[$adm['id']]['malayalam'] as $adm_c) {  ?>
-
-						<div class="card mb-2">
-							<div class="card-header tab_main_height">
-								<div class="row padd_4e">
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $adm_c['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $adm_c['lesson_name']; ?></a>
-									</div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
-										<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $adm_c['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-										<a>Created By <?php $fname=$this->mfaculty_model->getStaff($course_result[$adm['id']]['malayalam'][0]['created_by']);echo $fname[0]['name']; ?></a>
-		
-		<div class="modal fade in" id="modal-add-quiz<?php echo $adm_c['id'].$j; ?>">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Quiz</h4>
-              </div>
-				<div class="modal-body">
-					<form class="form-horizontal add_quiz_form"  data-id="<?php echo $adm_c['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form<?php echo $adm_c['id'].$j; ?>">
-						<div class="form-group">
-							<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
-							<div class="col-sm-8">
-							<?php 
-							// print_r($course_result[$adm['id']]['english'][0]);
-							$list_lesson=$course_result[$adm['id']]['malayalam'];
-							// print_r($list_lesson);
-							?>
-								<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $adm_c['id'].$j; ?>" >
-								<?php foreach($list_lesson as $lsn_drop) { 
-								?>
-									<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-								<?php } ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="quiz_type" class="col-sm-4 control-label">Select Quiz Type</label>
-							<div class="col-sm-8">
-							<select class="form-control quiz_type" data-id="<?php echo $adm_c['id'].$j; ?>" name="quiz_type" id="quiz_type_<?php echo $adm_c['id'].$j; ?>" >
-									<option value="true_or_false">True or False</option>
-									<option value="right_answer">Right Answer</option>
-									<option value="drag_and_drop">Drag and Drop</option>
-									<option value="reorder">Reorder</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="row" id="quiz_display_area">
-							<!---------------Quiz type 1--------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="true_or_false_<?php echo $adm_c['id'].$j; ?>">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>True or  False Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="quiz_question_<?php echo $adm_c['id'].$j; ?>" name="quiz_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label"></label>
-										<div class="col-sm-8">
-											<select class="form-control" name="trf_answer" id="trf_answer_<?php echo $adm_c['id'].$j; ?>" >
-												<option value="true">True</option>
-												<option value="false">False</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 2-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="right_answer_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Right Answer Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label for="quiz_question" class="col-sm-4 control-label">Please Type Question</label>
-										<div class="col-sm-8">
-											<textarea class="textarea" id="ra_question" name="ra_question" placeholder="Please type question"
-											style="width: 100%; height: 100px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="no_lessons" class="col-sm-4 control-label">Attach Media to Quiz</label>
-										<div class="col-sm-8">
-											<div class="radio">
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_one" value="video" checked="">
-													Video
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_media_two" value="image" checked="">
-													Image
-												</label>
-												<label>
-													<input type="radio" name="ra_media" id="ra_three" value="audio" checked="">
-													Audio
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
-										<div class="col-sm-8">
-											<input type="file" id="ra_file" name="ra_file">
-											<small>[Respective files corresponding to the media is to be uploaded.]</small>
-												<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="raa_answer" name="raa_answer" placeholder="A Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="raa_correct_answer" value="a" checked>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rab_answer" name="rab_answer" placeholder="B Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rab_correct_answer" value="b">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rac_answer" name="rac_answer" placeholder="C Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rac_correct_answer" value="c">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="rad_answer" name="rad_answer" placeholder="D Answer">
-										</div>
-										<div class="col-sm-2">
-											<input type="radio" name="ra_correct_answer" id="rad_correct_answer" value="d">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 3-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
-									</div>
-									
-									<div class="form-group">
-										<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
-										<div class="col-sm-4"></div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_questiom" name="dada_questiom" placeholder="Question A">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dada_answer" name="dada_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_questiom" name="dadb_questiom" placeholder="Question B">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadb_answer" name="dadb_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_questiom" name="dadc_questiom" placeholder="Question C">
-										</div>
-										<div class="col-sm-6">
-											<input type="textbox" class="form-control" id="dadc_answer" name="dadc_answer" placeholder="Matching Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!---------------Quiz type 4-------------->
-							<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $adm_c['id'].$j; ?>" style="display:none;">
-								<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
-									<div class="form-group">
-										<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
-										<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
-									</div>
-									<div class="form-group">
-										<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoa_answer" name="reoa_answer" placeholder="A Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reob_answer" name="reob_answer" placeholder="B Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reoc_answer" name="reoc_answer" placeholder="C Answer">
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
-										<div class="col-sm-8">
-											<input type="textbox" class="form-control" id="reod_answer" name="reod_answer" placeholder="D Answer">
-										</div>
-									</div>
-								</div>
-							</div>
-					
-					</div>
+			</div>
+			<div class="form-group">
+				<label for="icon_file" class="col-sm-4 control-label">Upload Media</label>
+				<div class="col-sm-8">
+					<input type="file" id="ra_file" name="ra_file">
+					<small>[Respective files corresponding to the media is to be uploaded.]</small>
+						<img class="loader" src="<?php echo base_url(); ?>front/images/loader.gif"  style="height:200px; width:200px;display:none"/>
 				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
-			  </div>
-			  </form>
-            </div>
-          </div>
-        </div></div>	
-									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-										<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-										<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($adm_c['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
-									</div>
-								</div>
-							</div>
-							<div class="collapse" id="c_course<?php echo $adm_c['id'].$j; ?>a">
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c['lessons']))
-											{
-												foreach($adm_c['lessons'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
-										<td>
-											<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-												<i class="fa fa-fw fa-edit"></i> Edit
-											</a>
-										</td>
-										<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-										<td ><a class="lp_buttoif(!empty($adm_c['iscomment'])){echo 'Admin Comment';} ns lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-								<?php if(!empty($adm_c['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
-										<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No slides added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								<table class="table table-striped">
-									<tbody>
-									<tr>
-										<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
-									</tr>	
-									<?php 
-										if(!empty($adm_c[0]['quiz']))
-											{
-												foreach($adm_c[0]['quiz'] as $lsn)
-													{
-									?>
-									<tr>
-										<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
-										<td>
-											<i class="fa fa-fw fa-edit"></i> Edit
-										</td>
-										<td><i class="fa fa-fw fa-eye"></i> Preview</td>
-										<td></td>
-									</tr>
-									<?php 
-													}
-											}
-										else
-											{
-									?>
-									<tr>
-									  <td colspan="3">No quiz added.</td>
-									</tr>
-									<?php 
-											} 
-									?>
-									</tbody>
-								</table>
-								
-								
-							</div>
-						</div>
-						<?php $j++; }
-											}
-											else{
-												echo "No data found";
-											}
-						?>
-					</div>	
-				
+			</div>
+			<div class="form-group">
+				<label class="col-sm-7 control-label">Please type answer & select correct answer</label>
+				<div class="col-sm-4"></div>
+			</div>
+			<div class="form-group">
+				<label for="raa_answer" class="col-sm-4 control-label">"A" Answer:</label>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="raa_answer" name="raa_answer" placeholder="A Answer">
+				</div>
+				<div class="col-sm-2">
+					<input type="radio" name="ra_correct_answer" id="raa_correct_answer" value="a" checked>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="rab_answer" class="col-sm-4 control-label">"B" Answer:</label>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="rab_answer" name="rab_answer" placeholder="B Answer">
+				</div>
+				<div class="col-sm-2">
+					<input type="radio" name="ra_correct_answer" id="rab_correct_answer" value="b">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="rac_answer" class="col-sm-4 control-label">"C" Answer:</label>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="rac_answer" name="rac_answer" placeholder="C Answer">
+				</div>
+				<div class="col-sm-2">
+					<input type="radio" name="ra_correct_answer" id="rac_correct_answer" value="c">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="rad_answer" class="col-sm-4 control-label">"D" Answer:</label>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="rad_answer" name="rad_answer" placeholder="D Answer">
+				</div>
+				<div class="col-sm-2">
+					<input type="radio" name="ra_correct_answer" id="rad_correct_answer" value="d">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!---------------Quiz type 3-------------->
+	<div class="col-lg-12 col-md-12 col-sm-12" id="draganddrop_<?php echo $lesson['id'].$j; ?>" style="display:none;">
+		<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
+			<div class="form-group">
+				<h4 class="box-title padd_5e"><u>Drag & Drop Quiz</u></h4>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-7 control-label" style="text-align: left;">Please type the sentences in part</label>
+				<div class="col-sm-4"></div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dada_questiom" name="dada_questiom" placeholder="Question A">
+				</div>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dada_answer" name="dada_answer" placeholder="Matching Answer">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dadb_questiom" name="dadb_questiom" placeholder="Question B">
+				</div>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dadb_answer" name="dadb_answer" placeholder="Matching Answer">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dadc_questiom" name="dadc_questiom" placeholder="Question C">
+				</div>
+				<div class="col-sm-6">
+					<input type="textbox" class="form-control" id="dadc_answer" name="dadc_answer" placeholder="Matching Answer">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!---------------Quiz type 4-------------->
+	<div class="col-lg-12 col-md-12 col-sm-12" id="reorder_quiz_<?php echo $lesson['id'].$j; ?>" style="display:none;">
+		<div class="col-lg-12 col-md-12 col-sm-12 quiz_border">
+			<div class="form-group">
+				<h4 class="box-title padd_5e"><u>Reorder Quiz</u></h4>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-12 control-label"  style="text-align: left;">Please type the required content into the boxes for reorder</label>
+				<label class="col-sm-12 control-label"  style="text-align: left;">Please write the right order as per the following</label>
+			</div>
+			<div class="form-group">
+				<label for="reoa_answer" class="col-sm-4 control-label">"A" Answer:</label>
+				<div class="col-sm-8">
+					<input type="textbox" class="form-control" id="reoa_answer" name="reoa_answer" placeholder="A Answer">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="reob_answer" class="col-sm-4 control-label">"B" Answer:</label>
+				<div class="col-sm-8">
+					<input type="textbox" class="form-control" id="reob_answer" name="reob_answer" placeholder="B Answer">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="reoc_answer" class="col-sm-4 control-label">"C" Answer:</label>
+				<div class="col-sm-8">
+					<input type="textbox" class="form-control" id="reoc_answer" name="reoc_answer" placeholder="C Answer">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="reod_answer" class="col-sm-4 control-label">"D" Answer:</label>
+				<div class="col-sm-8">
+					<input type="textbox" class="form-control" id="reod_answer" name="reod_answer" placeholder="D Answer">
+				</div>
+			</div>
+		</div>
+	</div>
 
-									</div>
-									</td>
-													</tr>
+</div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
+<button type="submit" name="quiz_submit" class="btn btn-flat btn-success">Submit</button>
+</div>
+</form>
+</div>
+</div>
+</div>	</div>	
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>"><i class="fa fa-times"></i> Delete</a>
+				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+			</div>
+		</div>
+	</div>
+	<div class="collapse" id="c_course<?php echo $lesson['id'].$j; ?>a">
+		<table class="table table-striped">
+			<tbody>
+			<tr>
+				<td colspan="4"><u><h4><i class="fa fa-desktop" aria-hidden="true"></i>&nbsp;Slides</h4></u></td>
+			</tr>	
+			<?php 
+			// print_r($lesson);
+				if(!empty($lesson['slides']))
+					{
+						
+						// die();
+						foreach($lesson['slides'] as $lsn)
+							{
+								// print_r($lsn);
+								if(!empty($lsn)){
+			?>
+			<tr>
+				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
+				<td>
+					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
+						<i class="fa fa-fw fa-edit"></i> Edit
+					</a>
+				</td>
+				<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
+				<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
+		<?php if(!empty($lesson['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
+				<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
+			</tr>
+			<?php 
+								}
+							}
+					}
+				else
+					{
+			?>
+			<tr>
+			  <td colspan="3">No slides added.</td>
+			</tr>
+			<?php 
+					} 
+			?>
+			</tbody>
+		</table>
+		<table class="table table-striped">
+			<tbody>
+			<tr>
+				<td colspan="4"><u><h4><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Quiz</h4></u></td>
+			</tr>	
+			<?php 
+				if(!empty($lesson['quiz']))
+					{
+						foreach($lesson['quiz'] as $lsn)
+							{
+			?>
+			<tr>
+				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
+				<td>
+					<i class="fa fa-fw fa-edit"></i> Edit
+				</td>
+				<td><i class="fa fa-fw fa-eye"></i> Preview</td>
+				<td></td>
+			</tr>
+			<?php 
+							}
+					}
+				else
+					{
+			?>
+			<tr>
+			  <td colspan="3">No quiz added.</td>
+			</tr>
+			<?php 
+					} 
+			?>
+			</tbody>
+		</table>
+		
+		
+	</div>
+</div>
+</div>	
+<?php $j++; }
+					}
+					else{
+						echo "No data found";
+					}
+?>
 
-													<?php
-											}
-									?>	
-								  </tbody>
-								</table>
-							</div>
-						</div>
-						<?php $i++; } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						<?php //$i++; //} ?>
 					</div>	
 				</div>
 			  </div>
@@ -2181,7 +616,7 @@
 						{ 
 				?>
 				<div class="box-header with-border">
-				  <h3 class="box-title">Course Information</h3>
+				  <h3 class="box-title">Lesson Information</h3>
 				</div>
 				<div class="table_padding">
 					<dl class="dl-horizontal">
@@ -2190,26 +625,28 @@
 						<dt>Language:</dt>
 						<dd><span id="main_l"></span></dd>
 						<br> -->
-						<dt>Current Course:</dt>
-						<dd><span id="current_c"></span></dd>
+						<dt>Current Lesson:</dt>
+						<dd><span id="current_l"></span></dd>
 						<dt>Language:</dt>
 						<dd><span id="current_l"></span></dd>
-						<dt>No. of Lessons:</dt>
-						<dd><span id="nol"></span></dd>
+						<dt>No. of slides:</dt>
+						<dd><span id="nos"></span></dd>
 						<dt>Status:</dt>
 						<dd><span id="current_s"></span></dd>
+						<dt>Version:</dt>
+						<dd><span id="current_v"></span></dd>
 						<br>
-						<dt>Date and Time</dt>
-						<dd><span id="c_date"></span></dd>
-						<dt>Course Creation: </dt>
-						<dd></dd>
+						<!-- <dt>Date and Time</dt>
+						<dd><span id="c_date"></span></dd> -->
+						<dt>Initial Creation By: </dt>
+						<dd><span id="i_creration"></span></dd>
 						<dt>Date:</dt>
 						<dd><span id="cc_date"></span></dd>
 						<dt>Time:</dt>
 						<dd><span id="cc_time"></span></dd>
 						<br>
-						<dt>Last Update :</dt>
-						<dd></dd>
+						<dt>Last Updated By :</dt>
+						<dd><span id="l_creration"></span></dd>
 						<dt>Date:</dt>
 						<dd><span id="lt_date"></span></dd>
 						<dt>Time:</dt>
@@ -2245,12 +682,14 @@
 							<!-- <input type="textbox" class="form-control" id="course_name" name="course_name" placeholder="Course Name"> -->
 							<select id="course_name" name="course_name">
 								<?php
-								$token=$this->mapi_model->getToken();
-							$courses=$this->mapi_model->getCourseList($token);
+								// $token=$this->mapi_model->getToken();
+							$courses=$this->mcourse_model->getCourses();
 							$course_list=$courses;
+							// print_r($course_list);
+							// die();
 							foreach($course_list as $course)
 							{
-								echo '<option value="'.$course->Id.'~'.$course->Name.'">'.$course->Name.'</option>';
+								echo '<option value="'.$course['Code'].'~'.$course['Description'].'">'.$course['Description'].'</option>';
 							}
 								?>
 								<!-- <option>

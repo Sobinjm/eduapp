@@ -8,6 +8,21 @@ class Mcourse extends CI_Model
 			$this->load->database();
 		}
 		
+		function getAllLessons()
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons ORDER BY created_on DESC");	
+			return $query->result_array();
+		}
+		function getPendingLessons()
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons WHERE publish_status = '0' ORDER BY created_on DESC");	
+			return $query->result_array();
+		}
+		function getDraftLessons()
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons WHERE publish_status = '1' ORDER BY created_on DESC");	
+			return $query->result_array();
+		}
 		function getAllcourse()
 		{
 			$query = $this->db->query("SELECT * FROM ad_course ORDER BY created_on DESC");	
@@ -95,6 +110,13 @@ class Mcourse extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_course WHERE id = '".$data."'");	
 			return $query->result_array();
 		}
+
+		function getCourses()
+		{
+			$query = $this->db->query("Execute _sp_el_lessons");	
+			return $query->result_array();
+		}
+		
 		
 		
 		
