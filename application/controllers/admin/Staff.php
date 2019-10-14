@@ -32,6 +32,7 @@ class Staff extends CI_Controller {
 		else
 		{
 			$staff_name = $this->security->xss_clean($this->input->post('staff_name'));
+			$staff_role = $this->security->xss_clean($this->input->post('staff_role'));
 			$staff_email = $this->security->xss_clean($this->input->post('staff_email'));
 			$staff_cnumber = $this->security->xss_clean($this->input->post('staff_cnumber'));
 			$staff_password = $this->security->xss_clean($this->input->post('staff_password'));
@@ -46,17 +47,17 @@ class Staff extends CI_Controller {
 				$hash_password = password_hash($staff_password, PASSWORD_DEFAULT);
 				$insert_data = array(
 								'name' => $staff_name,
+								'role' => $staff_role,
 								'email' => $staff_email,
 								'password' => $hash_password,
-								'contact_number' => $staff_cnumber,
-								'role' => '0'
+								'contact_number' => $staff_cnumber
 								);
 				$query = $this->madmin_model->insert_staff($insert_data);
 				// print_r($query);
 				// die();
 				if($query) 
 				{		
-					echo 'Admin staff added successfully.';
+					echo 'Staff added successfully.';
 				}
 				else 
 				{
@@ -82,8 +83,7 @@ class Staff extends CI_Controller {
 									'name' => $staff_name,
 									'email' => $staff_email,
 									'password' => $hash_password,
-									'contact_number' => $staff_cnumber,
-									'role' => '0'
+									'contact_number' => $staff_cnumber
 									);
 					$query = $this->madmin_model->update_staff_passwd($id,$update_data);
 					if($query) 

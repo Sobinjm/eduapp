@@ -23,7 +23,7 @@ class Madmin extends CI_Model
 		
 		function getAlladmin()
 		{
-			$query = $this->db->query("SELECT * FROM ad_staff WHERE role = 0 ORDER BY created_time DESC");	
+			$query = $this->db->query("SELECT * FROM ad_staff ORDER BY created_time DESC");	
 			return $query->result_array();
 		}
 		

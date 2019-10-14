@@ -25,23 +25,34 @@
 		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 			<div class="box box-danger">
 				<div class="box-header with-border">
-				  <h3 class="box-title">Add new admin</h3>
+				  <h3 class="box-title">Add new Staff</h3>
 				</div>
 				<form id="add_form">
 				  <div class="box-body">
 					<div class="form-group">
-					  <label for="category">Admin</label>
-					  <input type="textbox" class="form-control" id="staff_name" placeholder="Enter Admin Name">
+					  <label for="category">Type</label><br/>
+						<select id="staff_role" class="form-control">
+							<option value="select">Select</option>
+							<option value="0">Admin</option>
+							<option value="1">Faculty</option>
+							<option value="2">QA</option>
+							<option value="3">HM</option>
+						</select>
+		
+					</div>
+					<div class="form-group">
+					  <label for="category">Name</label>
+					  <input type="textbox" class="form-control" id="staff_name" placeholder="Enter Name">
 					</div>
 				  
 					<div class="form-group">
 					  <label for="category">Email</label>
-					  <input type="email" class="form-control" id="staff_email" placeholder="Enter Admin Email">
+					  <input type="email" class="form-control" id="staff_email" placeholder="Enter Email">
 					</div>
 				  
 					<div class="form-group">
 					  <label for="category">Contact</label>
-					  <input type="textbox" class="form-control" id="staff_cnumber" placeholder="Enter Admin Number">
+					  <input type="textbox" class="form-control" id="staff_cnumber" placeholder="Enter Number">
 					</div>
 				  
 					<div class="form-group">
@@ -51,7 +62,7 @@
 				  </div>
 				  
 				  <div class="box-footer">
-					<button type="submit" class="btn btn-danger pull-right">Add Admin</button>
+					<button type="submit" class="btn btn-danger pull-right">Add Staff</button>
 				  </div>
 				</form>
 			  </div>
@@ -69,6 +80,7 @@
 							<tr>
 								<th>Id</th>
 								<th>Name</th>
+								<th>Type</th>
 								<th>Email</th>
 								<th>Contact</th>
 								<th>Created On</th>
@@ -80,6 +92,25 @@
 							<tr>
 								<td><?php echo $i; ?></td>
 								<td><?php echo $adm['name']; ?></td>
+								<td><?php
+								if($adm['role']=="0")
+								{
+									echo "Admin";
+								}
+								else if($adm['role']=="1")
+								{
+									echo "Faculty";
+								}
+								else if($adm['role']=="2")
+								{
+									echo "QA";
+								}
+								else
+								{
+									echo "HM";
+								}
+								  ?>
+								</td>
 								<td><?php echo $adm['email']; ?></td>
 								<td><?php echo $adm['contact_number']; ?></td>
 								<td><?php echo date('d-m-Y',strtotime($adm['created_time'])); ?></td>
@@ -184,9 +215,10 @@
 					  
 					var staff_name = $('#staff_name').val();
 					var staff_email = $('#staff_email').val();
+					var staff_role = $('#staff_role').val();
 					var staff_cnumber = $('#staff_cnumber').val();
 					var staff_password = $('#staff_password').val();
-					  
+					
 					if(staff_name == '')
 					{	
 						swal('Name should not be empty');
@@ -196,6 +228,17 @@
 					else 
 					{
 						$('#staff_name').addClass("success");
+					}
+
+					if(staff_role == "select")
+					{
+						swal('Kindly select a role');
+						$('#staff_role').addClass("error");
+						return false;
+					}
+					else
+					{
+						$('#staff_role').addClass("success");
 					}
 					
 					if(staff_email == '')
@@ -254,7 +297,8 @@
 					}
 					// location.reload();
 					$.post( "<?php echo base_url(); ?>admin/staff/add", { 
-								staff_name: staff_name, 
+								staff_name: staff_name,
+								staff_role: staff_role, 
 								staff_email: staff_email,
 								staff_cnumber: staff_cnumber,
 								staff_password: staff_password,
