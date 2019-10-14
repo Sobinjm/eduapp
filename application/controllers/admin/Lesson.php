@@ -89,22 +89,25 @@ class Lesson extends CI_Controller {
 			$lesson_name 		= $lesson[1];
 			$lesson_id			= $lesson[0];
 			$no_lessons 		= $this->security->xss_clean($this->input->post('no_lessons'));
-			$language 			= $this->security->xss_clean($this->input->post('language'));
-			$course_id 			= $this->security->xss_clean($this->input->post('course_id'));
+			$language 			= $this->security->xss_clean($this->input->post('lesson_lang'));
+			// $course_id 			= $this->security->xss_clean($this->input->post('course_id'));
+			$course_id=0;
 			$course_id 			= $this->crc_encrypt->decode($course_id);
-			$course_code1		= $this->mcourse_model->getCourseCode($course_id);
-			if(isset($course_code1[0]['course_id']))
-			{
-				$course_code=$course_code1[0]['course_id'];
-			}
-			else{
-				$response = array(
-					'status'  => 'Failed',
-					'message' => 'Course Code Not Found'
-				);
-				echo json_encode($response);
-				exit();
-			}
+			// $course_code1		= $this->mcourse_model->getCourseCode($course_id);
+			$course_code1=0;
+			$course_code=0;
+			// if(isset($course_code1[0]['course_id']))
+			// {
+			// 	$course_code=$course_code1[0]['course_id'];
+			// }
+			// else{
+			// 	$response = array(
+			// 		'status'  => 'Failed',
+			// 		'message' => 'Course Code Not Found'
+			// 	);
+			// 	echo json_encode($response);
+			// 	exit();
+			// }
 
 			
 			if(isset($_FILES['icon_file']) AND !empty($_FILES["icon_file"]["name"]))

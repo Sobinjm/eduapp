@@ -163,7 +163,7 @@
 					<h3 class="box-title 5p_border"></h3>
 				  </div>
 				  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default">Add Lesson</button>
+					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default-new">Add Lesson</button>
 				  </div> 	
 				</div>
 				<div class="table_padding">
@@ -215,7 +215,7 @@
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 				<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
 			</div>	
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
 				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
 				<a>Created By <?php $fname=$this->mfaculty_model->getStaff($lesson['created_by']); echo $fname[0]['name']; ?></a>
@@ -452,9 +452,21 @@
 </div>
 </div>
 </div>	</div>	
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 				<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>"><i class="fa fa-times"></i> Delete</a>
 				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+			</div>
+			
+		</div>
+		<div class="row padd_4e">
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a href="#!" ><i class="fa fa-arrow"></i> <?php echo $lesson['language']; ?></a>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a href="#!" ><i class="fa fa-arrow"></i> Version : 1</a>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<a href="#!" ><i class="fa fa-arrow"></i>Notifications: 0</a>
 			</div>
 		</div>
 	</div>
@@ -1279,17 +1291,30 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						<div class="col-sm-8">
 							<!-- <input type="textbox" class="form-control" id="lesson_name_new" name="lesson_name" placeholder="Lesson Name"> -->
 							<select class="form-control" id="lesson_name_new" name="lesson_name">
-								<?php
-								$token=$this->mapi_model->getToken();
-							$lessons=$this->mapi_model->getLessonList($token);
-							$lesson_list=$lessons;
-							foreach($lesson_list as $lesson)
+								<?php $lessons=$this->mcourse_model->getCourses();
+							// $lesson_list=$lessons;
+							// print_r($course_list);
+							// die();
+							foreach($lessons as $lesson)
 							{
-								echo '<option value="'.$lesson->Code.'~'.$lesson->Name.'">'.$lesson->Name.'</option>';
+								echo '<option value="'.$lesson['Code'].'~'.$lesson['Description'].'">'.$lesson['Description'].'</option>';
 							}
 								?>
 								<!-- <option>
 								</option> -->
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="course_name" class="col-sm-4 control-label">Language</label>
+						<div class="col-sm-8">
+							<!-- <input type="textbox" class="form-control" id="lesson_name_new" name="lesson_name" placeholder="Lesson Name"> -->
+							<select class="form-control" id="lesson_lang" name="lesson_lang">
+								<option value="english">English</option>
+								<option value="english">Malayalam</option>
+								<option value="english">Arabic</option>
+								<option value="english">Urudu</option>
+					
 							</select>
 						</div>
 					</div>
