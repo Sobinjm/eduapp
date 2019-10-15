@@ -334,7 +334,7 @@ class Lesson extends CI_Controller {
 			$query = $this->mlesson_model->delete_lesson($data);
 			if($query) 
 			{		
-				echo 'Course deleted successfully.';
+				echo 'Lesson deleted successfully.';
 			}
 			else 
 			{

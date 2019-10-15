@@ -60,6 +60,8 @@
 				  <li class="<?php if($this->uri->segment(2) == 'dashboard'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/dashboard'; ?>">Dashboard</a></li>
 				  <li class="<?php if($this->uri->segment(2) == 'staff'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff'; ?>">Admin</a></li>
 				  <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/faculty'; ?>">Trainer</a></li>
+          <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/quality'; ?>">QM</a></li>
+          <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/hm'; ?>">HM</a></li>
 				  <li class="<?php if($this->uri->segment(2) == 'student'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/student'; ?>">Students</a></li>
           
 				  <li class="<?php if($this->uri->segment(2) == 'course'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Courses</a></li>

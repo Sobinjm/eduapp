@@ -491,7 +491,10 @@
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
 				<td>
 					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
-						<i class="fa fa-fw fa-edit"></i> Edit
+						<i class="fa fa-fw fa-edit"></i> 
+					</a>
+					<a href="#!" class="lb_bg_two tab_a_pad delete_slide"   data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
+						<i class="fa fa-fw fa-trash"></i> 
 					</a>
 				</td>
 				<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
@@ -528,10 +531,13 @@
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
 				<td>
-					<i class="fa fa-fw fa-edit"></i> Edit
+					<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i>  </a>
 				</td>
-				<td><i class="fa fa-fw fa-eye"></i> Preview</td>
-				<td></td>
+				<td><a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> </a>
+				</td>
+				<td>					
+				<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i> </a></td>
+				
 			</tr>
 			<?php 
 							}
@@ -624,7 +630,7 @@
 		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">	
 			<div class="box box-danger">
 				<?php 
-					if(!empty($result))
+					if(!empty($lessons))
 						{ 
 				?>
 				<div class="box-header with-border">
@@ -670,7 +676,7 @@
 					}
 				else
 					{
-						echo '<div class="box-header with-border"><h3 class="box-title">No slide found</h3></div>';
+						echo '<div class="box-header with-border"><h3 class="box-title">No lessons found</h3></div>';
 					}							
 				?>
 			</div>
@@ -980,11 +986,45 @@
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
 					  cancelButtonColor: '#d33',
-					  confirmButtonText: 'Yes, delete Course!'
+					  confirmButtonText: 'Yes, delete quiz!'
 					}).then((result) => {
 					  if (result.value) {
 						
 						$.post( "<?php echo base_url(); ?>admin/quiz/delete", { 
+									id: delid,
+									<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
+								}, function(data) {
+							swal({title: "Message", text: data, type: 
+								"info"}).then(function(){ 
+								   location.reload();
+								   }
+								);
+						})
+						.fail(function() {
+							swal('Something went wrong. Please check whether you are connected to Internet.');
+						})
+						
+					  }
+					})
+					
+					
+				});
+				
+				$('.delete_slide').click(function(){
+					
+					var delid = $(this).attr("data-id");
+					Swal({
+					  title: 'Are you sure?',
+					  text: "You won't be able to revert this!",
+					  type: 'warning',
+					  showCancelButton: true,
+					  confirmButtonColor: '#3085d6',
+					  cancelButtonColor: '#d33',
+					  confirmButtonText: 'Yes, Delete Slide!'
+					}).then((result) => {
+					  if (result.value) {
+						
+						$.post( "<?php echo base_url(); ?>admin/slide/delete", { 
 									id: delid,
 									<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
 								}, function(data) {

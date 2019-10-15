@@ -27,7 +27,7 @@ class Mslide extends CI_Model
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
 		
-		function delete_lesson($data)
+		function delete_slide($data)
 		{
 			$this->db->delete('ad_slides',$data);
 			return ($this->db->affected_rows() != 1) ? false : true;

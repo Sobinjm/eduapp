@@ -348,7 +348,29 @@ class Slide extends CI_Controller {
 		}
 	}
 	
-	
+	public function delete()
+	{
+		// $id = $this->security->xss_clean($this->input->post('id'));
+		$id=$_POST['id'];
+		if(empty($id))
+		{
+			echo 'Sorry, we are not able to delete this slide now.';	
+		}
+		else 
+		{
+			$data = array('id' => $this->crc_encrypt->decode($id));
+			$query = $this->mslide_model->delete_slide($data);
+			if($query) 
+			{		
+				echo 'Slide deleted successfully.';
+			}
+			else 
+			{
+				echo 'Sorry, we are not able to delete this slide now.';
+			}
+		}
+		
+	}
 
 	
 	
