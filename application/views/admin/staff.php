@@ -30,11 +30,11 @@
 				<form id="add_form">
 				  <div class="box-body">
 					<div class="form-group">
-					  <label for="category">Type</label><br/>
+					  <label for="category">Role</label><br/>
 						<select id="staff_role" class="form-control">
 							<option value="select">Select</option>
 							<option value="0">Admin</option>
-							<option value="1">Faculty</option>
+							
 							<option value="2">QA</option>
 							<option value="3">HM</option>
 						</select>
@@ -80,7 +80,7 @@
 							<tr>
 								<th>Id</th>
 								<th>Name</th>
-								<th>Type</th>
+								<th>Role</th>
 								<th>Email</th>
 								<th>Contact</th>
 								<th>Created On</th>
