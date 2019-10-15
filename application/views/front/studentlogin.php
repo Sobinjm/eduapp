@@ -9,18 +9,7 @@ $this->load->view('front/header');
 // Ajax post for refresh captcha image.
 $(document).ready(function() {
 $("a.refresh").click(function() {
-    
-// $.ajax({
-// type: "POST",
-// dataType: 'html', 
-// url: "<?php echo base_url(); ?>" + "captcha_controller/captcha_refresh",
-// success: function(res) {
-// if (res)
-// {
-// jQuery("div.image").html(res);
-// }
-// }
-// });
+ 
 $.ajax({
 url: "<?php echo base_url(); ?>" + "captcha_controller/captcha_refresh",
 type: 'get',
@@ -67,30 +56,36 @@ type: 'get',
                             <input type="text" name="Fnumber" class="blockClass fontInput" placeholder="File Number" />
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </div>
-                        <div class="form-control blockClass">
-                        <div class='image'>
-                        <?php 
+                        <div class="form-control " style='display:inline-block'>
+                            <div class='image' style='display:inline-block'>
+                                <?php 
 
-                        echo $image;
-echo "</div>";
+                                    echo $image;
+                                    
+                                    echo "</div>";
+                                    echo "<a href='#' class ='refresh' style='display:inline-block'><img id = 'ref_symbol' width='40' height='40' src =".base_url()."img/refresh.png></a>";
+                                    // Calling for refresh captcha image.
+                                   
+                                    echo "<br>";
+                                    echo "<br>";
 
-// Calling for refresh captcha image.
-echo "<a href='#' class ='refresh'><img id = 'ref_symbol' src =".base_url()."img/refresh.png></a>";
-echo "<br>";
-echo "<br>";
-
-// Captcha word field.
-echo form_label('Captcha');
-$data_captcha = array(
-'name' => 'captcha',
-'class' => 'input_box',
-'color' => 'white',
-'placeholder' => '',
-'id' => 'captcha'
-);
-echo form_input($data_captcha);
-?>
-</div>
+                                    // Captcha word field.
+                                    echo form_label('Captcha');
+                                    
+                                    ?>
+                            </div>
+                            <div class="form-control blockClass" style='display:inline-block'>
+                                <?php 
+                            $data_captcha = array(
+                                    'name' => 'captcha',
+                                    'class' => 'input_box blockClass  fontInput',
+                                    'color' => 'white',
+                                    'placeholder' => '',
+                                    'id' => 'captcha'
+                                    );
+                                    echo form_input($data_captcha);
+                                    ?>
+                        </div>
                         <div class="form-control blockClass">
 							<input type="hidden" name="<?=$csrf['name'];?>" value="<?=$csrf['hash'];?>" />
                             <button type="submit"  class="blockClass fontButton">Login</button>

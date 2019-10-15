@@ -77,6 +77,11 @@ class Login extends CI_Controller {
 	
 	public function authenticate()
 	{
+		if($_SESSION['captchaWord']!=$this->input->post('captcha'))
+		{
+			$this->session->set_flashdata('error', "<span class='help-block'>Invalid Captcha.</span>");
+			redirect(site_url() . '/login');
+		}
 		$this->form_validation->set_rules('Snumber', 'Number', 'trim|required|max_length[50]');
         $this->form_validation->set_rules('Tnumber', 'Number', 'required|max_length[50]');
         if ($this->form_validation->run() == false) 
