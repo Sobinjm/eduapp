@@ -31,13 +31,61 @@ class Login extends CI_Controller {
 		$this->load->model('admin/Mnotification', 'mnotification_model');
 	}
 	 
+	// public function index()
+	// {
+		
+	// 	$this->load->view('admin/login');
+	// }
 	public function index()
 	{
-		
-		$this->load->view('admin/login');
+		$this->captcha_setting();
+		// $this->load->view('front/studentlogin');
 	}
+
+	
+	public function captcha_setting(){
+		$values = array(
+		'word' => '',
+		'word_length' => 8,
+		'img_path' => './images/',
+		'img_url' => base_url() .'images/',
+		'font_path' => base_url() . '/system/fonts/texb.ttf',
+		'img_width' => '150',
+		'img_height' => 50,
+		'expiration' => 3600
+		);
+		$data = create_captcha($values);
+		// print_r($data);
+		// die();
+		$_SESSION['captchaWord'] = $data['word'];
+		
+		// image will store in "$data['image']" index and its send on view page
+		$this->load->view('admin/login', $data);
+		}
+		// For new image on click refresh button.
+		public function captcha_refresh(){
+		$values = array(
+		'word' => '',
+		'word_length' => 8,
+		'img_path' => './images/',
+		'img_url' => base_url() .'images/',
+		'font_path' => base_url() . 'system/fonts/texb.ttf',
+		'img_width' => '150',
+		'img_height' => 50,
+		'expiration' => 3600
+		);
+		$data = create_captcha($values);
+		$_SESSION['captchaWord'] = $data['word'];
+		echo $data['image'];
+		
+		}
 	public function authenticate()
 	{
+		if($_SESSION['captchaWord']!=$this->input->post('captcha'))
+		{
+			$this->session->set_flashdata('error', "<span class='help-block'>Invalid Captcha.</span>");
+			redirect(site_url() . 'admin/login');
+		}
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|max_length[50]');
         $this->form_validation->set_rules('password', 'Password', 'required|max_length[50]');
         if ($this->form_validation->run() == false) 
