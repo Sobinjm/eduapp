@@ -637,7 +637,7 @@
 				  <h3 class="box-title">Lesson Information</h3>
 				</div>
 				<div class="table_padding">
-					<dl class="dl-horizontal">
+					<dl class="dl-horizontal"> 
 						<!-- <dt>Main Course:</dt>
 						<dd><span id="main_c"></span></dd>
 						<dt>Language:</dt>
@@ -1183,6 +1183,81 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					event.preventDefault();
 				});
 				
+				$('.add_new_version').click(function(){
+					
+					var edit_eid 				= $('#edit_eid').val();
+					var edit_publish_status 	= $(this).attr("data-action");
+					var edit_course_name 		= $('#edit_course_name').val();
+					var edit_english 			= $('#edit_english').val();
+					var edit_arabic 			= $('#edit_arabic').val();
+					var edit_urdu 				= $('#edit_urdu').val();
+					var edit_pashto 			= $('#edit_pashto').val();
+					var edit_malayalam 			= $('#edit_malayalam').val();
+					var edit_icon_file 			= $('#edit_icon_file').val();
+					var edit_brief_desc 		= $('#edit_brief_desc').val();
+					var edit_no_lessons 		= $('#edit_no_lessons').val();
+					var hidden_edit_icon_file 	= $('#hidden_edit_icon_file').val();
+					var edit_form 				= $('#edit_form_1')[0];
+					var data 					= new FormData(edit_form); 
+					var desc = CKEDITOR.instances['edit_brief_desc'].getData(); 
+					// alert(desc);
+					
+					
+										
+					if(edit_no_lessons == '')
+					{	
+						swal('Please enter the number of lessons in this course.');
+						$('#edit_no_lessons').addClass("error");
+						return false;
+					}
+					else 
+					{
+						$('#edit_no_lessons').addClass("success");
+					}
+					 
+					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
+					data.append("edit_publish_status", edit_publish_status);
+					data.append("no_file_upload", hidden_edit_icon_file);
+					data.append("edit_eid", edit_eid);
+					data.append("edit_brief_descnew", desc);
+					// alert(edit_eid);
+					
+						$.ajax({
+									type: "POST",
+									enctype: 'multipart/form-data',
+									url: "<?php echo base_url(); ?>admin/lesson/add",
+									data: data,
+									processData: false,
+									contentType: false,
+									cache: false,
+									timeout: 600000,
+									success: function (data) {
+										console.log(data);
+										if(data == 'Version Added successfully')
+										{
+											swal({title: "Message", text: data, type: 
+											"info"}).then(function(){ 
+											   location.reload();
+											   });
+										}
+										else 
+										{
+											swal(data);
+											return false;
+										}											
+										   
+									},
+									error: function (e) {
+										
+										swal(e.responseText);
+										console.log("ERROR : ", e);
+
+									}
+								});					
+							
+					event.preventDefault();
+				});
+				
 								
 				$('.view_courses').on('click', function (e) {
 					var view_id = $(this).attr("data-id");
@@ -1414,6 +1489,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
               <div class="modal-footer">
                 <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
+								<button type="button" class="btn btn-flat btn-success add_new_version"  data-action="add_version">New Version</button>
 			  </div>
             </div>
             <!-- /.modal-content -->

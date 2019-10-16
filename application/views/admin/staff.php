@@ -34,7 +34,7 @@
 						<select id="staff_role" class="form-control">
 							<option value="select">Select</option>
 							<option value="0">Admin</option>
-							
+							<option value="1">Trainer</option>
 							<option value="2">QA</option>
 							<option value="3">HM</option>
 						</select>
@@ -99,7 +99,7 @@
 								}
 								else if($adm['role']=="1")
 								{
-									echo "Faculty";
+									echo "Trainer";
 								}
 								else if($adm['role']=="2")
 								{
