@@ -1186,82 +1186,58 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					event.preventDefault();
 				});
 				
-				$('.add_new_version').click(function(){
-					
-					var edit_eid 				= $('#edit_eid').val();
-					var edit_publish_status 	= $(this).attr("data-action");
-					var edit_course_name 		= $('#edit_course_name').val();
-					var edit_english 			= $('#edit_english').val();
-					var edit_arabic 			= $('#edit_arabic').val();
-					var edit_urdu 				= $('#edit_urdu').val();
-					var edit_pashto 			= $('#edit_pashto').val();
-					var edit_malayalam 			= $('#edit_malayalam').val();
-					var edit_icon_file 			= $('#edit_icon_file').val();
-					var edit_brief_desc 		= $('#edit_brief_desc').val();
-					var edit_no_lessons 		= $('#edit_no_lessons').val();
-					var hidden_edit_icon_file 	= $('#hidden_edit_icon_file').val();
-					var edit_form 				= $('#edit_form_1')[0];
-					var data 					= new FormData(edit_form); 
-					var desc = CKEDITOR.instances['edit_brief_desc'].getData(); 
-					// alert(desc);
-					
-					
-										
-					if(edit_no_lessons == '')
-					{	
-						swal('Please enter the number of lessons in this course.');
-						$('#edit_no_lessons').addClass("error");
-						return false;
-					}
-					else 
-					{
-						$('#edit_no_lessons').addClass("success");
-					}
-					 
-					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
-					data.append("edit_publish_status", edit_publish_status);
-					data.append("no_file_upload", hidden_edit_icon_file);
-					data.append("edit_eid", edit_eid);
-					data.append("edit_brief_descnew", desc);
-					// alert(edit_eid);
-					
-						$.ajax({
-									type: "POST",
-									enctype: 'multipart/form-data',
-									url: "<?php echo base_url(); ?>admin/lesson/add",
-									data: data,
-									processData: false,
-									contentType: false,
-									cache: false,
-									timeout: 600000,
-									success: function (data) {
-										console.log(data);
-										if(data == 'Version Added successfully')
-										{
+				$( ".add_new_version" ).click(function( event ) {
+					  
+						var lesson_name 	= $('#edit_lesson_name').val();
+						var form 			= $('#edit_form_version')[0];
+						var data 			= new FormData(form);
+						console.log(data);
+						var course_id=$('#course_id').val();
+						var course_lang=$('#course_lang').val();
+						//alert(course_id+'===='+course_lang);
+						if(lesson_name == '')
+						{	
+							swal('Lesson name should not be empty');
+							$('#lesson_name').addClass("error");
+							return false;
+						}
+						else 
+						{
+							$('#lesson_name').addClass("success");
+						}
+						
+						
+						data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
+						data.append("course_id", course_id);
+						data.append("language", course_lang);
+						// alert(JSON.stringify(data));
+						console.log(data);
+							$.ajax({
+										type: "POST",
+										enctype: 'multipart/form-data',
+										url: "<?php echo base_url(); ?>admin/lesson/addversion",
+										data: data,
+										processData: false,
+										contentType: false,
+										cache: false,
+										timeout: 600000,
+										success: function (data) {
+											console.log(data);
 											swal({title: "Message", text: data, type: 
 											"info"}).then(function(){ 
-											   location.reload();
-											   });
+												 location.reload();
+												 });
+										},
+										error: function (e) {
+											
+											swal(e.responseText);
+											console.log("ERROR : ", e);
 										}
-										else 
-										{
-											swal(data);
-											return false;
-										}											
-										   
-									},
-									error: function (e) {
-										
-										swal(e.responseText);
-										console.log("ERROR : ", e);
-
-									}
-								});					
-							
-					event.preventDefault();
-				});
-				
+									});					
 								
+						event.preventDefault();
+					});
+
 				$('.view_courses').on('click', function (e) {
 					var view_id = $(this).attr("data-id");
 					//$('.approve_course_main').data('id',view_id);
@@ -1464,13 +1440,14 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
                   <span aria-hidden="true">×</span></button>
                 <h4 class="modal-title">Edit Lesson</h4>
               </div>
-              <form class="form-horizontal" enctype="multipart/form-data" id="edit_form_l">
+              <form class="form-horizontal" enctype="multipart/form-data" id="edit_form_version">
 			  <div class="modal-body">
 					<div class="form-group">
 						<label for="no_lessons" class="col-sm-4 control-label">Lesson Order</label>
 						<div class="col-sm-8">
 							<input type="textbox" class="form-control" id="edit_no_lessons2" name="edit_no_lessons" placeholder="Lesson Order">
 							<input type="hidden" name="edit_eid_l" id="edit_eid_l" />
+							<input type="hidden" name="edit_lesson_language" id="edit_lesson_language" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -1484,7 +1461,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						<div class="col-sm-8">
 							<input type="file" id="edit_icon_file" name="edit_icon_file">
 							<small>Only jpg, jpeg, png and gif file types allowed.</small>
-							<input type="hidden" id="hidden_edit_icon_file" name="hidden_edit_icon_file">
+							<input type="hidden" id="edit_lesson_icon_file" name="edit_lesson_icon_file">
 						</div>
 					</div>
 				</div>
@@ -2338,6 +2315,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				//	alert(no_lessons);
 					var form 			= $('#add_lesson_form')[0];
 					var data 			= new FormData(form);  
+					
 					var course_id=$('#course_id').val();
 					var course_lang=$('#course_lang').val();
 					//alert(course_id+'===='+course_lang);
@@ -2443,7 +2421,8 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 										var obj = JSON.parse(data);
 										$('#edit_eid').val(etid);
 										$('#edit_lesson_name').val(obj['0'].lesson_name);
-										$('#hidden_edit_icon_file').val(obj['0'].icon_file);
+										$('#edit_lesson_icon_file').val(obj['0'].icon_file);
+										$('#edit_lesson_language').val(obj['0'].language);
 										console.log(obj['0'].lesson_order);
 										$('#edit_no_lessons2').val(obj['0'].lesson_order);
 										$('#modal-edit-new').modal('show');

@@ -223,7 +223,103 @@ class Lesson extends CI_Controller {
 		}
 	}
 
-	
+	public function addversion()
+	{	
+		
+			
+			$lesson_name 		= $this->security->xss_clean($this->input->post('edit_lesson_name'));
+			$lesson_id			= '1';
+			$no_lessons 		= $this->security->xss_clean($this->input->post('edit_no_lessons'));
+			$language 			= $this->security->xss_clean($this->input->post('edit_lesson_language'));
+			$course_id='1';
+			$course_code='1';	
+			$target_file_galry = $this->security->xss_clean($this->input->post('edit_lesson_icon_file'));
+			
+			
+			if(isset($_FILES['edit_icon_file']) AND !empty($_FILES["edit_icon_file"]["name"]))
+				{
+					$errors		=	array();
+					$file_name	=	$_FILES['edit_icon_file']['name'];
+					$file_size	=	$_FILES['edit_icon_file']['size'];
+					$file_tmp	=	$_FILES['edit_icon_file']['tmp_name'];
+					$file_type	=	$_FILES['edit_icon_file']['type']; 
+					$file_ext	= 	pathinfo($file_name, PATHINFO_EXTENSION);
+					
+					$expensions	=	array("jpeg","jpg","png","gif");
+					  
+					if(in_array($file_ext,$expensions)=== false)
+						{
+							$errors[]="extension not allowed, please choose a JPEG or PNG file.";
+						}
+					  
+					if($file_size > 2097152)
+						{
+							$errors[]='File size must be less than 2 MB';
+						}
+					  
+					if(empty($errors)==true)
+						{
+							$target_dir_galry		=	"content/uploads/lessons/";
+							$fileExt_galry			=	pathinfo($file_name, PATHINFO_EXTENSION);
+							$randfileName_galry		=	time() . rand() . "." . $fileExt_galry;
+							$target_file_galry		=	$target_dir_galry . basename($randfileName_galry);
+							$moveResult				=	move_uploaded_file($file_tmp,$target_file_galry);
+							if(!$moveResult)
+								{
+									$response = array(
+											'status'  => 'error',
+											'message' => 'Icon upload failed'
+										);
+									echo json_encode($response);
+									exit();
+								}
+							
+						}
+					else
+						{
+							$response = array(
+											'status'  => 'error',
+											'message' => $errors
+										);
+							echo json_encode($response);
+							exit();
+						}
+				}
+				
+
+				$insert_data = array(
+								'lesson_id'		=> $lesson_id,
+								'lesson_name'	 =>	$lesson_name,
+								'icon_file'		 =>	$target_file_galry,
+								'course_id'		 => $course_id,	
+								'course_code'	 =>	$course_code,
+								'lesson_order'	 =>	$no_lessons,
+								'language'		 =>	$language,
+								'created_by'	 => $this->crc_encrypt->decode($this->session->userdata('userid')),
+								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
+							);
+				$query = $this->mlesson_model->insert_lesson($insert_data);
+				if($query) 
+				{		
+					$response = array(
+											'status'  => 'success',
+											'message' => 'Lesson added successfully'
+										);
+					echo json_encode($response);
+					exit();
+				}
+				else 
+				{
+					$response = array(
+											'status'  => 'success',
+											'message' => 'Sorry, we are not able to add this lesson now.'
+										);
+					echo json_encode($response);
+					exit();
+				}	
+		
+	}
+
 	public function updatelesson()
 	{
 		$this->form_validation->set_rules('edit_lesson_name', 'Edit Lesson name', 'trim|required');
