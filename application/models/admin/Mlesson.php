@@ -45,10 +45,15 @@ class Mlesson extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_id = '".$courseid."' AND language = '".$language."' ORDER BY lesson_order ASC");	
 			return $query->result_array();
 		}
-		
+		 
 		function getslideforlesson($lessonid)
 		{
 			$query = $this->db->query("SELECT * FROM ad_slides WHERE lesson_id = '".$lessonid."' ORDER BY slide_order ASC");	
+			return $query->result_array();
+		}
+		function getslidecount($lessonid)
+		{
+			$query = $this->db->query("SELECT count(id) AS total FROM ad_slides WHERE lesson_id = '".$lessonid."' ");	
 			return $query->result_array();
 		}
 		function getlesson_code($lessonid)
@@ -66,6 +71,11 @@ class Mlesson extends CI_Model
 		
 		
 		function getlessonid($data)
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons WHERE id = '".$data."'");	
+			return $query->result_array();
+		}
+		function getlessondetails($data)
 		{
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE id = '".$data."'");	
 			return $query->result_array();
