@@ -12,7 +12,7 @@ class Mnotification extends CI_Model
 			$this->db->insert('notifications',$insert_data);
 			return ($this->db->affected_rows() != 1) ? false : true;
         }
-        function getNotifications()
+    function getNotifications()
 		{
 			$query = $this->db->query("SELECT * FROM notifications ORDER BY id DESC");	
 			return $query->result_array(); 
@@ -21,6 +21,12 @@ class Mnotification extends CI_Model
 		{
 			$query = $this->db->query("SELECT * FROM notifications where status <>'Login' ORDER BY id DESC");	
 			return $query->result_array();
+		}
+
+		function getNotificationsCount()
+		{
+			$query = $this->db->query("SELECT count(*) as count FROM notifications");	
+			return $query->result_array(); 
 		}
         
     }

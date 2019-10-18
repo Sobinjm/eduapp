@@ -11,6 +11,7 @@
 	$this->load->model('admin/Mfaculty', 'mfaculty_model');
 	$this->load->model('student/Mapi', 'mapi_model');
 	$this->load->model('admin/Mcourse', 'mcourse_model');
+	$this->load->model('admin/Mnotification', 'mnotification_model');
 ?>
   <!-- =============================================== -->
   <?php $this->load->view('admin/header'); ?>
@@ -466,10 +467,10 @@
 				<a href="#!" ><i class="fa fa-arrow"></i> <?php echo $lesson['language']; ?></a>
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-				<a href="#!" ><i class="fa fa-arrow"></i> Version : 1</a>
+				<a href="#!" ><i class="fa fa-arrow"></i> Version : <?php echo $lesson['lesson_version']; ?></a>
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-				<a href="#!" ><i class="fa fa-arrow"></i>Notifications: 0</a>
+				<a href="#!" ><i class="fa fa-arrow"></i>Notifications: <?php $count=$this->mnotification_model->getNotificationsCount(); echo $count[0]['count'];  ?></a>
 			</div>
 		</div>
 	</div>
