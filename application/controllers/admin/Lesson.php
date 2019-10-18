@@ -13,6 +13,7 @@ class Lesson extends CI_Controller {
 		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mlesson', 'mlesson_model');	
 		$this->load->model('admin/Mcomment', 'mcomment_model');	
+		$this->load->model('admin/Mfaculty', 'mfaculty_model');	
 		
 		$this->load->model('admin/Mnotification', 'mnotification_model');	
 	}
@@ -60,6 +61,34 @@ class Lesson extends CI_Controller {
 		// die();
 		$data['comments']=	$this->mcomment_model->getslidecomment($slideid);
 		$this->load->view('admin/summary',$data);
+	}
+	public function details()
+	{
+		$id=$this->input->post('lesson_id');
+		$data['details']=$this->mlesson_model->getlessondetails($id);
+		$details=json_encode($data['details']);
+		// $post_data = json_encode($data['details'], JSON_FORCE_OBJECT);
+		$details=json_decode($details);
+		$createdby=$this->mfaculty_model->getStaff($details[0]->created_by); 
+		if($createdby)
+		{
+			$details[0]->created_by=$createdby[0]['name'];
+		}
+		else{
+			$details[0]->createdName='-';
+		}
+		$updatedby=$this->mfaculty_model->getStaff($details[0]->updated_by); 
+		if($updatedby)
+		{
+			$details[0]->updated_by=$updatedby[0]['name'];
+		}
+		else{
+			$details[0]->updatedName='-';
+		}
+		$slide_count=$this->mlesson_model->getslidecount($id);
+		$details[0]->slide_count=$slide_count[0]['total'];
+		
+		print_r(json_encode($details[0]));
 	}
 	public function preview()
 	{

@@ -213,7 +213,10 @@
 	<div class="card-header tab_main_height">
 		<div class="row padd_4e">
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-				<a href="#!" class="tab_a_pad" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
+				<form id="form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="form_<?php echo $lesson['id']; ?>" method="post" >
+				<input type="hidden" value="<?php echo $lesson['id']; ?>" name="lesson_id">
+							</form>
+				<a href="#!" class="tab_a_pad pop-details" data-id="<?php echo $lesson['id']; ?>" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
 			</div>	
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
@@ -646,7 +649,7 @@
 						<dt>Current Lesson:</dt>
 						<dd><span id="current_l"></span></dd>
 						<dt>Language:</dt>
-						<dd><span id="current_l"></span></dd>
+						<dd><span id="current_lang"></span></dd>
 						<dt>No. of slides:</dt>
 						<dd><span id="nos"></span></dd>
 						<dt>Status:</dt>
@@ -1703,32 +1706,67 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 // function onLoad() { alert("Go!"); };
 // editor.on("change", onChange);
 // editor.on("load", onLoad);
-
+				/* Populating Side panel details */
 				$('.pop-details').click(function()
 				{
-					// alert();
-					var course_name=$(this).attr('data-course');
-					var status=$(this).attr('data-status');
-					var lcount=$(this).attr('data-nolsn');
-					var lang=$(this).attr('data-language');
-					var update=$(this).attr('data-udt').split('|');
-					var udate=update[0];
-					var utime=update[1];
-					var created=$(this).attr('data-dt').split('|');
-					var cdate=created[0];
-					var ctime=created[1];
+					var lesson_id=$(this).attr('data-id');
+					
+					
+						$.ajax({
+									type: "POST",
+									url: "<?php echo base_url(); ?>admin/lesson/details",
+									data: {lesson_id:lesson_id},
+									success: function (data) {
+										// console.log(data);
+										alert(data);
+										var value=JSON.parse(data);
+										var lesson_name=value.lesson_name;
+										var publish_status=value.publish_status;
+										if(publish_status==2)
+										{
+											var status='Published';
+										}
+										else if(publish_status==0)
+										{
+											var status='Drafted';
+										}
+										else if(publish_status==1)
+										{
+											var status='Pending';
+										}
+										
+										var lang=value.language;
+										var update=value.updated_on.split(' ');
+										var udate=update[0];
+										var utime=update[1];
+										var created=value.created_on.split(' ');
+										var cdate=created[0];
+										var ctime=created[1];
+										$('#cc_date').html(cdate);
+										$('#cc_time').html(ctime)
+										$('#lt_date').html(udate);
+										$('#lt_time').html(utime)
+										$('#i_creration').html(value.created_by)
+										$('#l_creration').html(value.updated_by)
+										
+										$('#current_l').html(lesson_name);
+										$('#nos').html(value.slide_count);
+										// $('#nol').html(lcount);
+										$('#current_lang').html(lang);
+										$('#current_s').html(status);						
+										   
+									},
+									error: function (e) {
+										
+										swal(e.responseText);
+										console.log("ERROR : ", e);
 
-					$('#cc_date').html(cdate);
-					$('#cc_time').html(ctime)
-					$('#lt_date').html(udate);
-					$('#lt_time').html(utime)
-					$('#current_c').html(course_name);
-					$('#nol').html(lcount);
-					$('#current_l').html(lang);
-					$('#current_s').html(status);
+									}
+								});
 
 				});
-								
+					
+				/* Changing Quize Type */
 				$('.quiz_type').change(function(){
 					var curr_select = $(this).val();
 					var id=$(this).attr('data-id');
@@ -1764,6 +1802,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						$('#reorder_quiz_'+id).show();
 					}
 				});
+				/*Add Course */
 				$('.add_course').click(function()
 				{
 					var course_id=$(this).attr('data-id');

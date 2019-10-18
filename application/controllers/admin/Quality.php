@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Faculty extends CI_Controller {
+class Quality extends CI_Controller {
 
 	
 	function __construct()
@@ -11,14 +11,14 @@ class Faculty extends CI_Controller {
 			{ 
 				redirect('admin/login');
 			}
-		$this->load->model('admin/Mfaculty', 'mfaculty_model');	
+		$this->load->model('admin/Madmin', 'madmin_model');	
 	}
 	
 	
 	public function index()
 	{
-		$data['result'] = $this->mfaculty_model->getAllfaculty();
-		$this->load->view('admin/faculty', $data);
+		$data['result'] = $this->madmin_model->getAlladmin(2);
+		$this->load->view('admin/staff', $data);
 	}
 	
 	public function add()
@@ -32,12 +32,13 @@ class Faculty extends CI_Controller {
 		else
 		{
 			$staff_name = $this->security->xss_clean($this->input->post('staff_name'));
+			$staff_role = $this->security->xss_clean($this->input->post('staff_role'));
 			$staff_email = $this->security->xss_clean($this->input->post('staff_email'));
 			$staff_cnumber = $this->security->xss_clean($this->input->post('staff_cnumber'));
 			$staff_password = $this->security->xss_clean($this->input->post('staff_password'));
 			
-			$email_count = $this->mfaculty_model->checkEmail($staff_email);
-			if(sizeof($email_count) > 0)
+			$email_count = $this->madmin_model->checkEmail($staff_email);
+			if(sizeof($email_count)> 0)
 			{
 				echo 'A user with this email already exists.';
 			}
@@ -46,19 +47,21 @@ class Faculty extends CI_Controller {
 				$hash_password = password_hash($staff_password, PASSWORD_DEFAULT);
 				$insert_data = array(
 								'name' => $staff_name,
+								'role' => $staff_role,
 								'email' => $staff_email,
 								'password' => $hash_password,
-								'contact_number' => $staff_cnumber,
-								'role' => '3'
+								'contact_number' => $staff_cnumber
 								);
-				$query = $this->mfaculty_model->insert_staff($insert_data);
+				$query = $this->madmin_model->insert_staff($insert_data);
+				// print_r($query);
+				// die();
 				if($query) 
 				{		
-					echo 'Trainer added successfully.';
+					echo 'Staff added successfully.';
 				}
 				else 
 				{
-					echo 'Sorry, we are not able to add this QA User now.';
+					echo 'Sorry, we are not able to add this staff now.';
 				}					
 			}
 		}
@@ -80,18 +83,17 @@ class Faculty extends CI_Controller {
 									'name' => $staff_name,
 									'email' => $staff_email,
 									'password' => $hash_password,
-									'contact_number' => $staff_cnumber,
-									'role' => '3'
+									'contact_number' => $staff_cnumber
 									);
-					$query = $this->mfaculty_model->update_staff_passwd($id,$update_data);
+					$query = $this->madmin_model->update_staff_passwd($id,$update_data);
 					if($query) 
 						{		
-							echo 'QA User Details updated successfully.';
+							echo 'Admin staff updated successfully.';
 							exit();
 						}
 					else 
 						{
-							echo 'Sorry, we are not able to update this QA User Details now.';
+							echo 'Sorry, we are not able to add this staff now.';
 							exit();
 						}					
 				}
@@ -103,17 +105,17 @@ class Faculty extends CI_Controller {
 									'name' => $staff_name,
 									'email' => $staff_email,
 									'contact_number' => $staff_cnumber,
-									'role' => '1'
+									'role' => '0'
 									);
-					$query = $this->mfaculty_model->update_staff($id,$update_data);
+					$query = $this->madmin_model->update_staff($id,$update_data);
 					if($query) 
 						{		
-							echo 'QA User Details updated successfully.';
+							echo 'Admin staff updated successfully.';
 							exit();
 						}
 					else 
 						{
-							echo 'Sorry, we are not able to update this QA User Details  now.';
+							echo 'Sorry, we are not able to add this staff now.';
 							exit();
 						}
 				}
@@ -126,19 +128,19 @@ class Faculty extends CI_Controller {
 			$id = $this->security->xss_clean($this->input->post('id'));
 			if(empty($id))
 			{
-				echo 'Sorry, we are not able to delete this trainer now.';	
+				echo 'Sorry, we are not able to delete this staff now.';	
 			}
 			else 
 			{
 				$data = array('id' => $this->crc_encrypt->decode($id));
-				$query = $this->mfaculty_model->delete_staff($data);
+				$query = $this->madmin_model->delete_staff($data);
 				if($query) 
 				{		
-					echo 'Trainer deleted successfully.';
+					echo 'Admin staff deleted successfully.';
 				}
 				else 
 				{
-					echo 'Sorry, we are not able to delete this trainer now.';
+					echo 'Sorry, we are not able to delete this staff now.';
 				}
 			}
 			
@@ -154,7 +156,7 @@ class Faculty extends CI_Controller {
 			else 
 			{
 				$data = $this->crc_encrypt->decode($id);
-				$query = $this->mfaculty_model->getStaff($data);
+				$query = $this->madmin_model->getStaff($data);
 				if($query)
 				{		
 					echo json_encode($query);
