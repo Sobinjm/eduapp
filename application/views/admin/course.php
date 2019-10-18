@@ -2321,6 +2321,8 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					var course_id=$('#course_id').val();
 					var course_lang=$('#course_lang').val();
 					//alert(course_id+'===='+course_lang);
+					
+        
 					if(lesson_name == '')
 					{	
 						swal('Lesson name should not be empty');
@@ -2331,6 +2333,14 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					{
 						$('#lesson_name').addClass("success");
 					}
+
+					var iconFile = $('#icon_file').val(); 
+					if(iconFile=='') 
+					{ 
+						swal("Icon File must be selected"); 
+						$('#icon_file').addClass("error");
+							return false; 
+					} 
 					
 					
 					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
