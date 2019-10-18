@@ -38,6 +38,13 @@ class Mslide extends CI_Model
 			$query = $this->db->query("SELECT count(id) as slide_count, * FROM ad_slides WHERE lesson_id = '".$lessonid."' AND language = '".$language."' ORDER BY lesson_order ASC");	
 			return $query->result_array();
 		}
+
+		function getallslidesforlesson($lessonid)
+		{
+			$query = $this->db->query("SELECT * FROM ad_slides WHERE lesson_id = '".$lessonid."'");	
+			return $query->result_array();
+		}
+
 		function getlessonforcourse($courseid,$language)
 		{
 			$query = $this->db->query("SELECT * FROM ad_slides WHERE course_id = '".$courseid."' AND language = '".$language."' ORDER BY lesson_order ASC");	

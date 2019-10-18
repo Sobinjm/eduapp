@@ -14,6 +14,8 @@ class Lesson extends CI_Controller {
 		$this->load->model('admin/Mlesson', 'mlesson_model');	
 		$this->load->model('admin/Mcomment', 'mcomment_model');	
 		$this->load->model('admin/Mfaculty', 'mfaculty_model');	
+		$this->load->model('admin/Mslide', 'mslide_model');
+		$this->load->model('admin/Mquiz', 'mquiz_model');
 		
 		$this->load->model('admin/Mnotification', 'mnotification_model');	
 	}
@@ -231,9 +233,12 @@ class Lesson extends CI_Controller {
 			$lesson_id			= $this->security->xss_clean($this->input->post('edit_lesson_id'));
 			$no_lessons 		= $this->security->xss_clean($this->input->post('edit_no_lessons'));
 			$language 			= $this->security->xss_clean($this->input->post('edit_lesson_language'));
+			$edit_id 			= $this->security->xss_clean($this->input->post('edit_id'));
 			$course_id='1';
 			$course_code='1';	
 			$target_file_galry = $this->security->xss_clean($this->input->post('edit_lesson_icon_file'));
+			$version = $this->mlesson_model->getmaxversion($lesson_name);
+			$version=$version[0]['version']+1;
 			
 			
 			if(isset($_FILES['edit_icon_file']) AND !empty($_FILES["edit_icon_file"]["name"]))
@@ -295,11 +300,40 @@ class Lesson extends CI_Controller {
 								'course_code'	 =>	$course_code,
 								'lesson_order'	 =>	$no_lessons,
 								'language'		 =>	$language,
+								'lesson_version' => $version,
 								'created_by'	 => $this->crc_encrypt->decode($this->session->userdata('userid')),
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->insert_lesson($insert_data);
-				echo($query);
+				$last_id = $this->mlesson_model->get_last_id();
+				$result_slide=$this->mslide_model->getallslidesforlesson($edit_id);
+				$result_quiz=$this->mquiz_model->getQuizForLesson($edit_id);
+				foreach ($result_slide as $slide) {
+					$insert_data = array(
+						'lesson_id'	 		=>	$last_id,
+						'slide_title'		=>	$slide['slide_title'],
+						'slide_mode'	 	=>	$slide['slide_mode'],
+						'slide_file'		=>	$slide['slide_file'],
+						'slide_description'	=> 	$slide['slide_description'],
+						'slide_duration'	=>	$slide['slide_duration'],
+						'slide_order'		=>	$slide['slide_order'],
+						'created_by'		=>	$this->crc_encrypt->decode($this->session->userdata('userid'))
+					);
+					$this->mslide_model->insert_slide($insert_data);
+				}
+				foreach ($result_quiz as $quiz) {
+					$insert_data = array(
+						'lessonid'		 =>	$last_id,
+						'quiz_type'		 =>	$quiz['quiz_type'],
+						'question'		 => $quiz['question'],
+						'mediatype'	 	 =>	$quiz['mediatype'],
+						'upload_media'	 =>	$quiz['upload_media'],
+						'right_answer'	 =>	$quiz['right_answer'],
+						'created_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
+						'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid'))
+					);
+					$this->mquiz_model->insert_quiz($insert_data);	
+				}
 				if($query) 
 				{		
 					$response = array(

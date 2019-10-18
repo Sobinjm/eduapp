@@ -20,6 +20,12 @@ class Mlesson extends CI_Model
 			$this->db->insert('ad_lessons',$insert_data);
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+
+		function get_last_id()
+		{
+			$insert_id = $this->db->insert_id();
+   			return  $insert_id;
+		}
 		
 		function update_lesson($id,$up_data)
 		{
@@ -44,6 +50,12 @@ class Mlesson extends CI_Model
 		{
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_id = '".$courseid."' AND language = '".$language."' ORDER BY lesson_order ASC");	
 			return $query->result_array();
+		}
+
+		function getmaxversion($lessionname)
+		{
+			$max_value = $this->db->query("SELECT MAX(lession_version) as version FROM ad_lessons WHERE lesson_name = '".$lessionname."'");	
+			return $max_value->result_array();
 		}
 		 
 		function getslideforlesson($lessonid)
