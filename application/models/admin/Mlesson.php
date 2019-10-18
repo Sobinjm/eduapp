@@ -54,7 +54,7 @@ class Mlesson extends CI_Model
 
 		function getmaxversion($lessionname)
 		{
-			$max_value = $this->db->query("SELECT MAX(lession_version) as version FROM ad_lessons WHERE lesson_name = '".$lessionname."'");	
+			$max_value = $this->db->query("SELECT MAX(lesson_version) as version FROM ad_lessons WHERE lesson_name = '".$lessionname."'");	
 			return $max_value->result_array();
 		}
 		 
