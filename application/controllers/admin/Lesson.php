@@ -199,7 +199,7 @@ class Lesson extends CI_Controller {
 		
 			
 			$lesson_name 		= $this->security->xss_clean($this->input->post('edit_lesson_name'));
-			$lesson_id			= '1';
+			$lesson_id			= $this->security->xss_clean($this->input->post('edit_lesson_id'));
 			$no_lessons 		= $this->security->xss_clean($this->input->post('edit_no_lessons'));
 			$language 			= $this->security->xss_clean($this->input->post('edit_lesson_language'));
 			$course_id='1';
@@ -270,6 +270,7 @@ class Lesson extends CI_Controller {
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->insert_lesson($insert_data);
+				echo($query);
 				if($query) 
 				{		
 					$response = array(

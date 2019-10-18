@@ -1445,6 +1445,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 							<input type="textbox" class="form-control" id="edit_no_lessons2" name="edit_no_lessons" placeholder="Lesson Order">
 							<input type="hidden" name="edit_eid_l" id="edit_eid_l" />
 							<input type="hidden" name="edit_lesson_language" id="edit_lesson_language" />
+							<input type="hidden" id="edit_lesson_id" name="edit_lesson_id">
 						</div>
 					</div>
 					<div class="form-group">
@@ -2383,6 +2384,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 										$('#edit_eid').val(etid);
 										$('#edit_lesson_name').val(obj['0'].lesson_name);
 										$('#edit_lesson_icon_file').val(obj['0'].icon_file);
+										$('#edit_lesson_id').val(obj['0'].lesson_id);
 										$('#edit_lesson_language').val(obj['0'].language);
 										console.log(obj['0'].lesson_order);
 										$('#edit_no_lessons2').val(obj['0'].lesson_order);
