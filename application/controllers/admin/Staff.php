@@ -21,6 +21,27 @@ class Staff extends CI_Controller {
 		$this->load->view('admin/staff', $data);
 	}
 	
+	public function admin()
+	{
+		$data['result'] = $this->madmin_model->getAllStaffs(0);
+		$this->load->view('admin/staff', $data);
+	}
+	public function trainer()
+	{
+		$data['result'] = $this->madmin_model->getAllStaffs(1);
+		$this->load->view('admin/staff', $data);
+	}
+	public function quality()
+	{
+		$data['result'] = $this->madmin_model->getAllStaffs(2);
+		$this->load->view('admin/staff', $data);
+	}
+	public function hm()
+	{
+		$data['result'] = $this->madmin_model->getAllStaffs(3);
+		$this->load->view('admin/staff', $data);
+	}
+	
 	public function add()
 	{
 		$this->form_validation->set_rules('staff_email', 'Email', 'trim|required|max_length[50]');

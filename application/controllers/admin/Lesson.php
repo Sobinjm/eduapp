@@ -358,7 +358,8 @@ class Lesson extends CI_Controller {
 	public function updatelesson()
 	{
 		$this->form_validation->set_rules('edit_lesson_name', 'Edit Lesson name', 'trim|required');
-        $this->form_validation->set_rules('edit_no_lessons', 'Edit Number of lessons', 'required');
+		$this->form_validation->set_rules('edit_no_lessons', 'Edit Number of lessons', 'required');
+		// echo $this->input->post('edit_no_lessons');
         if ($this->form_validation->run() == false) 
 		{
 			echo 'Form validation failed';

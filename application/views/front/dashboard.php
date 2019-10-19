@@ -108,17 +108,17 @@
 										<li>
 											<i class="fa fa-user" aria-hidden="true"></i>
 											<span class="smallHeding">Full Name</span>
-											<p><?php echo $this->session->name; ?></p>
+											<p><?php echo $this->session->ename; ?></p>
 										</li>
 										<li>
 											<i class="fa fa-sticky-note" aria-hidden="true"></i>
 											<span class="smallHeding">Student ID No</span>
-											<span class="smallContent"><?php if(isset($student_info['0']['student_idno']) && !empty($student_info['0']['student_idno'])){ echo $student_info['0']['student_idno']; } ?></span>
+											<span class="smallContent"><?php echo $this->session->student_no; ?></span>
 										</li>
 										<li>
 											<i class="fa fa-id-card-o" aria-hidden="true"></i>
 											<span class="smallHeding">Emirates ID No</span>
-											<span class="smallContent"><?php if(isset($student_info['0']['emirates_idno']) && !empty($student_info['0']['emirates_idno'])){ echo $student_info['0']['emirates_idno']; } ?></span>
+											<span class="smallContent"><?php echo $this->session->EmiratesID; ?></span>
 										</li>
 									</ul>
 								</div>

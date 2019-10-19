@@ -56,6 +56,10 @@ type: 'get',
                             <input type="text" name="Fnumber" class="blockClass fontInput" placeholder="File Number" />
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </div>
+                        <div class="form-control blockClass">
+                            <input type="text" name="Bnumber" class="blockClass fontInput" placeholder="Branch Number" />
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </div>
                         <div class="form-control " style='display:inline-block'>
                             <div class='image' style='display:inline-block'>
                                 <?php 
