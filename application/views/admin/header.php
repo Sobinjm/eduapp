@@ -58,10 +58,10 @@
 				<ol class="sub_menus">
 				  <?php if($this->session->role == 0){ ?>
 				  <li class="<?php if($this->uri->segment(2) == 'dashboard'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/dashboard'; ?>">Dashboard</a></li>
-				  <li class="<?php if($this->uri->segment(2) == 'staff'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff'; ?>">Admin</a></li>
-				  <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/faculty'; ?>">Trainer</a></li>
-          <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/quality'; ?>">QM</a></li>
-          <li class="<?php if($this->uri->segment(2) == 'faculty'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/hm'; ?>">HM</a></li>
+				  <li class="<?php if($this->uri->segment(3) == 'admin'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/admin'; ?>">Admin</a></li>
+				  <li class="<?php if($this->uri->segment(3) == 'trainer'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/trainer'; ?>">Trainer</a></li>
+          <li class="<?php if($this->uri->segment(3) == 'quality'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/quality'; ?>">QM</a></li>
+          <li class="<?php if($this->uri->segment(3) == 'hm'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/hm'; ?>">HM</a></li>
 				  <li class="<?php if($this->uri->segment(2) == 'student'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/student'; ?>">Students</a></li>
           
 				  <li class="<?php if($this->uri->segment(2) == 'course'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Lessons</a></li>

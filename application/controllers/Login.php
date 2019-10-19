@@ -96,221 +96,51 @@ class Login extends CI_Controller {
 			$studentNo 		 = $this->security->xss_clean($this->input->post('Snumber'));
 						$trafficNo 		 = $this->security->xss_clean($this->input->post('Tnumber'));
 						$fileNo 		 = $this->security->xss_clean($this->input->post('Fnumber'));
-						$token=$this->mapi_model->getToken();
+						$branchNo 		 = $this->security->xss_clean($this->input->post('Bnumber'));
 						
-						$login=$this->mapi_model->getStudentLogin($studentNo,$trafficNo,$fileNo,$token);
-						print_r($login);
+						
+						$login=$this->mlogin_model->validate($studentNo,$trafficNo,$fileNo,$branchNo);
+						// print_r($login);
 						// die();
-						if(isset($login->Message))
+						if(!isset($login[0]))
 						{
 							$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong data.</span>");
 							// echo $login->Message;
 							redirect(site_url() . 'login');
 						}
-						elseif($login->StudentName==null)
-						{
-							$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong data.</span>");
-							redirect(site_url() . 'login');
-						}
+						// elseif($login->StudentName==null)
+						// {
+						// 	$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong data.</span>");
+						// 	redirect(site_url() . 'login');
+						// }
 						else{
-							if($login->Status->Name=="In Progress")
-							{ 
-								$checkSno_count=$this->mlogin_model->checkStudent($studentNo);
-								if(sizeof($checkSno_count)>= 1)
-								{
-									if($checkSno_count[0]['trafficNumber']==$trafficNo && $checkSno_count[0]['fileNumber']==$fileNo)
-									{
-										$newsedata = array(
-											'userid' => $this->crc_encrypt->encode($checkSno_count[0]['id']),
-											'name'  => $checkSno_count[0]['name'],
-											'email' => $checkSno_count[0]['email'],
-											'student_no'=>$checkSno_count[0]['student_idno'],
-											'vip'=>$checkSno_count[0]['vip'],
-											'role' => $checkSno_count[0]['role'],
-											'logged_in' => TRUE
-										);
-										$this->session->set_userdata($newsedata);
-											$user_type='Student';
-										$notification=array(
-											'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
-											'name'=>$checkSno_count[0]['name'],
-											'user_type'=>$user_type,
-											'status'=>'Login'
-								
-										);
-										$this->mnotification_model->insert_notification($notification);
-										$this->session->set_userdata($newsedata);
-										redirect(site_url() . 'dashboard');
-									}
-									else 
-									{
-										
-										$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong Traffic Number and File Number.</span>");
-										redirect(site_url() . 'login');
-									}
-								}
-								else 
-								{
-									$insert_data = array(
-										'name' => $login->StudentName,
-										'email' => 'student@domain.com',
-										'student_idno' => $login->StudentNumber,
-										'trafficNumber' => $trafficNo,
-										'fileNumber' => $fileNo,
-										'contact_number' => 0,
-										'role' => '0',
-										'vip'=>$login->IsVIP,
-										'no_of_lessons'=>$login->NumberOfLessonPerDay
-										
-										);
-									$query = $this->mstudent_model->insert_student($insert_data);
-									// print_r($query);
-									// die();
-									$vip=0;
-									if($login->IsVIP=='true')
-									{
-										$vip=1;
-									}
-									
-									// 'lesson_count'	=>	$login->NumberOfLessonPerDay,
-									if($query)
-									{
-									$insert_data = array(
-										'student_id'	=>	$query,
-										'course_code'		=>	$login->LicenseId,
-										// 'vip'				=> $vip,
-										'start_date'	=>	 date('m/d/Y h:i a'),
-										'end_date'	 	=>	date('m/d/Y h:i a', strtotime('+6 months')),
-										'assigned_by'	=>	'0',
-										'language'		=>	'english '
-									);
-										$query1 = $this->mstudent_model->assign_course($insert_data);
-								}
-									if($query1) 
-									{	
-										$rs_count=$this->mlogin_model->checkStudent($studentNo);
-										$newsedata = array(
-											'userid' => $this->crc_encrypt->encode($rs_count[0]['id']),
-											'student_no'=>$login->StudentNumber,
-											'vip'				=> $vip,
-											'name' => $login->StudentName,
-											'email' => 'student@domain.com',
-											'role' => '0',
-											'logged_in' => TRUE
-										);
-										$this->session->set_userdata($newsedata);
-											$user_type='Student';
-										$notification=array(
-											'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
-											'name'=>$login->StudentName,
-											'user_type'=>$user_type,
-											'status'=>'Login'
-								
-										);
-										$this->mnotification_model->insert_notification($notification);
-										$this->session->set_userdata($newsedata);
-										redirect(site_url() . 'dashboard');
-									}
-									else 
-									{
-										echo 'Sorry, we are not able to add this student now.';
-										$this->session->set_flashdata('error', "<span class='help-block'>Sorry, we are not able to add this student now.</span>");
-									redirect(site_url() . 'login');
-									}
-									$this->session->set_flashdata('error', "<span class='help-block'>Student Number,Traffic Number and File Number does not match.</span>");
-									redirect(site_url() . 'login');
-								}
-							}
-							else{
-								$checkSno_count=$this->mlogin_model->checkStudent($studentNo);
-								if(sizeof($checkSno_count) >= 1)
-								{
-									if($checkSno_count[0]['trafficNumber']==$trafficNo && $checkSno_count[0]['fileNumber']==$fileNo)
-									{
-										$newsedata = array(
-											'userid' => $this->crc_encrypt->encode($email_count[0]['id']),
-											'name'  => $checkSno_count[0]['name'],
-											'email' => $checkSno_count[0]['email'],
-											'vip' => $checkSno_count[0]['vip'],
-											'role' => $checkSno_count[0]['role'],
-											'logged_in' => TRUE
-										);
-										$this->session->set_userdata($newsedata);
-											$user_type='Student';
-										$notification=array(
-											'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
-											'name'=>$checkSno_count[0]['name'],
-											'user_type'=>$user_type,
-											'status'=>'Login'
-								
-										);
-										$this->mnotification_model->insert_notification($notification);
-										$this->session->set_userdata($newsedata);
-										redirect(site_url() . 'dashboard');
-									}
-									else 
-									{
-										
-										$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong Traffic Number and File Number.</span>");
-										redirect(site_url() . 'login');
-									}
-								}
-							}
-							
+							// Array ( [0] => Array ( [id] => 14 [StudentNo] => 111 [TrafficNo] => 111 [TryFileNo] => 111 [NameEng] => 111 [NameAr] => 111 [BranchNo] => 111 [EmiratesID] => 111 ) )
+							$newsedata = array(
+								'userid' => $this->crc_encrypt->encode($login[0]['id']),
+								'ename'  => $login[0]['NameEng'],
+								'ar_name' => $login[0]['NameAr'],
+								'student_no'=>$login[0]['StudentNo'],
+								'TrafficNo'=>$login[0]['TrafficNo'],
+								'TryFileNo' => $login[0]['TryFileNo'],
+								'BranchNo' => $login[0]['BranchNo'],
+								'EmiratesID' => $login[0]['EmiratesID'],
+								'logged_in' => TRUE
+							);
+							$this->session->set_userdata($newsedata);
+								$user_type='Student';
+							// $notification=array(
+							// 	'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+							// 	'name'=>$login[0]['NameEng'],
+							// 	'user_type'=>$user_type,
+							// 	'status'=>'Login'
+					
+							// );
+							// $this->mnotification_model->insert_notification($notification);
+							$this->session->set_userdata($newsedata);
+							redirect(site_url() . 'dashboard');
 							// print_r($login);	
 						}
-			$email 		 = $this->security->xss_clean($this->input->post('email'));
-            $password 	 = $this->security->xss_clean($this->input->post('password'));
-            $email_count = $this->mlogin_model->checkEmail($email);
-			if(sizeof($email_count)>= 1)
-			{
-				if (password_verify($password, $email_count[0]['password'])) 
-					{
-
-						$newsedata = array(
-										'userid' => $this->crc_encrypt->encode($email_count[0]['id']),
-										'name'  => $email_count[0]['name'],
-										'email' => $email_count[0]['email'],
-										'contact' => $email_count[0]['contact_number'],
-										'role' => $email_count[0]['role'],
-										'logged_in' => TRUE
-									);
-						$this->session->set_userdata($newsedata);
-									if($email_count[0]['role']==0)
-									{
-										$user_type='Student';
-									}
-									elseif($email_count[0]['role']==1){
-										$user_type="Trainer";
-									}
-									else{
-										$user_type="Admin";
-									}
-									$notification=array(
-										'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
-										'name'=>$email_count[0]['name'],
-										'user_type'=>$user_type,
-										'status'=>'Login'
-							
-									);
-									$this->mnotification_model->insert_notification($notification);
-						
-						redirect(site_url() . 'dashboard');			
-					}
-				else 
-					{
-						
-						$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong password.</span>");
-						redirect(site_url() . 'login');
-					}
-					
-			}
-			else 
-			{
-				
-				$this->session->set_flashdata('error', "<span class='help-block'>Username and password does not match.</span>");
-				redirect(site_url() . 'login');
-			}
+			
 		}
 	}
 }

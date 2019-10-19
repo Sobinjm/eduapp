@@ -19,10 +19,17 @@ class Mlogin extends CI_Model
 			return $query->result_array(); 
 		}
 		
-		function checkPassword($email,$password)
+		function checkPassword($email,$password )
 		{
 			$query = $this->db->query("SELECT * FROM ad_student WHERE email = '".$email."' AND password = '".$password."'");	
 			return $query->result_array(); 
+		}
+		
+		
+		function validate($studentNo,$trafficNo,$fileNo,$branchNo)
+		{
+			$query = $this->db->query("execute _sp_el_studentauth ".$studentNo.",'".$trafficNo."','".$fileNo."',".$branchNo." ");	
+			return $query->result_array();
 		}
 		
 		

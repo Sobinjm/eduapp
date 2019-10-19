@@ -222,8 +222,24 @@
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
 				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
-				<a>Created By <?php $fname=$this->mfaculty_model->getStaff($lesson['created_by']); echo $fname[0]['name']; ?></a>
+				<?php 
+				if($lesson['publish_status']==0)
+				{
+					
+					?> <a class="btn btn-danger btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Pending</a>
+				<?php }
+				elseif($lesson['publish_status']==1)
+				{
 
+					?> <a class="btn btn-info btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Draft</a>
+				<?php 
+				}
+				elseif($lesson['publish_status']==2){
+
+					?> <a class="btn btn-success btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Published</a>
+				<?php 
+				}
+				?>
 <div class="modal fade in" id="modal-add-quiz<?php echo $lesson['id'].$j; ?>">
 <div class="modal-dialog modal-md">
 <div class="modal-content">
@@ -469,7 +485,7 @@
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 				<a href="#!" ><i class="fa fa-arrow"></i> Version : <?php echo $lesson['lesson_version']; ?></a>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
 				<a href="#!" ><i class="fa fa-arrow"></i>Notifications: <?php $count=$this->mnotification_model->getNotificationsCount(); echo $count[0]['count'];  ?></a>
 			</div>
 		</div>
@@ -535,12 +551,12 @@
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
 				<td>
-					<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i>  </a>
+					<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i> Edit </a>
 				</td>
-				<td><a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> </a>
+				<td><a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> Delete</a>
 				</td>
 				<td>					
-				<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i> </a></td>
+				<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i>View </a></td>
 				
 			</tr>
 			<?php 
@@ -1719,10 +1735,10 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 									url: "<?php echo base_url(); ?>admin/lesson/details",
 									data: {lesson_id:lesson_id},
 									success: function (data) {
-										// console.log(data);
-									//	alert(data);
+									
 										var value=JSON.parse(data);
 										var lesson_name=value.lesson_name;
+										var lesson_version=value.lesson_version;
 										var publish_status=value.publish_status;
 										if(publish_status==2)
 										{
@@ -1750,7 +1766,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 										$('#lt_time').html(utime)
 										$('#i_creration').html(value.created_by)
 										$('#l_creration').html(value.updated_by)
-										
+										$('#current_v').html(lesson_version);
 										$('#current_l').html(lesson_name);
 										$('#nos').html(value.slide_count);
 										// $('#nol').html(lcount);

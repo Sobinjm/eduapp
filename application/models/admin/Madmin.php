@@ -26,6 +26,11 @@ class Madmin extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_staff ORDER BY created_time DESC");	
 			return $query->result_array();
 		}
+		function getAllStaffs($role)
+		{
+			$query = $this->db->query("SELECT * FROM ad_staff WHERE role=".$role." ORDER BY name");	
+			return $query->result_array();
+		}
 		
 		function insert_staff($insert_data)
 		{

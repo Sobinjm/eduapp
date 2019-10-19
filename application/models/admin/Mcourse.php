@@ -23,6 +23,11 @@ class Mcourse extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE publish_status = '1' ORDER BY created_on DESC");	
 			return $query->result_array();
 		}
+		function getPublishedLessons()
+		{
+			$query = $this->db->query("SELECT * FROM ad_lessons WHERE publish_status = '2' ORDER BY created_on DESC");	
+			return $query->result_array();
+		}
 		function getAllcourse()
 		{
 			$query = $this->db->query("SELECT * FROM ad_course ORDER BY created_on DESC");	
@@ -60,7 +65,7 @@ class Mcourse extends CI_Model
 			$this->db->insert('ad_course',$insert_data);
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
-		
+		 
 		function update_staff_passwd($id,$up_data)
 		{
 			$this->db->where('id', $id); 
