@@ -1735,8 +1735,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 									url: "<?php echo base_url(); ?>admin/lesson/details",
 									data: {lesson_id:lesson_id},
 									success: function (data) {
-										// console.log(data);
-										// alert(data);
+									
 										var value=JSON.parse(data);
 										var lesson_name=value.lesson_name;
 										var lesson_version=value.lesson_version;
@@ -2181,7 +2180,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 												$("input[name=edit_select_media][value=" + obj['0'].slide_mode + "]").prop('checked', 'checked');
 												$('#edit_file_orginal').val(obj['0'].slide_file);
 												$('#edit_slide_duration').val(obj['0'].slide_duration);
-												$('#edit_slide_description, .wysihtml5-editor').html(obj['0'].slide_description);
+												CKEDITOR.instances['edit_slide_description'].setData(obj['0'].slide_description);
 												$('#edit_slide_order').val(obj['0'].slide_order);
 											}
 								})
