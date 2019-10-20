@@ -38,13 +38,14 @@
 							<th>Task</th>
 							<th>Status</th>
 							<th>Creade on</th>
+							<th>Action</th>
 								
 							</tr>
 						</thead>
 						<tbody>
 							<?php 
                             $slno=0;
-                            
+                            // print_r($comments);
 									foreach($comments as $comment) {
                                         if($comment['status']==0)
 						                {
@@ -52,7 +53,7 @@
                                         }
                                         else{
                                             $cmt_status="Completed";
-                                        }
+                                        } 
 										$slno++;?>
 								<tr>
 								<td><?php echo $slno; ?></td>
@@ -61,6 +62,8 @@
 									<td><?php echo $comment['comment']; ?></td>
 									<td><?php echo $cmt_status; ?></td>
 									<td><?php echo date('d-m-Y|h:i:sa',strtotime($comment['updated_at'])); ?></td>
+									<td><a href="<?php echo base_url().'admin/lesson/preview/'.$url; ?>">View</a></td>
+									
 									
 								</tr>
 								<?php } ?>
@@ -73,6 +76,7 @@
 								<th>Task</th>
 								<th>Status</th>
 								<th>Creade on</th>
+								<th>Action</th>
 								
 							</tr>
 						</tfoot>

@@ -164,7 +164,9 @@
 					<h3 class="box-title 5p_border"></h3>
 				  </div>
 				  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+				  <?php if($this->session->role != 2 ){ ?>
 					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default-new">Add Lesson</button>
+				  <?php } ?>
 				  </div> 	
 				</div>
 				<div class="table_padding">
@@ -211,7 +213,7 @@
 
 
 <div class="card mb-2">
-	<div class="card-header tab_main_height">
+	<div class="card-header tab_main_height" <?php if($this->crc_encrypt->encode($lesson['lesson_lock'])!=$this->session->userid && ($lesson['lesson_lock']!=null ||$lesson['lesson_lock']!='')){ echo 'style="background-color: #a9a9a9;"'; }?>>
 		<div class="row padd_4e">
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 				<form id="form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="form_<?php echo $lesson['id']; ?>" method="post" >
@@ -220,9 +222,11 @@
 				<a href="#!" class="tab_a_pad pop-details" data-id="<?php echo $lesson['id']; ?>" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
 			</div>	
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
 				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
 				<?php 
+				}
 				if($lesson['publish_status']==0)
 				{
 					
@@ -473,8 +477,10 @@
 </div>
 </div>	</div>	
 			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-lock="<?php echo $lesson['lesson_lock']; ?>" data-status=<?php echo $lesson['publish_status']; ?> data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+			<?php } ?>
 			</div>
 			
 		</div>
@@ -510,16 +516,18 @@
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
 				<td>
+				<?php if($this->session->role != 2  && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
 						<i class="fa fa-fw fa-edit"></i> 
 					</a>
 					<a href="#!" class="lb_bg_two tab_a_pad delete_slide"   data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
 						<i class="fa fa-fw fa-trash"></i> 
 					</a>
+				<?php } ?>
 				</td>
 				<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-				<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-		<?php if(!empty($lesson['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
+				<td ><?php if(!empty($lesson['iscomment'])){ ?><a class=" lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
+		<?php echo 'Admin Comment';}  ?></a></td>
 				<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
 			</tr>
 			<?php 
@@ -547,13 +555,18 @@
 					{
 						foreach($lesson['quiz'] as $lsn)
 							{
-			?>
+			?> 
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
 				<td>
+				<?php if($this->session->role != 2  && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 					<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i> Edit </a>
+				<?php } ?>
 				</td>
-				<td><a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> Delete</a>
+				<td>
+				<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
+					<a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> Delete</a>
+					<?php } ?>
 				</td>
 				<td>					
 				<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i>View </a></td>
@@ -1486,9 +1499,11 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				</div>
 			  </form>	
               <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
-								<button type="button" class="btn btn-flat btn-success add_new_version"  data-action="add_version">New Version</button>
+				<button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
+				<button type="button" style="display:none" id="lock_btn" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Lock Lesson</button>
+				<button type="button" style="display:none" id="unlock_btn" data-id="" class="btn btn-flat btn-info unlock_btn"  data-action="add_version">Unlock Lesson</button>
+				<button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
+				<button type="button" id="version_btn" class="btn btn-flat btn-success add_new_version"  data-action="add_version">New Version</button>
 			  </div>
             </div>
             <!-- /.modal-content -->
@@ -2181,7 +2196,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 												$("input[name=edit_select_media][value=" + obj['0'].slide_mode + "]").prop('checked', 'checked');
 												$('#edit_file_orginal').val(obj['0'].slide_file);
 												$('#edit_slide_duration').val(obj['0'].slide_duration);
-												$('#edit_slide_description, .wysihtml5-editor').html(obj['0'].slide_description);
+												CKEDITOR.instances['edit_slide_description'].setData(obj['0'].slide_description);
 												$('#edit_slide_order').val(obj['0'].slide_order);
 											}
 								})
@@ -2427,9 +2442,105 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					
 				});
 				
+				$('.lock_btn').click(function(){
+					var lesson_id = $(this).attr("data-id");
+					var lock = $(this).attr("data-lock");
+					
+					
+					$.post("<?php echo base_url(); ?>admin/lesson/lock", { 
+									id: lesson_id							
+								}, function(data) {
+									var json = $.parseJSON(data);
+									console.log(data);
+									if(json.status == 'Success')
+									{
+										swal({title: "Message", text: 'Success! Lesson Locked', type: 
+											"info"}).then(function(){ 
+								   			location.reload();
+										
+										   }
+										);
+									}
+									else 
+									{
+										swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now'+json.status, type: 
+										"info"}).then(function(){ 
+										//    location.reload();
+								   }
+								);
+									}
+						})
+						.fail(function(e) {
+
+							swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now-Call Failed.', type: 
+								"info"}).then(function(){ 
+								//    location.reload();
+								console.log(e);
+								   }
+								);
+						})
+				});
+				$('.unlock_btn').click(function(){
+					var lesson_id = $(this).attr("data-id");
+					var lock = $(this).attr("data-lock");
+					
+					
+					$.post("<?php echo base_url(); ?>admin/lesson/unlock", { 
+									id: lesson_id							
+								}, function(data) {
+									// alert(data);
+									var json = $.parseJSON(data);
+									console.log(data);
+									if(json.status == 'Success')
+									{
+										swal({title: "Message", text: 'Success! Lesson Unlocked', type: 
+											"info"}).then(function(){ 
+								   			location.reload();
+										
+										   }
+										);
+									}
+									else 
+									{
+										swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now', type: 
+										"info"}).then(function(){ 
+										   location.reload();
+								   }
+								);
+									}
+						})
+						.fail(function(e) {
+
+							swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now-Call Failed.', type: 
+								"info"}).then(function(){ 
+								//    location.reload();
+								console.log(e);
+								   }
+								);
+						})
+				});
 				
 				$('.edit_now-new').click(function(){
 					var etid = $(this).attr("data-id");
+					var status = $(this).attr("data-status");
+					$('#lock_btn').attr("data-id",etid);
+					$('#unlock_btn').attr("data-id",etid);
+					var lock = $(this).attr("data-lock");
+					// alert(lock );
+					if(lock==null || lock==''||lock!=<?php echo $this->crc_encrypt->decode($this->session->userid); ?>)
+					{
+						$('#lock_btn').show();
+						$('#unlock_btn').hide();
+					}
+					else{
+						$('#unlock_btn').show();
+						$('#lock_btn').hide();
+					}
+					if(status!=2)
+					{
+						$('#version_btn').hide();
+					}
+					
 					$('#edit_eid_l').val(etid);
 					// alert($('#edit_eid_l').val());
 					$.post("<?php echo base_url(); ?>admin/lesson/getlesson", { 
@@ -2482,7 +2593,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					var data 					= new FormData(edit_form);  
 					
 					if(edit_lesson_name == '')
-					{	
+					{	    
 						swal('Lesson name should not be empty');
 						$('#edit_lesson_name').addClass("error");
 						return false;
