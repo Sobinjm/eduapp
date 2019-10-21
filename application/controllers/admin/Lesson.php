@@ -62,6 +62,7 @@ class Lesson extends CI_Controller {
 		// print_r($slideid);
 		// die();
 		$data['comments']=	$this->mcomment_model->getslidecomment($slideid);
+		$data['url']=$this->uri->segment(4);
 		$this->load->view('admin/summary',$data);
 	}
 	public function details()
@@ -479,6 +480,112 @@ class Lesson extends CI_Controller {
 					echo json_encode($response);
 					exit();
 				}	
+		}
+	}
+
+	public function update_status()
+		{
+			$id = $this->security->xss_clean($this->input->post('id'));
+			if(empty($id))
+			{
+				echo 'Sorry, we are not able to approve this lesson now.';	
+			}
+			else 
+			{
+				$id = $this->crc_encrypt->decode($id);
+				$data = array('publish_status' => '2');
+				$query = $this->mlesson_model->update_status($id, $data);
+				if($query) 
+				{		
+					echo 'Lesson approved.';
+				}
+				else 
+				{
+					echo 'Sorry, we are not able to approve this lesson now.';
+				}
+			}
+			
+		}
+		public function draft_status()
+		{
+			$id = $this->security->xss_clean($this->input->post('id'));
+			if(empty($id))
+			{
+				echo 'Sorry, we are not able to draft this lesson now.';	
+			}
+			else 
+			{
+				$id = $this->crc_encrypt->decode($id);
+				$data = array('publish_status' => '0');
+				$query = $this->mlesson_model->draft_status($id, $data);
+				if($query) 
+				{		
+					echo 'Lesson drafted successfully.';
+				}
+				else 
+				{
+					echo 'Sorry, we are not able to draft this lesson now.';
+				}
+			}
+			
+		}
+		
+	public function lock()
+	{
+			$update_data = array(
+				'lesson_lock'=>$this->crc_encrypt->decode($this->session->userdata('userid'))
+			);
+			$lesson_id=$this->input->post('id');
+			$query = $this->mlesson_model->update_lesson($this->crc_encrypt->decode($lesson_id),$update_data);
+			// print_r($lesson_id);
+			// exit();
+			if($query) 
+			{	
+				
+			$response = array(
+									'status'  => 'Success',
+									'message' => 'Lesson locked successfully'
+								);
+			echo json_encode($response);
+			exit();
+			}
+			else 
+			{
+			$response = array(
+									'status'  => 'Failed',
+									'message' => 'Sorry, we are not able to lock this lesson now.'
+								);
+			echo json_encode($response);
+			exit();
+			}
+	}
+	public function unlock()
+	{
+		$update_data = array(
+			'lesson_lock'=>NULL
+		);
+		$lesson_id=$this->input->post('id');
+		$query = $this->mlesson_model->update_lesson($this->crc_encrypt->decode($lesson_id),$update_data);
+		// print_r($lesson_id);
+		// exit();
+		if($query) 
+		{	
+			
+		$response = array(
+								'status'  => 'Success',
+								'message' => 'Lesson unlocked successfully'
+							);
+		echo json_encode($response);
+		exit();
+		}
+		else 
+		{
+		$response = array(
+								'status'  => 'Failed',
+								'message' => 'Sorry, we are not able to unlock this lesson now.'
+							);
+		echo json_encode($response);
+		exit();
 		}
 	}
 	public function delete()

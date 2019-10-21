@@ -9,7 +9,7 @@
 </div>
 <script src="http://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
 <!-- ./wrapper -->
-<!-- <script type="text/javascript" src="http://jhollingworth.github.io/bootstrap-wysihtml5/lib/js/wysihtml5-0.3.0.js"></script> -->
+
 <!-- jQuery 3 -->
 <script src="<?php echo base_url(); ?>admdist/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->

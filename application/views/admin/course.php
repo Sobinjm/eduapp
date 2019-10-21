@@ -164,7 +164,9 @@
 					<h3 class="box-title 5p_border"></h3>
 				  </div>
 				  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+				  <?php if($this->session->role != 2 ){ ?>
 					<button type="button" class="btn btn-block btn-danger btn-flat" data-toggle="modal" data-target="#modal-default-new">Add Lesson</button>
+				  <?php } ?>
 				  </div> 	
 				</div>
 				<div class="table_padding">
@@ -211,7 +213,7 @@
 
 
 <div class="card mb-2">
-	<div class="card-header tab_main_height">
+	<div class="card-header tab_main_height" <?php if($this->crc_encrypt->encode($lesson['lesson_lock'])!=$this->session->userid && ($lesson['lesson_lock']!=null ||$lesson['lesson_lock']!='')){ echo 'style="background-color: #a9a9a9;"'; }?>>
 		<div class="row padd_4e">
 			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 				<form id="form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="form_<?php echo $lesson['id']; ?>" method="post" >
@@ -220,9 +222,11 @@
 				<a href="#!" class="tab_a_pad pop-details" data-id="<?php echo $lesson['id']; ?>" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
 			</div>	
 			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
 				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
 				<?php 
+				}
 				if($lesson['publish_status']==0)
 				{
 					
@@ -473,8 +477,10 @@
 </div>
 </div>	</div>	
 			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>"><i class="fa fa-times"></i> Delete</a>
-				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-lock="<?php echo $lesson['lesson_lock']; ?>" data-status=<?php echo $lesson['publish_status']; ?> data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
+			<?php } ?>
 			</div>
 			
 		</div>
@@ -510,16 +516,19 @@
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
 				<td>
+				<?php if($this->session->role != 2  && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
 						<i class="fa fa-fw fa-edit"></i> 
 					</a>
 					<a href="#!" class="lb_bg_two tab_a_pad delete_slide"   data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
 						<i class="fa fa-fw fa-trash"></i> 
 					</a>
+				<?php } ?>
 				</td>
 				<td><a href="<?php echo base_url(); ?>admin/lesson/preview/<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" target="_blank" style="color:#000;"><i class="fa fa-fw fa-eye"></i> Preview</a></td>
-				<td ><a class="lp_buttons lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
-		<?php if(!empty($lesson['iscomment'])){echo 'Admin Comment';}  ; ?></a></td>
+				<td ><?php  if(!empty($lesson['iscomment'])){ ?><a class=" lb_bg_two tab_a_pad "><i class="fa fa-circle"></i> 
+		<?php //echo 'Admin Comment';
+	}  ?></a></td>
 				<td><i class="fa fa-fw fa-clock-o"></i> <?php echo $lsn['slide_duration']; ?></td>
 			</tr>
 			<?php 
@@ -547,13 +556,18 @@
 					{
 						foreach($lesson['quiz'] as $lsn)
 							{
-			?>
+			?> 
 			<tr>
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['question']; ?></td>
 				<td>
+				<?php if($this->session->role != 2  && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 					<a href="#!" class="edit_quiz" data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']);?>" data-toggle="modal" data-target="#modal-edit-quiz" ><i class="fa fa-fw fa-edit"></i> Edit </a>
+				<?php } ?>
 				</td>
-				<td><a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> Delete</a>
+				<td>
+				<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
+					<a class=" lb_bg_one tab_a_pad pull-right delete_quiz" href='#!' data-id="<?php echo $this->crc_encrypt->encode($lsn['quiz_id']); ?>"><i class="fa fa-trash"></i> Delete</a>
+					<?php } ?>
 				</td>
 				<td>					
 				<a target="blank" href="<?php echo base_url().'admin/quiz/preview_quiz/'.$this->crc_encrypt->encode($lsn['quiz_id']);?>"><i class="fa fa-fw fa-eye"></i>View </a></td>
@@ -703,132 +717,6 @@
 			</div>
 		</div>
 	
-		
-		<div class="modal fade in" id="modal-default">
-          <div class="modal-dialog modal-md">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add Course</h4>
-              </div>
-              <div class="modal-body">
-				<form class="form-horizontal" enctype="multipart/form-data" id="add_course_form">
-					<div class="form-group">
-						<label for="course_name" class="col-sm-4 control-label">Course Name</label>
-						<div class="col-sm-8">
-							<!-- <input type="textbox" class="form-control" id="course_name" name="course_name" placeholder="Course Name"> -->
-							<select id="course_name" name="course_name">
-								<?php
-								// $token=$this->mapi_model->getToken();
-							$courses=$this->mcourse_model->getCourses();
-							$course_list=$courses;
-							// print_r($course_list);
-							// die();
-							foreach($course_list as $course)
-							{
-								echo '<option value="'.$course['Code'].'~'.$course['Description'].'">'.$course['Description'].'</option>';
-							}
-								?>
-								<!-- <option>
-								</option> -->
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="course_language" class="col-sm-4 control-label">Course Language</label>
-						<div class="col-sm-8">
-							<div class="form-group">
-									<div class="col-sm-12 pull-right">
-										<label class="mr-5">
-										  <input type="checkbox" id="english" name="english" value="eng" class="minimal-red" checked> English
-										</label>
-										
-										<label class="mr-5">
-										  <input type="checkbox" id="arabic" name="arabic" value="arb" class="minimal-red"> Arabic
-										</label>
-									
-										<label class="mr-5">
-										  <input type="checkbox" id="urdu" name="urdu" value="urd" class="minimal-red"> Urdu
-										</label>
-									</div>
-									<div class="col-sm-12 pull-right">
-										<label class="mr-5">
-										  <input type="checkbox" id="pashto" name="pashto" value="pas" class="minimal-red"> Pashto
-										</label>
-										
-										<label class="mr-5">
-										  <input type="checkbox" id="malayalam" name="malayalam" value="mal" class="minimal-red"> Malayalam
-										</label>
-									
-									</div>
-									
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="icon_file" class="col-sm-4 control-label">Icon Upload</label>
-						<div class="col-sm-8">
-							<input type="file" id="icon_file" name="icon_file">
-							<small>Only jpg, jpeg, png and gif file types allowed.</small>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="brief_desc" class="col-sm-4 control-label">Brief Desc</label>
-						<div class="col-sm-8">
-							<textarea id="brief_desc" name="brief_desc" rows="10" style="width:100%">
-							
-							</textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="no_lessons" class="col-sm-4 control-label">No. of Lessons</label>
-						<div class="col-sm-8">
-							<input type="textbox" class="form-control" id="no_lessons" name="no_lessons" placeholder="No. of Lessons">
-						</div>
-					</div>
-				</div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-flat btn-warning save_now" data-action="draft">Save as draft</button>
-				<button type="button" class="btn btn-flat btn-success save_now" data-action="publish">Publish now</button>
-				</form>
-              </div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
-	
-	
-		
-		
-		<div class="modal fade in" id="modal-view">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span></button>
-					<h4 class="modal-title">View Course</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<p class="loading-message"></p>
-						</div>
-					</div>
-					<div class="row current_course">
-						
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				</div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
-        </div>
 		
 		
     </section>
@@ -1301,21 +1189,21 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				
 			});
 			
-			$(document).on("click", ".approve_course_main", function(event){
+			$(document).on("click", ".approve_lesson_main", function(event){
 					//alert('Hello');
 					var course_id = $(this).attr("data-id");
 					Swal({
 					  title: 'Are you sure?',
-					  text: "You want to approve this course?",
+					  text: "You want to approve this lesson?",
 					  type: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
 					  cancelButtonColor: '#d33',
-					  confirmButtonText: 'Yes, Approve Course!'
+					  confirmButtonText: 'Yes, Approve Lesson!'
 					}).then((result) => {
 					  if (result.value) {
 						
-						$.post( "<?php echo base_url(); ?>admin/course/update_status", { 
+						$.post( "<?php echo base_url(); ?>admin/lesson/update_status", { 
 									id: course_id,
 									<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
 								}, function(data) {
@@ -1337,21 +1225,21 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 
 
 			});
-			$(document).on("click", ".deapprove_course_main", function(event){
+			$(document).on("click", ".draft_lesson_main", function(event){
 					//alert('Hello');
 					var course_id = $(this).attr("data-id");
 					Swal({
 					  title: 'Are you sure?',
-					  text: "You want to deapprove this course?",
+					  text: "You want to Draft this lesson?",
 					  type: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
 					  cancelButtonColor: '#d33',
-					  confirmButtonText: 'Yes, Deapprove Course!'
+					  confirmButtonText: 'Yes, Draft Lesson!'
 					}).then((result) => {
 					  if (result.value) {
 						
-						$.post( "<?php echo base_url(); ?>admin/course/draft_status", { 
+						$.post( "<?php echo base_url(); ?>admin/lesson/draft_status", { 
 									id: course_id,
 									<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
 								}, function(data) {
@@ -1464,7 +1352,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						<div class="col-sm-8">
 							<input type="textbox" class="form-control" id="edit_no_lessons2" name="edit_no_lessons" placeholder="Lesson Order">
 							<input type="hidden" name="edit_eid_l" id="edit_eid_l" />
-							<input type="hidden" name="edit_lesson_language" id="edit_lesson_language" />
+							<input type="hidden" name="edit_lesson_language1" id="edit_lesson_language" />
 							<input type="hidden" id="edit_lesson_id" name="edit_lesson_id">
 							<input type="hidden" id="edit_id" name="edit_id">
 						</div>
@@ -1473,6 +1361,19 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						<label for="edit_lesson_name" class="col-sm-4 control-label">Lesson Name</label>
 						<div class="col-sm-8">
 							<input type="textbox" class="form-control" id="edit_lesson_name" name="edit_lesson_name" placeholder="Lesson Name">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="course_name" class="col-sm-4 control-label">Language</label>
+						<div class="col-sm-8">
+							<!-- <input type="textbox" class="form-control" id="lesson_name_new" name="lesson_name" placeholder="Lesson Name"> -->
+							<select class="form-control" id="edit_lang" name="edit_lesson_language">
+								<option value="english">English</option>
+								<option value="malayalam">Malayalam</option>
+								<option value="arabic">Arabic</option>
+								<option value="urudu">Urudu</option>
+					
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
@@ -1486,9 +1387,13 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				</div>
 			  </form>	
               <div class="modal-footer">
-                <button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
-								<button type="button" class="btn btn-flat btn-success add_new_version"  data-action="add_version">New Version</button>
+				<button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
+				<button type="button" style="display:none" id="draft_lesson_main" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Draft</button>
+				<button type="button" style="display:none" id="approve_lesson_main" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Approve</button>
+				<button type="button" style="display:none" id="lock_btn" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Lock Lesson</button>
+				<button type="button" style="display:none" id="unlock_btn" data-id="" class="btn btn-flat btn-info unlock_btn"  data-action="add_version">Unlock Lesson</button>
+				<button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
+				<button type="button" id="version_btn" class="btn btn-flat btn-success add_new_version"  data-action="add_version">New Version</button>
 			  </div>
             </div>
             <!-- /.modal-content -->
@@ -1735,8 +1640,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 									url: "<?php echo base_url(); ?>admin/lesson/details",
 									data: {lesson_id:lesson_id},
 									success: function (data) {
-										// console.log(data);
-										// alert(data);
+									
 										var value=JSON.parse(data);
 										var lesson_name=value.lesson_name;
 										var lesson_version=value.lesson_version;
@@ -2181,7 +2085,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 												$("input[name=edit_select_media][value=" + obj['0'].slide_mode + "]").prop('checked', 'checked');
 												$('#edit_file_orginal').val(obj['0'].slide_file);
 												$('#edit_slide_duration').val(obj['0'].slide_duration);
-												$('#edit_slide_description, .wysihtml5-editor').html(obj['0'].slide_description);
+												CKEDITOR.instances['edit_slide_description'].setData(obj['0'].slide_description);
 												$('#edit_slide_order').val(obj['0'].slide_order);
 											}
 								})
@@ -2427,9 +2331,116 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					
 				});
 				
+				$('.lock_btn').click(function(){
+					var lesson_id = $(this).attr("data-id");
+					var lock = $(this).attr("data-lock");
+					
+					
+					$.post("<?php echo base_url(); ?>admin/lesson/lock", { 
+									id: lesson_id							
+								}, function(data) {
+									var json = $.parseJSON(data);
+									console.log(data);
+									if(json.status == 'Success')
+									{
+										swal({title: "Message", text: 'Success! Lesson Locked', type: 
+											"info"}).then(function(){ 
+								   			location.reload();
+										
+										   }
+										);
+									}
+									else 
+									{
+										swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now'+json.status, type: 
+										"info"}).then(function(){ 
+										   location.reload();
+								   }
+								);
+									}
+						})
+						.fail(function(e) {
+
+							swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now-Call Failed.', type: 
+								"info"}).then(function(){ 
+								   location.reload();
+								console.log(e);
+								   }
+								);
+						})
+				});
+				$('.unlock_btn').click(function(){
+					var lesson_id = $(this).attr("data-id");
+					var lock = $(this).attr("data-lock");
+					
+					
+					$.post("<?php echo base_url(); ?>admin/lesson/unlock", { 
+									id: lesson_id							
+								}, function(data) {
+									// alert(data);
+									var json = $.parseJSON(data);
+									// console.log(data);
+									if(json.status == 'Success')
+									{
+										swal({title: "Message", text: 'Success! Lesson Unlocked', type: 
+											"info"}).then(function(){ 
+								   			location.reload();
+										
+										   }
+										);
+									}
+									else 
+									{
+										swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now', type: 
+										"info"}).then(function(){ 
+										   location.reload();
+								   }
+								);
+									}
+						})
+						.fail(function(e) {
+
+							swal({title: "Message", text: 'Sorry! We are not able to lock the lesson now-Call Failed.', type: 
+								"info"}).then(function(){ 
+								//    location.reload();
+								console.log(e);
+								   }
+								);
+						})
+				});
 				
 				$('.edit_now-new').click(function(){
 					var etid = $(this).attr("data-id");
+					var status = $(this).attr("data-status");
+					$('#lock_btn').attr("data-id",etid);
+					$('#unlock_btn').attr("data-id",etid);
+					var lock = $(this).attr("data-lock");
+					// alert(lock );
+					if(lock==null || lock==''||lock!=<?php echo $this->crc_encrypt->decode($this->session->userid); ?>)
+					{
+						$('#lock_btn').show();
+						$('#unlock_btn').hide();
+					}
+					else{
+						$('#unlock_btn').show();
+						$('#lock_btn').hide();
+					}
+
+					if(status=0 && <?php echo $this->crc_encrypt->decode($this->session->userid); ?>=='1')
+					{
+						$('#approve_btn').show();
+						$('#draft_btn').hide();
+					}
+					else{
+						$('#approve_btn').show();
+						$('#draft_btn').hide();
+					}
+					
+					if(status!=2)
+					{
+						$('#version_btn').hide();
+					}
+					
 					$('#edit_eid_l').val(etid);
 					// alert($('#edit_eid_l').val());
 					$.post("<?php echo base_url(); ?>admin/lesson/getlesson", { 
@@ -2454,8 +2465,11 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 										$('#edit_lesson_icon_file').val(obj['0'].icon_file);
 										$('#edit_lesson_id').val(obj['0'].lesson_id);
 										$('#edit_id').val(obj['0'].id);
-										$('#edit_lesson_language').val(obj['0'].language);
-										console.log(obj['0'].lesson_order);
+										$('#edit_language').val(obj['0'].language);
+										$('#edit_lang').find('option[value="'+obj['0'].language+'"]').attr('selected','selected');
+										// alert(obj['0'].language);
+										// $('#edit_lang option[value="'+obj['0'].language+'"]').attr("selected",true);
+										// console.log(obj['0'].lesson_order);
 										$('#edit_no_lessons2').val(obj['0'].lesson_order);
 										$('#modal-edit-new').modal('show');
 										$('.overlay').hide();
@@ -2482,7 +2496,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					var data 					= new FormData(edit_form);  
 					
 					if(edit_lesson_name == '')
-					{	
+					{	    
 						swal('Lesson name should not be empty');
 						$('#edit_lesson_name').addClass("error");
 						return false;
@@ -2555,37 +2569,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				
 			});
 			
-			$(document).on("click", ".approve_course_main", function(event){
-					//alert('Hello');
-					var course_id = $(this).attr("data-id");
-					Swal({
-					  title: 'Are you sure?',
-					  text: "You want to approve this course?",
-					  type: 'warning',
-					  showCancelButton: true,
-					  confirmButtonColor: '#3085d6',
-					  cancelButtonColor: '#d33',
-					  confirmButtonText: 'Yes, Approve Lesson!'
-					}).then((result) => {
-					  if (result.value) {
-						
-						$.post( "<?php echo base_url(); ?>admin/course/update_status", { 
-									id: course_id,
-									<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"								
-								}, function(data) {
-							swal({title: "Message", text: data, type: 
-								"info"}).then(function(){ 
-								   location.reload();
-								   }
-								);
-						})
-						.fail(function() {
-							swal('Something went wrong. Please check whether you are connected to Internet.');
-						});
-						
-					  }
-					}); 
-			});
+			
 			
 			var i = 1;
 			
