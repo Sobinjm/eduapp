@@ -33,6 +33,13 @@ class Mlesson extends CI_Model
 			$this->db->update('ad_lessons',$up_data); 
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+		function update_status($id, $up_data)
+		{
+			$this->db->where('id', $id); 
+			$this->db->update('ad_lesson',$up_data); 
+			return ($this->db->affected_rows() != 1) ? false : true;
+		}
+		
 		
 		//function for updating the slides completed
 		function update_slides($id,$up_data){
