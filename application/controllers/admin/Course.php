@@ -39,15 +39,24 @@ class Course extends CI_Controller {
 							reset($datas);
 							$slide[]=$qry;
 							$qrys['slides'] = $this->mlesson_model->getslideforlesson($qry['id']);
+							$commentlsn=0;
 							foreach($qrys['slides'] as $lsn)
 											{
 												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+												// print_r($lsn['iscomment']);
+												if($lsn['iscomment'] && $commentlsn!=0)
+												{
+													$commentlsn=$lsn['iscomment'];
+													// break;
+												}
+												
 											}
 							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
-							
+							$qrys['iscomment']=$qrys['quiz'];
 
 							
 							$data['lessons'][$index]['slides']=$qrys['slides'];
+							$data['lessons'][$index]['iscomment']=$commentlsn;
 							$data['lessons'][$index]['quiz']=$qrys['quiz'];
 							$index++;
 						}
@@ -75,9 +84,13 @@ class Course extends CI_Controller {
 							foreach($qrys['slides'] as $lsn)
 											{
 												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+												if($lsn['iscomment'])
+												{
+													break;
+												}
 											}
 							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
-							
+							$qrys['iscomment']=$qrys['quiz'];
 
 							
 							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
@@ -113,10 +126,13 @@ class Course extends CI_Controller {
 							foreach($qrys['slides'] as $lsn)
 											{
 												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+												if($lsn['iscomment'])
+												{
+													break;
+												}
 											}
 							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
-							
-
+							$qrys['iscomment']=$qrys['quiz'];
 							
 							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
 							$datas[] = $qrys;
@@ -149,9 +165,13 @@ class Course extends CI_Controller {
 							foreach($qrys['slides'] as $lsn)
 											{
 												$lsn['iscomment']=$this->mcomment_model->getslidecommentcount($lsn['id']);
+												if($lsn['iscomment'])
+												{
+													break;
+												}
 											}
 							$qrys['quiz'] = $this->mlesson_model->getquizforlesson($qry['id']);
-							
+							$qrys['iscomment']=$qrys['quiz'];
 
 							
 							// $qry['comments']=	$this->mcomment_model->getslidecommentcount($qry['id']);
@@ -570,7 +590,7 @@ class Course extends CI_Controller {
 			$id = $this->security->xss_clean($this->input->post('id'));
 			if(empty($id))
 			{
-				echo 'Sorry, we are not able to approve this course now.';	
+				echo 'Sorry, we are not able to approve this lesson now.';	
 			}
 			else 
 			{
@@ -579,7 +599,7 @@ class Course extends CI_Controller {
 				$query = $this->mcourse_model->update_status($id, $data);
 				if($query) 
 				{		
-					echo 'Course approved successfully.';
+					echo 'Lesson approved.';
 				}
 				else 
 				{
