@@ -2,6 +2,9 @@
 $this->load->view('front/header');
 $length=sizeof($result);
 $lesson=$this->uri->segment(3);
+$val=explode("=>",$slide_count);
+$current_row=$val['1'];
+print_r($current_row);
 ?>
 
     <!--Section : Header Sub Section-->
@@ -33,11 +36,11 @@ $lesson=$this->uri->segment(3);
                             
                             if(sizeof($result) >=1){
                             
-                                if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio' )
+                                if($result[$current_row]['slide_mode'] == 'video' || $result[$current_row]['slide_mode'] == 'audio' )
                                 {                                   
                             ?>
                             <video id="my-player" class="video-js vjs-big-play-centered" data-setup='{"fluid": true}' controls preload="auto" poster="<?php echo base_url(); ?>front/images/elearnvid.png" onended="change_vid()">
-                              <source src="<?php echo base_url().$result['0']['slide_file']; ?>" type="video/mp4"></source>
+                              <source src="<?php echo base_url().$result[$current_row]['slide_file']; ?>" type="video/mp4"></source>
                               <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a
                                 web browser that
@@ -52,7 +55,7 @@ $lesson=$this->uri->segment(3);
                                 else
                                 {
                             ?>      
-                                <img src="<?php echo base_url().$result['0']['slide_file']; ?>" class="img-responsive"/> <?php if(sizeof($result) >1 ){
+                                <img src="<?php echo base_url().$result[$current_row]['slide_file']; ?>" class="img-responsive"/> <?php if(sizeof($result) >1 ){
                                     ?>
                                 <div class="overlay">
                                     <button class="blockClass fontButton fontButtonAbsolute d" id="next">Next</button>
@@ -75,7 +78,7 @@ $lesson=$this->uri->segment(3);
                         </div>
                         <?php 
                             if(sizeof($result) >1 ){
-                                if($result['0']['slide_mode'] == 'video' || $result['0']['slide_mode'] == 'audio')
+                                if($result[$current_row]['slide_mode'] == 'video' || $result[$current_row]['slide_mode'] == 'audio')
                                 {
                                 ?>
                              <!--Absolute Overlay-->

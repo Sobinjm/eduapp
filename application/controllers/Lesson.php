@@ -41,7 +41,8 @@ class Lesson extends CI_Controller {
 		);
 		$this->session->set_userdata($newdata);
 		$data['lesson_data']=$this->mlesson_model->getlessonid($lesson_id);
-		// $data=$qry;
+		$data['slide_count']=$assigned_course[0]['slide_count'];
+		// $data=$qry; 
 		// print_r($this->session->course_info[0]['course_name']);
 		$this->load->view('front/lesson',$data);
 	}
@@ -58,8 +59,9 @@ class Lesson extends CI_Controller {
 		);
 		$this->mlesson_model->update_slides($assigned_id,$update_data);
 		$data['result'] = $this->mlesson_model->getslideforlesson($lesson_id);
+	
 		$data['sl_no']=$slider_number;
-        $this->load->view('front/view_slider',$data);
+        $this->load->view('front/view_slider',$data); 
 	}
 	public function get_nextslide(){
 
