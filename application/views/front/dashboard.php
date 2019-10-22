@@ -195,8 +195,8 @@
 								if(isset($assigned_course) && !empty($assigned_course))
 								{
 							?>		
-								<h3 class="headingColored">Required Courses:</h3>
-									<?php //foreach($result as $adm) { ?>
+							<!--	<h3 class="headingColored">Required Courses:</h3>
+									
 										<div class="blockClass contentBlocks">
 											<span class="titleIcon">
 												<?php if(isset($course_info[0]['icon_file']))
@@ -218,10 +218,10 @@
 											?>
 											</strong>
 											<br/>
-											<!-- TRAINING COURSE -->
-										</div>
+											 
+										</div>-->
 
-									<div class="blockClass contentBlocks">
+								<!--	<div class="blockClass contentBlocks">
 										<h4 class="headingDefault">
 											About The course:
 										</h4>
@@ -237,7 +237,7 @@
 												
 											?>
 										</p>
-									</div>
+									</div>-->
 									<p>
 										<b>Course Informations:</b>
 										<?php 

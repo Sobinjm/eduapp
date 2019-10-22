@@ -23,7 +23,7 @@ class Dashboard extends CI_Controller {
 		$data['student_info'] 		= $student_info;
 		$assigned_course 			= $this->mdashboard_model->getmycourses($student_id);
 		$data['assigned_course'] 	= $assigned_course;
-		if(!empty($assigned_course))
+	/*	if(!empty($assigned_course))
 		{
 		$course_info 				= $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
 		
@@ -40,9 +40,9 @@ class Dashboard extends CI_Controller {
 		{
 			$data['course_info'] 		= '';
 			$data['getalllessons'] 		= '';
-		}
+		}*/
 
-		
+		$data['getalllessons'] = $this->mdashboard_model->getalllessonsforstudent('14');
 		
 		// echo '<pre>';
 		// print_r($assigned_course);
