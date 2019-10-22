@@ -4,7 +4,6 @@ $length=sizeof($result);
 $lesson=$this->uri->segment(3);
 $val=explode("=>",$slide_count);
 $current_row=$val['1'];
-print_r($current_row);
 ?>
 
     <!--Section : Header Sub Section-->
@@ -344,7 +343,23 @@ print_r($current_row);
                     
                     <!--Right-->
                 </div>
+              
+   
                 </div>
+                <div class="dropdown">
+                    <button class="dropbtn">Slide</button>
+                    <div class="dropdown-content">
+                        <?php
+                        $i=1;
+                        foreach($result as $val)
+                        {
+                            echo "<a href=#>Slide ".$i."</a>";
+                            $i++;
+                        }
+                        ?>
+                    </div>
+                    <?php echo ($current_row + 1)." of ".$length; ?>
+                    </div>
                 <style>
                     .col-lg-8{
                         width:60%;
@@ -356,8 +371,42 @@ print_r($current_row);
                         display:inline;
                         float:left;
                     }
+                    .dropdown {
+                        position: relative;
+                        display: inline-block;
+                        }
+
+                        .dropdown-content {
+                        display: none;
+                        position: absolute;
+                        background-color: #f1f1f1;
+                        min-width: 160px;
+                        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                        z-index: 1;
+                        }
+
+                        .dropdown-content a {
+                        color: black;
+                        padding: 12px 16px;
+                        text-decoration: none;
+                        display: block;
+                        }
+
+                        .dropdown-content a:hover {background-color: #ddd;}
+
+                        .dropdown:hover .dropdown-content {display: block;}
+
+                        .dropdown:hover .dropbtn {background-color: #ffa500;}
+                        .dropbtn {
+                            
+                            color: #000;
+                            padding: 16px;
+                            font-size: 16px;
+                            border: none;
+                            }
                     </style>
                 <div class="col-lg-4">
+               
                 <button class="blockClass fontButton " style="display:none;width:30%; float:left;margin-right:10px;" id="previous">Previous</button>
                                             <button class="blockClass fontButton " style="width:30%;float:right;" id="start">Start Now
                                     <i class="fa fa-angle-right" aria-hidden="true"></i>
