@@ -380,10 +380,10 @@ class Quiz extends CI_Controller {
 				$reod_answer	= $this->security->xss_clean($this->input->post('reod_answer'));
 				
 				$redorder_question = array(
-										'1' => $reoa_answer,	
-										'2' => $reob_answer,	
-										'3' => $reoc_answer,	
-										'4' => $reod_answer	
+										'one' => $reoa_answer,	
+										'two' => $reob_answer,	
+										'three' => $reoc_answer,	
+										'four' => $reod_answer	
 										);
 				
 				$insert_data = array(

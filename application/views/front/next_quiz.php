@@ -10,11 +10,11 @@ $q1=json_decode($quiz['right_answer']);
 
 $d1=json_decode($quiz['drag_drop']);
 
-$r1=json_decode($quiz['reoder']);
+$r1=json_decode($quiz['reorder']);
 $d1=(array)$d1;
 $q1=(array)$q1;  
 $r1=(array)$r1;
-// print_r($q1);
+ //print_r($r1);
 if($quiz_count==$quiz_id[0]+1)
 {
 $data['final']=true;
@@ -215,26 +215,26 @@ else{
                         <ul>
                         <li>
                         <a draggable="true" href="" id="one"  class="centerBlockContainer with4Buttons">
-                            <span class="buttonLabels">A</span>
+                            <span class="buttonLabels"> '.$r1['three'].'</span>
                             
                         </a>
                          </li>
                             <li>
                            <a draggable="true" href="" id="two"  class="centerBlockContainer with4Buttons">
-                               <span class="buttonLabels">B</span>
+                               <span class="buttonLabels">'.$r1['one'].'</span>
                               
                            </a>
                             </li>
                            
                             <li>
                            <a draggable="true" href="" id="three" class="centerBlockContainer with4Buttons">
-                               <span class="buttonLabels">C</span>
+                               <span class="buttonLabels">'.$r1['four'].'</span>
                           
                            </a>
                             </li>
                             <li>
                            <a draggable="true" href="" id="four" class="centerBlockContainer with4Buttons">
-                               <span class="buttonLabels">C</span>
+                               <span class="buttonLabels">'.$r1['two'].'</span>
                                
                            </a>
                             </li>
@@ -248,12 +248,6 @@ else{
                           <li> <a class="v_ButtonBlock v_ButtonDanger bin" id="bin3" data-ans="">
                              </a>
                             </li>
-                            <li> <a  class="v_ButtonBlock v_ButtonDanger">
-                               <span class="buttonLabels">A</span>
-                               '.$r1['3'].'
-                                </a>
-                            </li>
-    
                        </ul>
                        <ul>
                            <li>
@@ -261,12 +255,7 @@ else{
                               
                            </a>
                             </li>
-                            <li>
-                           <a  class="v_ButtonBlock v_ButtonSuccess">
-                               <span class="buttonLabels">C</span>
-                               '.$r1['2'].'
-                           </a>
-                           </li>
+                            
     
                        </ul>
                        <ul>
@@ -276,12 +265,7 @@ else{
                                
                            </a>
                         </li>
-                        <li>
-                           <a  class="v_ButtonBlock">
-                               <span class="buttonLabels">D</span>
-                               '.$r1['4'].'
-                           </a>
-                        </li>
+                        
                            </ul>
                            <ul>
                            <li>
@@ -290,12 +274,7 @@ else{
                                   
                               </a>
                            </li>
-                           <li>
-                              <a  class="v_ButtonBlock">
-                                  <span class="buttonLabels">B</span>
-                                  '.$r1['1'].'
-                              </a>
-                           </li>
+                         
                               </ul>
                        </div>
                        <!--Buttons-->
