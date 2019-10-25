@@ -55,6 +55,11 @@ class Mstudent extends CI_Model
 			$this->db->insert('ad_assignments',$insert_data);
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
+		function check_assignment($data)
+		{
+			$query = $this->db->query("SELECT * FROM ad_assignments where course_code='".$data."' ORDER BY id ASC");	
+			return $query->result_array();
+		}
 		
 		function insert_staff($insert_data)
 		{

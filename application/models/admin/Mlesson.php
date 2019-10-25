@@ -111,6 +111,10 @@ class Mlesson extends CI_Model
 			$this->db->update('ad_assignments',$up_data);
 			
 		}
+		function getcourselessons($indata)
+		{
+			$query = $this->db->query("Execute _sp_el_studentcoursedetails ?,?,?,?,?", $indata);
+		}
 
 		
 	}

@@ -17,6 +17,50 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+	<style>
+	
+.slideshow-container {
+  /* position: relative; */
+  /* background: #f1f1f1f1;  */
+}
+
+/* Slides */
+.mySlides {
+  display: none;
+  /* padding: 80px; */
+  text-align: center;
+}
+.mySlides .col-xl-3{
+	float:left;
+}
+
+
+/* The dot/bullet/indicator container */
+.dot-container {
+    text-align: center;
+    padding: 20px;
+    background: #ddd;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+/* Add a background color to the active dot/circle */
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+
+</style>
 </head>
 <body>
     <!--Header-->
@@ -29,6 +73,8 @@
 
             <!--Site Links-->
 			<?php 
+			
+		$this->load->model('student/Mlesson', 'mlesson_model');
 			$timeout=0;
 			if (!$this->session->has_userdata('logged_in') || $this->session->userdata('logged_in') !== TRUE)
 			{ 
@@ -124,19 +170,20 @@
 								</div>
 								
 								<div class="whiteBlock whiteBlockContents blockClass">
-									<h3 class="headingColored">Course calendar:</h3>
+									<h3 class="headingColored">Exam Schedule:</h3>
 									<?php
 									if(isset($assigned_course['0']['start_date']) && isset($assigned_course['0']['end_date']))
 									{
 										$starting_date = new DateTime($assigned_course['0']['start_date']);
 										$ending_date = new DateTime($assigned_course['0']['end_date']);
+										$payment_ending_date = new DateTime($assigned_course['0']['payment_end_date']);
 										$today  = new DateTime();
 										if($starting_date > $today) 
 										{
 											
 									?>
 									<button type="button" class="btn btn-secondary" style="width: 100%;">
-										Your next class will be on:</br> 
+										Your next exam will be on:</br> 
 										<span>
 											<i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $starting_date->format('d F Y'); ?>
 										</span>
@@ -154,7 +201,7 @@
 									</button>
 									<?php			
 										}
-										else if($ending_date < $today)
+										else if(($ending_date < $today))
 										{
 											$timeout=1;
 									?>
@@ -179,8 +226,13 @@
 									<?php
 									}										
 									?>
-									<div class=" blockSeprator2-blockClass2">
+									<!-- <div class=" blockSeprator2-blockClass2">
 										<div id="datepicker" style="font-size: 90%;"></div>
+									</div> -->
+									<div class="whiteBlock whiteBlockContents blockClass" style="font-color: orange;">
+									<h6 class="headingColored" >Expiry of Training: <br><?php echo $ending_date->format('d F Y'); ?></h6>
+									<hr>
+									<h6 class="headingColored" >Expiry of Payment:<br><?php echo $payment_ending_date->format('d F Y'); ?></h6>
 									</div>
 								</div>
 							</div>
@@ -189,13 +241,15 @@
                     <!--Right Wrapper-->
 					<div class="col-lg-9 col-md-6 col-sm-12 col-xs-12">
 						<div class="blockClass blockSeprator noPadding">
+						<h3 class="headingColored">License Type :</h3>
 							<div class="whiteBlock whiteBlockContents blockClass">
 							<?php 
 							// print_r($assigned_course);
-								if(isset($assigned_course) && !empty($assigned_course))
+							// die();
+								if((isset($assigned_course) && !empty($assigned_course)))
 								{
 							?>		
-							<!--	<h3 class="headingColored">Required Courses:</h3>
+								
 									
 										<div class="blockClass contentBlocks">
 											<span class="titleIcon">
@@ -204,22 +258,28 @@
 													<img src="<?php echo base_url(); ?><?php echo $course_info[0]['icon_file']; ?>"  style="height:35px"/>
 													<?php
 												}
+												else{ ?>
+													<img src="<?php echo base_url().'img/icon-default.png'; ?>"  style="height:35px"/>
+												<?php }
 												?>
 											</span>
-											<strong>
+											<h5>
 											<?php
-											if(isset($course_info['0']['course_name'])) 
+											// print_r($assigned_course);
+											if(isset($assigned_course['0']['licence_type'])) 
 											{
-												echo $course_info['0']['course_name'];
+												echo $assigned_course['0']['licence_type'];
 											}
 											else{
 												echo "No Course Assigned";
 											}
 											?>
-											</strong>
+											</h5>
+											<b>Training Course</b>
+											
 											<br/>
 											 
-										</div>-->
+										</div>
 
 								<!--	<div class="blockClass contentBlocks">
 										<h4 class="headingDefault">
@@ -227,9 +287,9 @@
 										</h4>
 										<p class="paraSmall">
 										   <?php 
-										   if(isset($course_info['0']['course_desc'])) 
+										   if(isset($assigned_course['0']['course_desc'])) 
 										   {
-											   echo $course_info['0']['course_desc'];
+											   echo $assigned_course['0']['course_desc'];
 										   }
 										   else{
 											   echo "No Course Assigned";
@@ -239,10 +299,8 @@
 										</p>
 									</div>-->
 									<p>
-										<b>Course Informations:</b>
-										<?php 
-										// print_r($getalllessons); 
-										?>
+										<b>Lesson Informations:</b>
+										
 									</p>
 									<p class="wrapper"></p>
 									<div class="row">
@@ -283,38 +341,60 @@
 									</div>
 								<?php //} ?>
 							<hr/>
+							<div class="row">
                             <div class="blockClass contentBlocks">
-                                <h4>
+                                <h6>
                                 	
                                     E-Learning Slider:
-                                </h4>
+                                </h6>
 								<div class="row">
 									<?php 
-									if(!empty($assigned_course) && $assigned_course !== '') 
-										{ 
-											// print_r($assigned_course);
-											// print_r($getalllessons);
-											foreach($getalllessons as $getl)
+									if((!empty($assigned_course) && $assigned_course !== '' )) 
+										{ ?>
+											<div class="slideshow-container col-lg-12 col-md-12 col-sm-12">
+
+											<?php
+											$ik=0;
+											foreach($assigned_course as $history_course)
 											{
+												echo '<div class="mySlides ">';
+											// print_r($history_course);
+											// print_r($getalllessons);alllesson
+											foreach($history_course['alllessons'] as $getl)
+											{
+												$lesson_detail=$this->mlesson_model->getlessondetails($getl['LessonCode']);
+												// print_r($lesson_detail);
 									?>
 									 <div class= "col-xl-3 col-lg-3 col-md-6 col-sm-12">
 										<div class="blockClass">
-											<div class="fourColumnBlock" style="background: url(<?php echo base_url(); ?><?php echo $getl['icon_file']; ?>) center no-repeat; background-size: cover;">
+											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$lesson_detail[0]['icon_file']; ?>) center no-repeat; background-size: cover;">
 												
 												<?php 
-													if($assigned_course[0]['completed_lessons']>=$getl['lesson_order'])
+													if($history_course['completed_lessons']>=$getl['Order'])
 													{
 														?>
 														<div class="serialNo" style="background:green;">
-													 <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
+													 <strong class="serial"><?php //echo $getl['lesson_order'];
+													 $lesson_detail[0]['lesson_name']=$lesson_detail[0]['lesson_name'].' 0';
+													 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
+													echo  $lsn_name[1]; ?></strong>
 													<br/> Lesson
+													<?php //echo $getl['lesson_order'];
+													
+													//  echo $lesson_detail[0]['lesson_name']; ?>
 													<?php
 													}
 													else{
 														
 														?>
-														<div class="serialNo"> <strong class="serial"><?php echo $getl['lesson_order']; ?></strong>
-													<br/> Lesson
+														<div class="serialNo"> <strong class="serial"><?php //echo $getl['lesson_order'];
+														 $lesson_detail[0]['lesson_name']=$lesson_detail[0]['lesson_name'].' 0';
+														 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
+														echo  $lsn_name[1]; ?></strong>
+														<br/> Lesson
+														<?php //echo $getl['lesson_order'];
+														
+														//  echo $lesson_detail[0]['lesson_name']; ?>
 														<?php
 													}
 													?>
@@ -322,23 +402,29 @@
 												<div class="lessionDetailsLabel">
 												
 													<?php 
-													echo $getl['lesson_name'];
+													//echo $getl['lesson_name'];
 													?>
 													
 													
 												</div>
 												<div class="lessionDetails">
 													<span>
-														<i class="fa fa-book" aria-hidden="true"></i> 18 Slide
+													<?php //echo $getl['lesson_order']; 
+													 $slide_details= $this->mlesson_model->getslides($lesson_detail[0]['id']);
+													//  print_r($slide_details);
+													 $slide_count=sizeof($slide_details); ?>
+														<i class="fa fa-book" aria-hidden="true"></i> <?php echo $slide_count; ?> Slide(s)
 													</span>
 													<span style="float: right">
-														<i class="fa fa-clock-o" aria-hidden="true"></i> 60 min
+														<i class="fa fa-clock-o" aria-hidden="true"></i> 60 min(s)
 													</span>
 												</div>
 												<?php 
-												if($timeout!=1)
+												if($timeout==1 || $history_course['status']==0)
 												{
-													if(($assigned_course[0]['completed_lessons']+1)==$getl['lesson_order'])
+													// echo $history_course['status'];
+													// die();
+													if(($history_course['completed_lessons']+1)==$getl['Order'])
 													{
 													?>
 														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"><div class="lessStatus" style="background:green;">
@@ -347,7 +433,7 @@
 													</div></a>
 												<?php
 													}
-													else if($assigned_course[0]['completed_lessons']>=$getl['lesson_order'])
+													else if($history_course['completed_lessons']>=$getl['Order'])
 													{
 														?>
 												<div class="lessStatus" style="background:green;">
@@ -380,6 +466,13 @@
 									</div>                      
 									<?php 
 											}
+											?> </div> <?php
+											$ik++;
+										}
+										
+										//end of history slide
+										?> </div>
+										<?php
 										} 
 										else 
 										{
@@ -395,18 +488,39 @@
 							<?php }else{ ?>
 							<h3 class="headingColored">No course has been assigned to you right now!</h3>
 							<?php } ?>
+							<!-- doted box -->
+							</div>
+							<div class="row">
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 dot-container"> <?php
+										$kk=1;
+										foreach($assigned_course as $history_course)
+											{
+												?>
+												
+												<span class="dot" onclick="currentSlide(<?php echo $kk; ?>)"></span> 
+												
+												
+
+												<?php
+												$kk++;
+											}
+											echo '</div>'; ?>
+											</div> <!-- doted box -->
 						</div>                                
 					</div>
 				</div>
             </div>
+			
         </div>
 
         </div>
         </div>
+		
         </div>
         </div>
 		</div>
 		</div>
+		
     </section>
 	<footer id="footerType2"  class="container">
 		<div class="blockClass fContainer">
@@ -467,5 +581,34 @@
 			?>		
 		} );
    </script>
+   
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+</script>
 </body>
 </html>

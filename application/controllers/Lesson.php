@@ -30,18 +30,18 @@ class Lesson extends CI_Controller {
 		$data['result'] = $this->mlesson_model->getslideforlesson($lesson_id);
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 		$student_no=$this->crc_encrypt->decode($this->session->userdata('student_no'));		
-		$assigned_course = $this->mdashboard_model->getmycourses_code($student_id);
+		$assigned_course = $this->mdashboard_model->getmycourses_code($student_no);
 		// print_r($assigned_course);
-		$course_info = $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
+		// $course_info = $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
 		// $assigned_course = $this->mdashboard_model->getmycourses($student_id);
 		// $course_info = $this->mdashboard_model->course_info($assigned_course['0']['course']);
-		$data['course_info']=$course_info;
-		$newdata = array(
-			'course_info'  => $data['course_info']
-		);
-		$this->session->set_userdata($newdata);
+		// $data['course_info']=$course_info;
+		// $newdata = array(
+		// 	'course_info'  => $data['course_info']
+		// );
+		// $this->session->set_userdata($newdata);
 		$data['lesson_data']=$this->mlesson_model->getlessonid($lesson_id);
-		$data['slide_count']=$assigned_course[0]['slide_count'];
+		// $data['slide_count']=$assigned_course[0]['slide_count'];
 		// $data=$qry; 
 		// print_r($this->session->course_info[0]['course_name']);
 		$this->load->view('front/lesson',$data);

@@ -121,9 +121,15 @@ class Mcourse extends CI_Model
 			$query = $this->db->query("Execute _sp_el_lessons");	
 			return $query->result_array();
 		}
+
+		function getEDCCourse($indata){
+			$query = $this->db->query("Execute _sp_el_studentcourses ?,?,?,?", $indata);	
+			
+			return $query->result_array();
+		}
 		
 		
-		
+	
 		
 		
 	}

@@ -27,6 +27,7 @@ class Login extends CI_Controller {
 		$this->load->model('admin/Mnotification', 'mnotification_model');
 		
 		$this->load->model('student/Mapi', 'mapi_model');
+		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mstudent', 'mstudent_model');	
 	}
 	
@@ -100,21 +101,18 @@ class Login extends CI_Controller {
 						
 						
 						$login=$this->mlogin_model->validate($studentNo,$trafficNo,$fileNo,$branchNo);
+						// $checklogin=$this->mlogin_model->studentvalidate($studentNo);
+						
 						// print_r($login);
 						// die();
 						if(!isset($login[0]))
 						{
+							
 							$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong data.</span>");
 							// echo $login->Message;
 							redirect(site_url() . 'login');
 						}
-						// elseif($login->StudentName==null)
-						// {
-						// 	$this->session->set_flashdata('error', "<span class='help-block'>You have entered a wrong data.</span>");
-						// 	redirect(site_url() . 'login');
-						// }
 						else{
-							// Array ( [0] => Array ( [id] => 14 [StudentNo] => 111 [TrafficNo] => 111 [TryFileNo] => 111 [NameEng] => 111 [NameAr] => 111 [BranchNo] => 111 [EmiratesID] => 111 ) )
 							$newsedata = array(
 								'userid' => $this->crc_encrypt->encode($login[0]['id']),
 								'ename'  => $login[0]['NameEng'],
@@ -127,17 +125,101 @@ class Login extends CI_Controller {
 								'logged_in' => TRUE
 							);
 							$this->session->set_userdata($newsedata);
-								$user_type='Student';
-							// $notification=array(
-							// 	'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
-							// 	'name'=>$login[0]['NameEng'],
-							// 	'user_type'=>$user_type,
-							// 	'status'=>'Login'
-					
-							// );
-							// $this->mnotification_model->insert_notification($notification);
-							$this->session->set_userdata($newsedata);
-							redirect(site_url() . 'dashboard');
+							$assigned=$this->mstudent_model->getAssignedCourse($studentNo);
+							print_r($assigned);
+							if($assigned)
+							{
+								$newsedata = array(
+									'userid' => $this->crc_encrypt->encode($login[0]['id']),
+									'ename'  => $login[0]['NameEng'],
+									'ar_name' => $login[0]['NameAr'],
+									'student_no'=>$login[0]['StudentNo'],
+									'TrafficNo'=>$login[0]['TrafficNo'],
+									'TryFileNo' => $login[0]['TryFileNo'],
+									'BranchNo' => $login[0]['BranchNo'],
+									'EmiratesID' => $login[0]['EmiratesID'],
+									'logged_in' => TRUE
+								);
+								$this->session->set_userdata($newsedata);
+								
+									$user_type='Student';
+								$notification=array(
+									'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+									'name'=>$login[0]['NameEng'],
+									'user_type'=>$user_type,
+									'status'=>'Login'
+						
+								);
+								$this->mnotification_model->insert_notification($notification);
+								
+								redirect(site_url() . 'dashboard');
+							}
+							else{
+								// $as_in=0;
+								$procedure_in=array(
+									'StudentNo' => $this->session->userdata('student_no'),
+									'TrafficNo' => $this->session->userdata('TrafficNo'),
+									'fileNo' => $this->session->userdata('TryFileNo'),
+									'BranchNo' => $this->session->userdata('BranchNo'));
+								$courses=$this->mcourse_model->getEDCCourse($procedure_in);
+								// print_r($courses);
+								foreach($courses as $course)
+									{
+										$is_available=$this->mstudent_model->check_assignment($course['CourseRef']);
+										// print_r($is_available);
+										// die();
+										if(!$is_available)
+										{
+											if($course['ExamStatus']=='Failed')
+											{
+												$exam_status=1;
+											}
+											else{
+												$exam_status=0;
+											}
+																													
+											$insert_data = array('student_id'=>$course['StudentNo'],
+												'branch'=>$course['Branch'],
+												'course'=>1,
+												'licence_type'=>$course['LicenseType'],
+												'course_code'=>$course['CourseRef'],
+												'status'=>$exam_status,
+												'dated'=>$course['ExamBookingDate'],
+												'assigned_by'=>1,
+												'slide_count'=>0,
+												'completed_lessons'=>0,
+												'score'=>0,
+												'start_date'=>$course['TrainingExpiry'],
+												'end_date'=>$course['TrainingExpiry'],
+												'payment_end_date'=>$course['PaymentExpiry'],
+												'lesson_count'=>$course['NoOfLessonsPerDay'],
+												'language'=>$course['EducationLanguage']
+												);
+												
+												$assss=$this->mstudent_model->assign_course($insert_data);
+												// $as_in=1;
+												$insert_data='';
+												// print_r($assss);
+										}
+
+									}
+								
+								// if($as_in==1)
+								// {
+									$user_type='Student';
+									$notification=array(
+									'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
+									'name'=>$login[0]['NameEng'],
+									'user_type'=>$user_type,
+									'status'=>'Login'
+						
+								);
+								$this->mnotification_model->insert_notification($notification);
+								
+								redirect(site_url() . 'dashboard');
+								// }
+									
+							}
 							// print_r($login);	
 						}
 			

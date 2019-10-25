@@ -2,14 +2,16 @@
 $this->load->view('front/header');
 $length=sizeof($result);
 $lesson=$this->uri->segment(3);
-$val=explode("=>",$slide_count);
-$current_row=$val['1'];
+// $val=explode("=>",$slide_count);
+// $current_row=$val['1'];
+$current_row=0;
+
 ?>
 
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-        <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider > <?php echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
+        <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider > <?php // echo $course_info['0']['course_name'];?> > Lesson <?php  echo $lesson_data['0']['lesson_order'];?> -  <?php echo $lesson_data['0']['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -333,7 +335,7 @@ $current_row=$val['1'];
                             <i class="fa fa-car" aria-hidden="true"></i>
                         </span>
                         <?php 
-                                                echo $course_info['0']['course_name'];
+                                                // echo $course_info['0']['course_name'];
                                             ?>
                                             
                     </div>

@@ -16,7 +16,7 @@ class Mdashboard extends CI_Model
 		
 		function getmycourses($student_id)
 		{
-			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_id."' ");	
+			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_id."' order by status");	
 			return $query->result_array();
 		}
 		function getmycourses_code($student_id)
@@ -43,7 +43,7 @@ class Mdashboard extends CI_Model
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_id = '".$course_id."' AND publish_status = 2 ORDER BY lesson_order ASC");	
 			return $query->result_array();
 		}
-		function getalllessons_code($course_id)
+		function getalllessons_code($course_id) 
 		{
 			$query = $this->db->query("SELECT * FROM ad_lessons WHERE course_code = '".$course_id."' AND publish_status = 2 ORDER BY lesson_order ASC");	
 			return $query->result_array();
