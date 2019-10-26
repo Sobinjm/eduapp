@@ -29,10 +29,11 @@
 
 <?php
 $this->load->view('front/header');
-$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
+// $student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
+$student_id=$this->session->userdata('student_no');
 $assigned_course = $this->mdashboard_model->getmycourses($student_id);
 // print_r($assigned_course);
-// print_r($course_info);
+// print_r($course_info); 
 // print_r($data);
 ?>
 <input type="hidden" id="assign_id" value="<?php echo $assigned_course[0]['id'] ; ?>">

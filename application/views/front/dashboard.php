@@ -363,6 +363,7 @@
 											foreach($history_course['alllessons'] as $getl)
 											{
 												$lesson_detail=$this->mlesson_model->getlessondetails($getl['LessonCode']);
+												// print_r($getl);
 												// print_r($lesson_detail);
 									?>
 									 <div class= "col-xl-3 col-lg-3 col-md-6 col-sm-12">
@@ -427,7 +428,7 @@
 													if(($history_course['completed_lessons']+1)==$getl['Order'])
 													{
 													?>
-														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($getl['id']); ?>" style="color:white; text-decoration: none;"><div class="lessStatus" style="background:green;">
+														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($lesson_detail[0]['id']); ?>" style="color:white; text-decoration: none;"><div class="lessStatus" style="background:green;">
 														<i class="fa fa-play" aria-hidden="true"></i>
 														Start now
 													</div></a>
