@@ -74,7 +74,7 @@
             <!--Site Links-->
 			<?php 
 			
-		$this->load->model('student/Mlesson', 'mlesson_model');
+		// $this->load->model('student/Mlesson', 'mlesson_model');
 			$timeout=0;
 			if (!$this->session->has_userdata('logged_in') || $this->session->userdata('logged_in') !== TRUE)
 			{ 
@@ -360,15 +360,18 @@
 												echo '<div class="mySlides ">';
 											// print_r($history_course);
 											// print_r($getalllessons);alllesson
-											foreach($history_course['alllessons'] as $getl)
+											$lessons=json_decode($history_course['total_lessons'],true);
+											$completionorder=0;
+											foreach($lessons as $getl)
 											{
 												$lesson_detail=$this->mlesson_model->getlessondetails($getl['LessonCode']);
 												// print_r($getl);
+												// die();
 												// print_r($lesson_detail);
 									?>
 									 <div class= "col-xl-3 col-lg-3 col-md-6 col-sm-12">
 										<div class="blockClass">
-											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$lesson_detail[0]['icon_file']; ?>) center no-repeat; background-size: cover;">
+											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$getl['lesson_details'][0]['icon_file']; ?>) center no-repeat; background-size: cover;">
 												
 												<?php 
 													if($history_course['completed_lessons']>=$getl['Order'])
@@ -376,7 +379,7 @@
 														?>
 														<div class="serialNo" style="background:green;">
 													 <strong class="serial"><?php //echo $getl['lesson_order'];
-													 $lesson_detail[0]['lesson_name']=$lesson_detail[0]['lesson_name'].' 0';
+													 $lesson_detail[0]['lesson_name']=$getl['lesson_details'][0]['lesson_name'].' 0';
 													 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
 													echo  $lsn_name[1]; ?></strong>
 													<br/> Lesson
@@ -389,7 +392,7 @@
 														
 														?>
 														<div class="serialNo"> <strong class="serial"><?php //echo $getl['lesson_order'];
-														 $lesson_detail[0]['lesson_name']=$lesson_detail[0]['lesson_name'].' 0';
+														 $lesson_detail[0]['lesson_name']=$getl['lesson_details'][0]['lesson_name'].' 0';
 														 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
 														echo  $lsn_name[1]; ?></strong>
 														<br/> Lesson
@@ -410,23 +413,28 @@
 												</div>
 												<div class="lessionDetails">
 													<span>
+													<?php 
+												echo $getl['lesson_details'][0]['description']; 
+												?><br>
 													<?php //echo $getl['lesson_order']; 
-													 $slide_details= $this->mlesson_model->getslides($lesson_detail[0]['id']);
+													//  $slide_details= $this->mlesson_model->getslides($getl['lesson_detail'][0]['id']);
 													//  print_r($slide_details);
-													 $slide_count=sizeof($slide_details); ?>
-														<i class="fa fa-book" aria-hidden="true"></i> <?php echo $slide_count; ?> Slide(s)
+													//  $slide_count=sizeof($slide_details); ?>
+														<i class="fa fa-book" aria-hidden="true"></i> <?php echo $getl['slide_count']; ?> Slide(s)
 													</span>
 													<span style="float: right">
 														<i class="fa fa-clock-o" aria-hidden="true"></i> 60 min(s)
 													</span>
 												</div>
 												<?php 
-												if($timeout==1 || $history_course['status']==0)
+												// if($timeout==1 || $history_course['status']!=1)
+												if($history_course['status']!=1)
 												{
-													// echo $history_course['status'];
+													// echo print_r($history_course['status']);
 													// die();
-													if(($history_course['completed_lessons']+1)==$getl['Order'])
+													if($getl['lesson_status']==0 && $completionorder==0)
 													{
+														$completionorder++;
 													?>
 														<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($lesson_detail[0]['id']); ?>" style="color:white; text-decoration: none;"><div class="lessStatus" style="background:green;">
 														<i class="fa fa-play" aria-hidden="true"></i>
@@ -434,7 +442,7 @@
 													</div></a>
 												<?php
 													}
-													else if($history_course['completed_lessons']>=$getl['Order'])
+													else if($getl['lesson_status']==1 && $completionorder!=0)
 													{
 														?>
 												<div class="lessStatus" style="background:green;">

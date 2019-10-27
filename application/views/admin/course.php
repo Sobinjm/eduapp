@@ -1277,14 +1277,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
               <div class="modal-body">
 				<form class="form-horizontal" enctype="multipart/form-data" id="add_lesson_form">
 					
-					<div class="form-group">
-						<label for="no_lessons" class="col-sm-4 control-label">Lesson Order.</label>
-						<div class="col-sm-8">
-							<input type="textbox" class="form-control" id="no_lessons" name="no_lessons" placeholder="Lesson Order">
-							<input type="hidden" name="course_id" id="course_id" >
-							<input type="hidden" name="course_id" id="course_lang" >
-						</div>
-					</div>
+					
 					<div class="form-group">
 						<label for="course_name" class="col-sm-4 control-label">Lesson Name</label>
 						<div class="col-sm-8">
@@ -1302,6 +1295,14 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 								<!-- <option>
 								</option> -->
 							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="no_lessons" class="col-sm-4 control-label">Lesson Descriptio.</label>
+						<div class="col-sm-8">
+							<input type="textbox" class="form-control" id="lesson_desc" name="lesson_desc" placeholder="Lesson Description">
+							<input type="hidden" name="course_id" id="course_id" >
+							<input type="hidden" name="course_id" id="course_lang" >
 						</div>
 					</div>
 					<div class="form-group">
@@ -1350,7 +1351,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					<div class="form-group">
 						<label for="no_lessons" class="col-sm-4 control-label">Lesson Order</label>
 						<div class="col-sm-8">
-							<input type="textbox" class="form-control" id="edit_no_lessons2" name="edit_no_lessons" placeholder="Lesson Order">
+							<input type="textbox" class="form-control" id="edit_lessons_desc2" name="edit_lesson_desc" placeholder="Lesson Description">
 							<input type="hidden" name="edit_eid_l" id="edit_eid_l" />
 							<input type="hidden" name="edit_lesson_language1" id="edit_lesson_language" />
 							<input type="hidden" id="edit_lesson_id" name="edit_lesson_id">
@@ -2426,20 +2427,30 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						$('#lock_btn').hide();
 					}
 
-					if(status=0 && <?php echo $this->crc_encrypt->decode($this->session->userid); ?>=='1')
+					if((status==0 && <?php echo $this->session->role; ?>=='0' ) || status==0 && <?php echo $this->session->role; ?>=='3')
 					{
-						$('#approve_btn').show();
+						// alert();
+						$('#approve_lesson_main').show();
 						$('#draft_btn').hide();
 					}
 					else{
-						$('#approve_btn').show();
+						$('#approve_lesson_main').hide();
 						$('#draft_btn').hide();
 					}
 					
-					if(status!=2)
+					
+					if(status=='2')
 					{
+						// alert(status);
+						$('.save_edit_now-new').hide();
+						$('#version_btn').show();
+					}
+					else{
+						// alert(status);
+						$('.save_edit_now-new').show();
 						$('#version_btn').hide();
 					}
+					
 					
 					$('#edit_eid_l').val(etid);
 					// alert($('#edit_eid_l').val());
@@ -2490,7 +2501,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 					var edit_eid 				= $('#edit_eid_l').val();
 					var edit_lesson_name 		= $('#edit_lesson_name').val();
 					var edit_icon_file 			= $('#edit_icon_file').val();
-					var edit_no_lessons 		= $('#edit_no_lessons2').val();
+					var edit_description 		= $('#edit_lessons_desc2').val();
 					var hidden_edit_icon_file 	= $('#hidden_edit_icon_file').val();
 					var edit_form 				= $('#edit_form_l')[0];
 					var data 					= new FormData(edit_form);  
@@ -2506,16 +2517,16 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						$('#edit_lesson_name').addClass("success");
 					}
 										
-					if(edit_no_lessons == '')
-					{	
-						swal('Please enter the lesson order.');
-						$('#edit_no_lessons2').addClass("error");
-						return false;
-					}
-					else 
-					{
-						$('#edit_no_lessons2').addClass("success");
-					}
+					// if(edit_no_lessons == '')
+					// {	
+					// 	swal('Please enter the lesson order.');
+					// 	$('#edit_no_lessons2').addClass("error");
+					// 	return false;
+					// }
+					// else 
+					// {
+					// 	$('#edit_no_lessons2').addClass("success");
+					// }
 					
 					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
 					data.append("no_file_upload", hidden_edit_icon_file);

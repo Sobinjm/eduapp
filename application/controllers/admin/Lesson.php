@@ -109,10 +109,10 @@ class Lesson extends CI_Controller {
 	public function add()
 	{	
 		$this->form_validation->set_rules('lesson_name', 'Lesson name', 'trim|required');
-        $this->form_validation->set_rules('no_lessons', 'Number of lessons', 'required');
+        $this->form_validation->set_rules('lesson_desc', 'Lesson Description', 'required');
         if ($this->form_validation->run() == false) 
 		{
-			echo 'Form validation failed';
+			echo 'Form validation failed. Please Enter all the fields.';
         } 
 		else
 		{
@@ -120,7 +120,7 @@ class Lesson extends CI_Controller {
 			$lesson 			=explode('~',$lessons);
 			$lesson_name 		= $lesson[1];
 			$lesson_id			= $lesson[0];
-			$no_lessons 		= $this->security->xss_clean($this->input->post('no_lessons'));
+			$lesson_desc 		= $this->security->xss_clean($this->input->post('lesson_desc'));
 			$language 			= $this->security->xss_clean($this->input->post('lesson_lang'));
 			// $course_id 			= $this->security->xss_clean($this->input->post('course_id'));
 			$course_id=0;
@@ -196,10 +196,11 @@ class Lesson extends CI_Controller {
 				$insert_data = array(
 								'lesson_id'		=> $lesson_id,
 								'lesson_name'	 =>	$lesson_name,
+								'lesson_order'	=> 0,
 								'icon_file'		 =>	$target_file_galry,
 								'course_id'		 => $course_id,	
 								'course_code'	 =>	$course_code,
-								'lesson_order'	 =>	$no_lessons,
+								'description'	 =>	$lesson_desc,
 								'language'		 =>	$language,
 								'created_by'	 => $this->crc_encrypt->decode($this->session->userdata('userid')),
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
@@ -232,7 +233,7 @@ class Lesson extends CI_Controller {
 			
 			$lesson_name 		= $this->security->xss_clean($this->input->post('edit_lesson_name'));
 			$lesson_id			= $this->security->xss_clean($this->input->post('edit_lesson_id'));
-			$no_lessons 		= $this->security->xss_clean($this->input->post('edit_no_lessons'));
+			$description 		= $this->security->xss_clean($this->input->post('edit_lesson_desc'));
 			$language 			= $this->security->xss_clean($this->input->post('edit_lesson_language'));
 			$edit_id 			= $this->security->xss_clean($this->input->post('edit_id'));
 			$course_id='1';
@@ -299,7 +300,8 @@ class Lesson extends CI_Controller {
 								'icon_file'		 =>	$target_file_galry,
 								'course_id'		 => $course_id,	
 								'course_code'	 =>	$course_code,
-								'lesson_order'	 =>	$no_lessons,
+								'lesson_order'	 =>0,
+								'description'	 =>$description,
 								'language'		 =>	$language,
 								'lesson_version' => $version,
 								'created_by'	 => $this->crc_encrypt->decode($this->session->userdata('userid')),
@@ -359,7 +361,7 @@ class Lesson extends CI_Controller {
 	public function updatelesson()
 	{
 		$this->form_validation->set_rules('edit_lesson_name', 'Edit Lesson name', 'trim|required');
-		$this->form_validation->set_rules('edit_no_lessons', 'Edit Number of lessons', 'required');
+		$this->form_validation->set_rules('edit_lesson_desc', 'Edit Lesson Description', 'required');
 		// echo $this->input->post('edit_no_lessons');
         if ($this->form_validation->run() == false) 
 		{
@@ -369,7 +371,7 @@ class Lesson extends CI_Controller {
 		{
 			$lesson_id 			    = $this->crc_encrypt->decode($this->security->xss_clean($this->input->post('edit_eid')));
 			$lesson_name 		= $this->security->xss_clean($this->input->post('edit_lesson_name'));
-			$no_lessons 			= $this->security->xss_clean($this->input->post('edit_no_lessons'));
+			$description 			= $this->security->xss_clean($this->input->post('edit_lesson_desc'));
 			$no_file_upload		 	= $this->security->xss_clean($this->input->post('no_file_upload'));
 			
 			if(isset($_FILES['edit_icon_file']) AND !empty($_FILES["edit_icon_file"]["name"]))
@@ -439,7 +441,8 @@ class Lesson extends CI_Controller {
 				$update_data = array(
 								'lesson_name'	 =>	$lesson_name,
 								'icon_file'		 =>	$target_file_galry,
-								'lesson_order'	 =>	$no_lessons,
+								'lesson_order'	 =>	0,
+								'description'	 =>$description,
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
