@@ -29,6 +29,7 @@ class Login extends CI_Controller {
 		$this->load->model('student/Mapi', 'mapi_model');
 		$this->load->model('admin/Mcourse', 'mcourse_model');
 		$this->load->model('admin/Mstudent', 'mstudent_model');	
+		$this->load->model('student/Mlesson', 'mlesson_model');
 	}
 	
 	public function index()
@@ -126,7 +127,7 @@ class Login extends CI_Controller {
 							);
 							$this->session->set_userdata($newsedata);
 							$assigned=$this->mstudent_model->getAssignedCourse($studentNo);
-							print_r($assigned);
+							// print_r($assigned);
 							if($assigned)
 							{
 								$newsedata = array(
@@ -177,7 +178,31 @@ class Login extends CI_Controller {
 											else{
 												$exam_status=0;
 											}
-																													
+											$lesson_infos=[];
+											
+												$procedure_in=array(
+													'StudentNo' => $this->session->userdata('student_no'),
+													'TrafficNo' => $this->session->userdata('TrafficNo'),
+													'fileNo' => $this->session->userdata('TryFileNo'),
+													'BranchNo' => $this->session->userdata('BranchNo'),
+													'CourseRef' =>$course['CourseRef']);
+												$inner_lessons=$this->mlesson_model->getcourselessons($procedure_in);
+												foreach($inner_lessons as $inner_lesson)
+												{
+													$inr_lsn=$inner_lesson;
+													// $status_array=array('completed_slides'=>'0','lesson_status'=>'0');
+													// array_push($inr_lsn,'completed_slides':'0','lesson_status':'0');
+													$inr_lsn['completed_slides']=0;
+													$inr_lsn['lesson_status']=0;
+													$inr_lsn['lesson_details']=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
+													$slide_details= $this->mlesson_model->getslides($inr_lsn['lesson_details'][0]['id']);
+													$inr_lsn['slide_count']=sizeof($slide_details);
+													array_push($lesson_infos,$inr_lsn);
+														
+												}
+												// print_r($inr_lsn);
+														
+												// die();
 											$insert_data = array('student_id'=>$course['StudentNo'],
 												'branch'=>$course['Branch'],
 												'course'=>1,
@@ -192,8 +217,9 @@ class Login extends CI_Controller {
 												'start_date'=>$course['TrainingExpiry'],
 												'end_date'=>$course['TrainingExpiry'],
 												'payment_end_date'=>$course['PaymentExpiry'],
-												'lesson_count'=>$course['NoOfLessonsPerDay'],
-												'language'=>$course['EducationLanguage']
+												'lesson_per_day'=>$course['NoOfLessonsPerDay'],
+												'language'=>$course['EducationLanguage'],
+												'total_lessons'=>json_encode($lesson_infos)
 												);
 												
 												$assss=$this->mstudent_model->assign_course($insert_data);
