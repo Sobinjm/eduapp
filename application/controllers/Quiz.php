@@ -62,7 +62,7 @@ class Quiz extends CI_Controller {
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 		$student_no	= $this->crc_encrypt->decode($this->session->userdata('student_no'));
 		$student_info=$this->mstudent_model->getProfileInformation($student_id);
-		$student_name=$student_info[0]['name'];
+		$student_name=$this->crc_encrypt->decode($this->session->userdata('name'));
 		$lesson_id=$_GET['lesson_id'];
 		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
         $assign_id=$_GET['assign_id'];

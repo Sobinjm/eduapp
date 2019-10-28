@@ -103,6 +103,7 @@
 					</div>
 					<div class="form-group">
 						<label for="icon_file" class="col-sm-4 control-label">Icon Upload</label>
+						<label id="infos"></label>
 						<div class="col-sm-8">
 							<input type="file" id="edit_icon_file" name="edit_icon_file">
 							<small>Only jpg, jpeg, png and gif file types allowed.</small>
@@ -215,13 +216,16 @@
 <div class="card mb-2">
 	<div class="card-header tab_main_height" <?php if($this->crc_encrypt->encode($lesson['lesson_lock'])!=$this->session->userid && ($lesson['lesson_lock']!=null ||$lesson['lesson_lock']!='')){ echo 'style="background-color: #a9a9a9;"'; }?>>
 		<div class="row padd_4e">
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 				<form id="form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="form_<?php echo $lesson['id']; ?>" method="post" >
 				<input type="hidden" value="<?php echo $lesson['id']; ?>" name="lesson_id">
 							</form>
-				<a href="#!" class="tab_a_pad pop-details" data-id="<?php echo $lesson['id']; ?>" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?></a>
+				<a href="#!" class="tab_a_pad pop-details" data-id="<?php echo $lesson['id']; ?>" data-toggle="collapse" data-target="#c_course<?php echo $lesson['id'].$j; ?>a" ><i class="fa fa-plus-circle"></i> <?php echo $lesson['lesson_name']; ?>: <?php echo $lesson['description']; ?></a>
 			</div>	
-			<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<form id="111form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="1111form_<?php echo $lesson['id']; ?>" method="post" >
+				<input type="hidden" value="111111<?php echo $lesson['id']; ?>" name="1111lesson_id">
+							</form>
 			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a class="lp_buttons lb_bg_one tab_a_pad lesson_slide" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-slide"><i class="fa fa-plus"></i> Slide.</a>
 				<a class="lp_buttons lb_bg_two tab_a_pad lesson_quiz" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" data-toggle="modal" data-target="#modal-add-quiz<?php echo $lesson['id'].$j; ?>"><i class="fa fa-plus"></i> Quiz.</a>
@@ -230,12 +234,12 @@
 				if($lesson['publish_status']==0)
 				{
 					
-					?> <a class="btn btn-danger btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Pending</a>
+					?> <a class="btn btn-danger btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Draft</a>
 				<?php }
 				elseif($lesson['publish_status']==1)
 				{
 
-					?> <a class="btn btn-info btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Draft</a>
+					?> <a class="btn btn-info btn-xs btn-flat" style="color: #fff;margin-left: 15px;">Pending</a>
 				<?php 
 				}
 				elseif($lesson['publish_status']==2){
@@ -475,8 +479,8 @@
 </form>
 </div>
 </div>
-</div>	</div>	
-			<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+</div>	
+			
 			<?php if($this->session->role != 2 && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
 				<a href="#!" class="lp_buttons lb_bg_one tab_a_pad pull-right delete_now-new" data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>"><i class="fa fa-times"></i> Delete</a>
 				<a href="#!" class="lp_buttons lb_bg_two tab_a_pad pull-right edit_now-new" data-lock="<?php echo $lesson['lesson_lock']; ?>" data-status=<?php echo $lesson['publish_status']; ?> data-id="<?php echo $this->crc_encrypt->encode($lesson['id']); ?>" style="margin-right: 5px; margin-left: -9px;"><i class="fa fa-edit"></i> Edit</a>										
@@ -485,13 +489,14 @@
 			
 		</div>
 		<div class="row padd_4e">
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-				<a href="#!" ><i class="fa fa-arrow"></i> <?php echo $lesson['language']; ?></a>
+		
+		<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="margin-left:15px;">
+				<a href="#!" ><i class="fa fa-caret-right"></i> <?php echo $lesson['language']; ?></a>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-				<a href="#!" ><i class="fa fa-arrow"></i> Version : <?php echo $lesson['lesson_version']; ?></a>
+			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+				<a href="#!" ><i class="fa fa-arrow"></i> Ver. : <?php echo $lesson['lesson_version']; ?></a>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="float:right;"> 
 				<a href="#!" ><i class="fa fa-arrow"></i>Notifications: <?php $count=$this->mnotification_model->getNotificationsCount(); echo $count[0]['count'];  ?></a>
 			</div>
 		</div>
@@ -1348,20 +1353,21 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
               </div>
               <form class="form-horizontal" enctype="multipart/form-data" id="edit_form_version">
 			  <div class="modal-body">
+					
 					<div class="form-group">
-						<label for="no_lessons" class="col-sm-4 control-label">Lesson Order</label>
+						<label for="edit_lesson_name" class="col-sm-4 control-label">Lesson Name</label>
+						<div class="col-sm-8">
+							<input type="textbox" class="form-control" id="edit_lesson_name" name="edit_lesson_name" placeholder="Lesson Name">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="no_lessons" class="col-sm-4 control-label">Lesson Description</label>
 						<div class="col-sm-8">
 							<input type="textbox" class="form-control" id="edit_lessons_desc2" name="edit_lesson_desc" placeholder="Lesson Description">
 							<input type="hidden" name="edit_eid_l" id="edit_eid_l" />
 							<input type="hidden" name="edit_lesson_language1" id="edit_lesson_language" />
 							<input type="hidden" id="edit_lesson_id" name="edit_lesson_id">
 							<input type="hidden" id="edit_id" name="edit_id">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="edit_lesson_name" class="col-sm-4 control-label">Lesson Name</label>
-						<div class="col-sm-8">
-							<input type="textbox" class="form-control" id="edit_lesson_name" name="edit_lesson_name" placeholder="Lesson Name">
 						</div>
 					</div>
 					<div class="form-group">
@@ -2026,6 +2032,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 	<script>
 		$(document).ready(function() 
 			{
+				var myVideos = [];
 				// Toggler.Init();
 				
 				/*
@@ -2114,6 +2121,9 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 						default:
 							swal('This is not an allowed file type.');
 							this.value = '';
+
+
+
 					}
 				});
 				
@@ -2128,6 +2138,32 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				
 				
 				$('#slide_media_file').change(function () {
+
+					
+
+// window.URL = window.URL || window.webkitURL;
+
+
+  var files = this.files;
+  myVideos.push(files[0]);
+  var video = document.createElement('video');
+  video.preload = 'metadata';
+
+  video.onloadedmetadata = function() {
+    window.URL.revokeObjectURL(video.src);
+    var duration = video.duration;
+    myVideos[myVideos.length - 1].duration = duration;
+
+	
+	var minus=duration/60;
+	var min=Math.floor(minus);
+	var sec=duration%60;
+    // alert(duration);
+	$('#slide_duration').val(min+'.'+Math.floor(sec));
+  }
+
+  video.src = URL.createObjectURL(files[0]);;
+
 					
 					var sel_media = $("input[name='select_media']:checked").val();
 					console.log(this.value);
@@ -2476,6 +2512,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 										$('#edit_lesson_icon_file').val(obj['0'].icon_file);
 										$('#edit_lesson_id').val(obj['0'].lesson_id);
 										$('#edit_id').val(obj['0'].id);
+										$('#edit_lessons_desc2').val(obj['0'].description);
 										$('#edit_language').val(obj['0'].language);
 										$('#edit_lang').find('option[value="'+obj['0'].language+'"]').attr('selected','selected');
 										// alert(obj['0'].language);
@@ -3050,4 +3087,39 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 				
 			
 
+
+
+
+
+
+// 				 var myVideos = [];
+
+// window.URL = window.URL || window.webkitURL;
+
+// document.getElementById('slide_media_file').onchange = setFileInfo;
+
+// function setFileInfo() {
+//   var files = this.files;
+//   myVideos.push(files[0]);
+//   var video = document.createElement('video');
+//   video.preload = 'metadata';
+
+//   video.onloadedmetadata = function() {
+//     window.URL.revokeObjectURL(video.src);
+//     var duration = video.duration;
+//     myVideos[myVideos.length - 1].duration = duration;
+//     updateInfos();
+//   }
+
+//   video.src = URL.createObjectURL(files[0]);;
+// }
+
+
+// function updateInfos() {
+//   var infos = document.getElementById('infos1');
+//   infos.textContent = "";
+//   for (var i = 0; i < myVideos.length; i++) {
+//     infos.textContent += myVideos[i].name + " duration: " + myVideos[i].duration + '\n';
+//   }
+// }
 	</script>
