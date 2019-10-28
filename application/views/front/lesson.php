@@ -9,6 +9,11 @@ $current_row=0;
 
 ?>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
@@ -41,7 +46,7 @@ $current_row=0;
                                 if($result[$current_row]['slide_mode'] == 'video' || $result[$current_row]['slide_mode'] == 'audio' )
                                 {                                   
                             ?>
-                            <video id="my-player" class="video-js vjs-big-play-centered" data-setup='{"fluid": true}' controls preload="auto" poster="<?php echo base_url(); ?>front/images/elearnvid.png" onended="change_vid()">
+                            <video style="min-height:540px; max-height:540px;" id="my-player" class="video-js vjs-big-play-centered" data-setup='{"fluid": true}' controls preload="auto" poster="<?php echo base_url(); ?>front/images/elearnvid.png" onended="change_vid()">
                               <source src="<?php echo base_url().$result[$current_row]['slide_file']; ?>" type="video/mp4"></source>
                               <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a
@@ -167,7 +172,7 @@ $current_row=0;
                             
                             // $('.start').css('display','block');
                         } 
-                    $(document).ready(function(){
+                    jQuery(document).ready(function(){
                         var base_url='<?php echo base_url();?>';
                         // var slider_number=0;
                         // var currentslide=0;
