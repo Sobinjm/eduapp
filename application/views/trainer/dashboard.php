@@ -83,13 +83,13 @@
       </ol>
     </section>
     <section class="hero">
-        <div class="header">Welcome Back, Tamer</div>
-        <button  class="btn btn-danger pull-right cus_btn">Course Panel</button>
+        <div class="header">Welcome Back, </div>
+        <!-- <button  class="btn btn-danger pull-right cus_btn">Lesson Panel</button> -->
     </section>
 
     <section class="content">
 	  <div class="row">
-	      <div class="col-lg-4 col-xs-12 leftCon">
+	      <!-- <div class="col-lg-4 col-xs-12 leftCon">
 	           <div>
 	          <div class="title">Welcome to E-learning Trainer Panel</div>
 	          <p>
@@ -100,8 +100,8 @@ In vitae malesuada elit. Fusce magna ligula, malesuada sit amet sagittis id, lob
 	          </p>
 	          <button type="button" class="btn btn-block btn-primary btn-flat" >  <i class="ion ion-ios-videocam"></i> Tutorial Video</button>
 	            </div>
-	      </div>
-	      <div class="col-lg-8 col-xs-12">
+	      </div> -->
+	      <div class="col-lg-12 col-xs-12">
 	           <div class="col-lg-4 col-xs-6">
           <div class="small-box bg-orangees">
             <div class="inner">

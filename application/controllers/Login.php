@@ -167,6 +167,7 @@ class Login extends CI_Controller {
 								foreach($courses as $course)
 									{
 										$is_available=$this->mstudent_model->check_assignment($course['CourseRef']);
+										$is_available=false;
 										// print_r($is_available);
 										// die();
 										if(!$is_available)
@@ -178,7 +179,20 @@ class Login extends CI_Controller {
 											else{
 												$exam_status=0;
 											}
-											$lesson_infos=[];
+											// [
+											// 	{
+											// 		"id":5,
+											// 		"CourseRef":"2670513",
+											// 		"LessonCode":"L2",
+											// 		"LessonDescription":"Lesson 2",
+											// 		"description":'Attributes of driving',
+											// 		"ByPass":"No",
+											// 		"Order":4,
+											// 		"current_slides":0,
+											// 		"completed_status":0,
+											// 		"slide_count":0
+											// 	},
+												$lesson_infos=[];
 											
 												$procedure_in=array(
 													'StudentNo' => $this->session->userdata('student_no'),
@@ -187,20 +201,44 @@ class Login extends CI_Controller {
 													'BranchNo' => $this->session->userdata('BranchNo'),
 													'CourseRef' =>$course['CourseRef']);
 												$inner_lessons=$this->mlesson_model->getcourselessons($procedure_in);
+												// print_r($inner_lessons);
+												if($course['CourseRef']=='AR')
+												{
+												$lesson_language="Arabic";
+												}
+												elseif($course['CourseRef']=='EN')
+												{
+													$lesson_language="English";
+												}
+												else
+												{
+													$lesson_language="English";
+												}
 												foreach($inner_lessons as $inner_lesson)
 												{
-													$inr_lsn=$inner_lesson;
+													// $inr_lsn=$inner_lesson;
 													// $status_array=array('completed_slides'=>'0','lesson_status'=>'0');
 													// array_push($inr_lsn,'completed_slides':'0','lesson_status':'0');
-													$inr_lsn['completed_slides']=0;
-													$inr_lsn['lesson_status']=0;
-													$inr_lsn['lesson_details']=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
-													$slide_details= $this->mlesson_model->getslides($inr_lsn['lesson_details'][0]['id']);
+													$lesson_details=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
+													
+													// print_r($lesson_details);
+													$inr_lsn["LessonCode"]=$inner_lesson['LessonCode'];
+													$inr_lsn["CourseRef"]=$inner_lesson['CourseRef'];
+													$inr_lsn["LessonName"]=$inner_lesson['LessonDescription'];
+													$inr_lsn["language"]=$lesson_language;
+													$inr_lsn["LessonDescription"]=$lesson_details[0]['description'];
+													$inr_lsn["ByPass"]=$inner_lesson['ByPass'];
+													$inr_lsn["Order"]	=$inner_lesson['Order'];
+													$lesson_details=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
+													$slide_details= $this->mlesson_model->getslides($lesson_details[0]['id']);
 													$inr_lsn['slide_count']=sizeof($slide_details);
+													$inr_lsn['current_slide']=0;
+													$inr_lsn['completed_status']=0;
 													array_push($lesson_infos,$inr_lsn);
 														
 												}
 												// print_r($inr_lsn);
+												// echo json_encode($lesson_infos);
 														
 												// die();
 											$insert_data = array('student_id'=>$course['StudentNo'],

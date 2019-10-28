@@ -63,8 +63,8 @@
           <li class="<?php if($this->uri->segment(3) == 'quality'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/quality'; ?>">QM</a></li>
           <li class="<?php if($this->uri->segment(3) == 'hm'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/staff/hm'; ?>">HM</a></li>
 				  <li class="<?php if($this->uri->segment(2) == 'student'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/student'; ?>">Students</a></li>
-          
-				  <li class="<?php if($this->uri->segment(2) == 'course'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Lessons</a></li>
+          <?php $url_i=$this->uri->segment(3); ?>
+				  <li class="<?php if($this->uri->segment(2) == 'course' && !isset($url_i)){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Lessons</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'pending'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/pending'; ?>">Pending</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'draft'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/draft'; ?>">Drafts</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'published'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/published'; ?>">Published</a></li>
@@ -72,12 +72,13 @@
           else{
             ?>
 <li class="<?php if($this->uri->segment(2) == 'dashboard'){ echo 'active'; } ?>"><a href="<?php echo base_url().'trainer/dashboard'; ?>">Home</a></li>
-				  <!-- <li class="<?php if($this->uri->segment(2) == 'student'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/student'; ?>">Students</a></li>				   -->
-          <li class="<?php if($this->uri->segment(2) == 'course'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Lessons</a></li>
+				  <!-- <li class="<?php if($this->uri->segment(2) == 'student'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/student'; ?>">Students</a></li>	
+          <?php $url_i=$this->uri->segment(3); ?>			   -->
+          <li class="<?php if($this->uri->segment(2) == 'course' && !isset($url_i)){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course'; ?>">All Lessons</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'pending'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/pending'; ?>">Pending</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'draft'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/draft'; ?>">Drafts</a></li>
 				  <li class="<?php if($this->uri->segment(3) == 'published'){ echo 'active'; } ?>"><a href="<?php echo base_url().'admin/course/published'; ?>">Published</a></li>
-				  <li class="<?php if($this->uri->segment(3) == 'draft'){ echo 'active'; } ?>"><a href="<?php echo base_url().'trainer/notification'; ?>">Notification</a></li>
+				  <li class="<?php if($this->uri->segment(2) == 'notification'){ echo 'active'; } ?>"><a href="<?php echo base_url().'trainer/notification'; ?>">Notification</a></li>
 
 
 
