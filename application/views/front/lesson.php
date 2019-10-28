@@ -315,7 +315,73 @@ $current_row=0;
                        });
 
 
+
+                   
+                       $('a[data-slideno]').click(function(){
+                        alert();
+                        slider_number = $(this).attr("data-slideno");   
+                            $.ajax({
+                                 type: "GET",
+                                 url: base_url + "/lesson/get_slide/", 
+                                 data: {slider_no : slider_number, ls_id : lesson_id},
+                                 contentType: 'json',
+                                 success: function(result){
+                                    var obj=JSON.parse(result);
+                                    var html=obj.data;
+                                    var type=obj.type;
+                                    var last=obj.comp;
+                                    var sl_html=obj.sl_title;
+                                    $('.slide_title').html(sl_html);
+                                    if(type!='image'){
+                                        // alert(type);
+                                        $('#vid_div').html(html);
+                                        overlay.css("display","block");
+                                        $('#next').css("display","none");
+                                        $('#previous').css("display","block");
+                                        $('#next_img').css("display","none");
+                                        $('#start').css("display","block");
+                                        $('#last_slide').css("display","none");
+                                    }
+                                    else{
+                                        // alert(slider_number+'=='+total);
+                                       $('#vid_div').html(html);
+                                       overlay.css("display","none");
+                                       $('#previous').css("display","block");
+                                        $('#next').css("display","block");
+                                        $('#start').css("display","none");
+                                       $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","block");
+                                        $('#last_slide').css("display","none");
+                                    }
+                                    
+                                    if(slider_number==total){
+                                        if(type!='image'){
+                                        $('#next').css("display","none");
+                                        $('#previous').css("display","block");
+                                        $('#start').css("display","block");
+                                        $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","none");
+                                        $('#last_slide').css("display","none");
+                                        }
+                                        else{
+                                            $('#next').css("display","none");
+                                        $('#previous').css("display","block");
+                                        $('#start').css("display","none");
+                                        $('.bottom_right').css("display","block");
+                                        $('#next_img').css("display","none");
+                                        $('#last_slide').css("display","block");
+                                        }
+                                    }
+                                    
+                                 },
+                                 error:function(ex){
+                                    alert(JSON.stringify(ex));
+                                }
+                            });
+                       });
+
                     });
+
                 </script>
         </div>
         <!--Video Wrapper-->
@@ -358,11 +424,11 @@ $current_row=0;
                     <button class="dropbtn">Slide</button>
                     <div class="dropdown-content">
                         <?php
-                        $i=1;
+                        $i=0;
                         foreach($result as $val)
                         {
-                            echo "<a href=#>Slide ".$i."</a>";
-                            $i++;
+                            echo "<a data-slideno=".$i.">Slide ".++$i."</a>";
+                            
                         }
                         ?>
                     </div>
