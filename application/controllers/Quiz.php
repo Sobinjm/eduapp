@@ -71,11 +71,12 @@ class Quiz extends CI_Controller {
         $update_data=array(
 			'score'=>$score_value
 		);
-		$token=$this->mapi_model->getToken();
+		// $token=$this->mapi_model->getToken();
 		// $this->mquiz_model->update_score($assigned_id,$update_data);
 		$rs1=$this->mapi_model->setStudentResult($student_no,$lesson_code,$token);
 		$rs=json_decode($rs1);
 		// print_r($rs);
+		// echo json_encode($this->session->userdata);
 		// die();
 		if($rs->Succeeded==true)
 		{

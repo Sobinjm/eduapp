@@ -1308,7 +1308,7 @@ $('.edit_now').click(function(){
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="no_lessons" class="col-sm-4 control-label">Lesson Descriptio.</label>
+						<label for="no_lessons" class="col-sm-4 control-label">Lesson Description</label>
 						<div class="col-sm-8">
 							<input type="textbox" class="form-control" id="lesson_desc" name="lesson_desc" placeholder="Lesson Description">
 							<input type="hidden" name="course_id" id="course_id" >
@@ -2548,7 +2548,7 @@ $('.edit_now').click(function(){
 					var edit_icon_file 			= $('#edit_icon_file').val();
 					var edit_description 		= $('#edit_lessons_desc2').val();
 					var hidden_edit_icon_file 	= $('#hidden_edit_icon_file').val();
-					var edit_form 				= $('#edit_form_l')[0];
+					var edit_form 				= $('#edit_form_version')[0];
 					var data 					= new FormData(edit_form);  
 					
 					if(edit_lesson_name == '')

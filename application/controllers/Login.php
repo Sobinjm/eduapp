@@ -167,7 +167,7 @@ class Login extends CI_Controller {
 								foreach($courses as $course)
 									{
 										$is_available=$this->mstudent_model->check_assignment($course['CourseRef']);
-										$is_available=false;
+										// $is_available=false;
 										// print_r($is_available);
 										// die();
 										if(!$is_available)

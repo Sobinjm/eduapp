@@ -201,7 +201,9 @@ $current_row=0;
                         });
                        $('#next').click(function(){
                             currentslide = slider_number;
-                            slider_number++;
+                            // slider_number++;
+                            slider_number=parseInt(currentslide)+1;
+                            // alert(slider_number);
                             
                             $.ajax({
                                  type: "GET",
@@ -215,6 +217,7 @@ $current_row=0;
                                     var last=obj.comp;
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
+                                    $('#nav_slide_count').html(parseInt(currentslide)+2);
                                     if(type!='image'){
                                         // alert(type);
                                         $('#vid_div').html(html);
@@ -255,6 +258,10 @@ $current_row=0;
                                         $('#last_slide').css("display","block");
                                         }
                                     }
+                                    if(slider_number==0){
+                                       
+                                        $('#previous').css("display","none");
+                                        }
                                     
                                  },
                                  error:function(ex){
@@ -279,6 +286,7 @@ $current_row=0;
                                     var last=obj.comp;
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
+                                    $('#nav_slide_count').html(parseInt(currentslide)+2);
                                     if(type!='image'){
                                         // alert(type);
                                         $('#vid_div').html(html);
@@ -306,6 +314,10 @@ $current_row=0;
                                         $('#next_img').css("display","none");
                                         $('#last_slide').css("display","block");
                                     }
+                                    if(slider_number==0){
+                                       
+                                       $('#previous').css("display","none");
+                                       }
                                     
                                  },
                                  error:function(ex){
@@ -318,20 +330,23 @@ $current_row=0;
 
                    
                        $('a[data-slideno]').click(function(){
-                        alert();
+                        // alert();
                         slider_number = $(this).attr("data-slideno");   
+                        currentslide = parseInt(slider_number)-1;
                             $.ajax({
                                  type: "GET",
                                  url: base_url + "/lesson/get_slide/", 
                                  data: {slider_no : slider_number, ls_id : lesson_id},
                                  contentType: 'json',
                                  success: function(result){
+
                                     var obj=JSON.parse(result);
                                     var html=obj.data;
                                     var type=obj.type;
                                     var last=obj.comp;
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
+                                    $('#nav_slide_count').html(parseInt(currentslide)+2);
                                     if(type!='image'){
                                         // alert(type);
                                         $('#vid_div').html(html);
@@ -372,6 +387,10 @@ $current_row=0;
                                         $('#last_slide').css("display","block");
                                         }
                                     }
+                                    if(slider_number==0){
+                                       
+                                       $('#previous').css("display","none");
+                                       }
                                     
                                  },
                                  error:function(ex){
@@ -395,32 +414,17 @@ $current_row=0;
                 <h2 class="heading">
                     <span class="slide_title"></span>
                     <br />
-                    <small class="smallFont">Lesson <?php  echo $lesson_data['0']['lesson_order'];?>
-                        <span class="darkSmallFont">| <?php echo $lesson_data['0']['lesson_name']; ?></span>
+                    <small class="smallFont"> <?php  echo $lesson_data['0']['lesson_name'];?>
+                        <span class="darkSmallFont">| <?php echo $lesson_data['0']['description']; ?></span>
                     </small>
                 </h2>
 
-                <div class="blockClass labelAndButton">
-                    <!--Left-->
-                    <div class="labelContainer">
-                        <span class="labelIcon">
-                            <i class="fa fa-car" aria-hidden="true"></i>
-                        </span>
-                        <?php 
-                                                // echo $course_info['0']['course_name'];
-                                            ?>
-                                            
-                    </div>
-                    <!--Left-->
-
-                    <!--Right-->
-                    
-                    <!--Right-->
-                </div>
+                
               
    
                 </div>
-                <div class="dropdown">
+                <div class="col-lg-4">
+                <div class="dropdown" style="float:right;margin-right:10px;">
                     <button class="dropbtn">Slide</button>
                     <div class="dropdown-content">
                         <?php
@@ -432,7 +436,9 @@ $current_row=0;
                         }
                         ?>
                     </div>
-                    <?php echo ($current_row + 1)." of ".$length; ?>
+                    <?php echo '<span id="nav_slide_count">'.($current_row + 1)."</span> of ".$length; ?>
+                    </div>
+                    <br>
                     </div>
                 <style>
                     .col-lg-8{
@@ -474,13 +480,33 @@ $current_row=0;
                         .dropbtn {
                             
                             color: #000;
-                            padding: 16px;
+                            /* padding: 16px; */
                             font-size: 16px;
                             border: none;
                             }
                     </style>
-                <div class="col-lg-4">
-               
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-8">
+                    <div class="blockClass labelAndButton">
+                    <!--Left-->
+                    <div class="labelContainer">
+                        <span class="labelIcon">
+                            <i class="fa fa-car" aria-hidden="true"></i>
+                        </span>
+                        <?php echo $this->session->license_type; ?>
+                                            
+                    </div>
+                    <!--Left-->
+
+                    <!--Right-->
+                    
+                    <!--Right-->
+                </div>
+                    </div>
+                
+                    
+                    <div class="col-lg-4">
                 <button class="blockClass fontButton " style="display:none;width:30%; float:left;margin-right:10px;" id="previous">Previous</button>
                                             <button class="blockClass fontButton " style="width:30%;float:right;" id="start">Start Now
                                     <i class="fa fa-angle-right" aria-hidden="true"></i>

@@ -260,7 +260,7 @@
 												}
 												else{ ?>
 													<img src="<?php echo base_url().'img/icon-default.png'; ?>"  style="height:35px"/>
-												<?php }
+												<?php } 
 												?>
 											</span>
 											<h5>
@@ -269,6 +269,10 @@
 											if(isset($assigned_course['0']['licence_type'])) 
 											{
 												echo $assigned_course['0']['licence_type'];
+												$newsedata = array(
+													'license_type' => $assigned_course['0']['licence_type']
+												);
+												$this->session->set_userdata($newsedata);
 											}
 											else{
 												echo "No Course Assigned";

@@ -447,7 +447,8 @@ class Lesson extends CI_Controller {
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
 				// print_r($lesson_id);
-				// exit();
+				print_r($query);
+				exit();
 				if($query) 
 				{	
 						if($this->session->userdata('role')=='0')

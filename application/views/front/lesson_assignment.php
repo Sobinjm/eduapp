@@ -79,10 +79,10 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
         <div class="blockClass contentWrapper">
             <div class="container">
                 <h2 class="heading">
-                <?php echo $data[0]['lesson_name'] ?>
+                Assessment Quiz
                     <br />
-                    <small class="smallFont">Lesson <?php echo $data[0]['lesson_order'] ?>
-                        <!-- <span class="darkSmallFont">| Outside The City Limits</span> -->
+                    <small class="smallFont"><?php echo $data[0]['lesson_name'] ?>
+                        <span class="darkSmallFont">| <?php echo $data[0]['description'] ?></span>
                     </small>
                 </h2>
 
@@ -92,7 +92,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
                         <span class="labelIcon">
                             <i class="fa fa-car" aria-hidden="true"></i>
                         </span>
-                        <?php echo $course_info[0]['course_name']; ?>
+                        <?php echo $this->session->license_type; ?>
                     </div>
                     <!--Left-->
 
