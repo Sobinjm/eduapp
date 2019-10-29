@@ -232,6 +232,7 @@ class Login extends CI_Controller {
 													$lesson_details=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
 													$slide_details= $this->mlesson_model->getslides($lesson_details[0]['id']);
 													$inr_lsn['slide_count']=sizeof($slide_details);
+													$inr_lsn['icon']=$lesson_details[0]['icon_file'];
 													$inr_lsn['current_slide']=0;
 													$inr_lsn['completed_status']=0;
 													array_push($lesson_infos,$inr_lsn);

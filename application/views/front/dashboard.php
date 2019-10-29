@@ -368,10 +368,11 @@
 												// print_r($getl);
 												// die();
 												// print_r($lesson_detail);
+
 									?>
 									 <div class= "col-xl-3 col-lg-3 col-md-6 col-sm-12">
 										<div class="blockClass">
-											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$getl['lesson_details'][0]['icon_file']; ?>) center no-repeat; background-size: cover;">
+											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$getl['icon']; ?>) center no-repeat; background-size: cover;">
 												
 												<?php 
 													if($history_course['completed_lessons']>=$getl['Order'])
@@ -379,8 +380,8 @@
 														?>
 														<div class="serialNo" style="background:green;">
 													 <strong class="serial"><?php //echo $getl['lesson_order'];
-													 $lesson_detail[0]['lesson_name']=$getl['lesson_details'][0]['lesson_name'].' 0';
-													 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
+													 $lesson_detail[0]['lesson_name']=$getl['LessonName'].' 0';
+													 $lsn_name=explode(' ',$lesson_detail[0]['LessonName']);  
 													echo  $lsn_name[1]; ?></strong>
 													<br/> Lesson
 													<?php //echo $getl['lesson_order'];
@@ -392,8 +393,8 @@
 														
 														?>
 														<div class="serialNo"> <strong class="serial"><?php //echo $getl['lesson_order'];
-														 $lesson_detail[0]['lesson_name']=$getl['lesson_details'][0]['lesson_name'].' 0';
-														 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
+														 $lsnname=$getl['LessonName'].' 0';
+														 $lsn_name=explode(' ',$lsnname);  
 														echo  $lsn_name[1]; ?></strong>
 														<br/> Lesson
 														<?php //echo $getl['lesson_order'];
@@ -414,7 +415,7 @@
 												<div class="lessionDetails">
 													<span>
 													<?php 
-												echo $getl['lesson_details'][0]['description']; 
+												echo $getl['LessonDescription']; 
 												?><br>
 													<?php //echo $getl['lesson_order']; 
 													//  $slide_details= $this->mlesson_model->getslides($getl['lesson_detail'][0]['id']);
@@ -432,7 +433,7 @@
 												{
 													// echo print_r($history_course['status']);
 													// die();
-													if($getl['lesson_status']==0 && $completionorder==0)
+													if($getl['completed_status']==0 && $completionorder==0)
 													{
 														$completionorder++;
 													?>
@@ -442,7 +443,7 @@
 													</div></a>
 												<?php
 													}
-													else if($getl['lesson_status']==1 && $completionorder!=0)
+													else if($getl['completed_status']==1 && $completionorder!=0)
 													{
 														?>
 												<div class="lessStatus" style="background:green;">
