@@ -61,7 +61,8 @@ class Slide extends CI_Controller {
 	}
 
 	public function addslide()
-	{	
+	{
+
 		$this->form_validation->set_rules('slide_title', 'Slide title', 'trim|required');
         if ($this->form_validation->run() == false) 
 		{
@@ -216,6 +217,7 @@ class Slide extends CI_Controller {
 			$edit_slide_duration 	= $this->security->xss_clean($this->input->post('edit_slide_duration'));
 			$edit_slide_order 		= $this->security->xss_clean($this->input->post('edit_slide_order'));
 			$no_file_upload			= $this->security->xss_clean($this->input->post('edit_file_orginal'));
+			$lessonid	 		= $this->security->xss_clean($this->crc_encrypt->decode($this->input->post('id')));
 			if(isset($_FILES['edit_slide_upload']) AND !empty($_FILES["edit_slide_upload"]["name"]))
 				{
 					$errors		=	array();
@@ -331,9 +333,9 @@ class Slide extends CI_Controller {
 											'status'  => 'success',
 											'message' => 'Slide updated successfully'
 										);
-					// echo 'Slide updated successfully';
-					print_r($query);
-					exit();
+					echo 'Slide updated successfully';
+					// print_r($query);
+					// exit();
 				 }
 				else 
 				{
@@ -341,9 +343,9 @@ class Slide extends CI_Controller {
 											'status'  => 'success',
 											'message' => 'Sorry, we are not able to add this slidasdasde now.'
 										);
-					// echo 'Sorry, we are not able to add this slide now.'.$query;
+					echo 'Sorry, we are not able to add this slide now.'.$query;
 					// print_r($update_data);
-					print_r($query);
+					// print_r($query);
 					exit();
 				}	
 		}

@@ -25,12 +25,15 @@ class Lesson extends CI_Controller {
 	 
 	public function view()
 	{
+		// print_r($this->session->userdata('student_no'));
+		// die();
 		$lesson_id = $this->crc_encrypt->decode($this->uri->segment(3));
 		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
 		$data['result'] = $this->mlesson_model->getslideforlesson($lesson_id);
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 		$student_no=$this->crc_encrypt->decode($this->session->userdata('student_no'));		
 		$assigned_course = $this->mdashboard_model->getmycourses_code($student_no);
+		
 		// print_r($assigned_course);
 		// $course_info = $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
 		// $assigned_course = $this->mdashboard_model->getmycourses($student_id);
@@ -65,7 +68,7 @@ class Lesson extends CI_Controller {
   
 		$student_id=$this->session->userdata('student_no');
 		// echo $student_id;
-		$assigned_course = $this->mdashboard_model->getmycourses($student_id);
+		$assigned_course = $this->mdashboard_model->getmycourses($student_id); 
 		$assigned_id=$assigned_course[0]['id']; 
 		$slider_number=$_GET['slider_no'];
 		$lesson_id=$_GET['ls_id'];
