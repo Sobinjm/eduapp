@@ -91,6 +91,7 @@ class Staff extends CI_Controller {
 	public function updatestaff()
 	{
 			$staff_id = $this->security->xss_clean($this->input->post('id'));
+			$staff_role = $this->security->xss_clean($this->input->post('role'));
 			$staff_name = $this->security->xss_clean($this->input->post('name'));
 			$staff_email = $this->security->xss_clean($this->input->post('email'));
 			$staff_cnumber = $this->security->xss_clean($this->input->post('staff_number'));
@@ -104,7 +105,8 @@ class Staff extends CI_Controller {
 									'name' => $staff_name,
 									'email' => $staff_email,
 									'password' => $hash_password,
-									'contact_number' => $staff_cnumber
+									'contact_number' => $staff_cnumber,
+									'role'=>$staff_role
 									);
 					$query = $this->madmin_model->update_staff_passwd($id,$update_data);
 					if($query) 
@@ -126,7 +128,7 @@ class Staff extends CI_Controller {
 									'name' => $staff_name,
 									'email' => $staff_email,
 									'contact_number' => $staff_cnumber,
-									'role' => '0'
+									'role'=>$staff_role
 									);
 					$query = $this->madmin_model->update_staff($id,$update_data);
 					if($query) 

@@ -57,7 +57,7 @@ class Mfaculty extends CI_Model
 		
 		function getStaff($data)
 		{
-			$query = $this->db->query("SELECT name, email, contact_number FROM ad_staff WHERE id = '".$data."'");	
+			$query = $this->db->query("SELECT name, email, contact_number,role FROM ad_staff WHERE id = '".$data."'");	
 			return $query->result_array();
 		}
 		

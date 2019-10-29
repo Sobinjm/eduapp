@@ -1,5 +1,8 @@
 
-   <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> <script type="text/javascript">
+   <!-- <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>  -->
+   <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+   <script type="text/javascript">
+    
 //<![CDATA[
         // bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 				// $('#edit_bried_desc').width('100%');
@@ -114,8 +117,10 @@
 						<label for="brief_desc" class="col-sm-4 control-label">Brief Desc</label>
 						<div class="col-sm-8">
 							<textarea id="edit_brief_desc" name="edit_brief_desc" rows="10" style="width:100%">
-							
 							</textarea>
+							<script>
+							CKEDITOR.replace( 'edit_brief_desc' );
+							</script>
 						</div>
 					</div>
 					<div class="form-group">
@@ -994,7 +999,7 @@ $('.edit_now').click(function(){
 										$('#edit_brief_desc').html(obj['0'].course_desc);
 										// $('#edit_brief_desc').html(obj['0'].course_desc);
 										
-CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
+										CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 
 										
 										$('#edit_no_lessons').val(obj['0'].lesson_no);
@@ -1497,6 +1502,9 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 							<div class="col-sm-8">
 								<textarea class="textarea" id="slide_description" name="slide_description" placeholder="Place some text here"
 								style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>	
+								<script>
+							CKEDITOR.replace( 'slide_description' );
+							</script>
 							</div>
 						</div>
 						<div class="form-group">
@@ -1608,7 +1616,7 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
           </div>
         </div>
 
-				<!-- <script src="http://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script> -->
+				<script src="http://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
         <script>
 				// Replace the <textarea id="editor1"> with a CKEditor
 // instance, using default configuration.
@@ -3123,3 +3131,4 @@ CKEDITOR.instances['edit_brief_desc'].setData(obj['0'].course_desc);
 //   }
 // }
 	</script>
+	<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>

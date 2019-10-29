@@ -169,11 +169,12 @@ class Slide extends CI_Controller {
 						else{
 							$user_type='Trainer';
 						}
+						$lesson_details=$this->mlesson_model->getlessondetails($lessonid);
 						$notification=array(
 							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
 							'name'=>$this->session->userdata('name'),
 							'user_type'=>$user_type,
-							'course'=>$slide_title,
+							'course'=>$lesson_details[0]['description'],
 							'status'=>'Slide Added',
 							'url'=>base_url().'admin/course/'
 				

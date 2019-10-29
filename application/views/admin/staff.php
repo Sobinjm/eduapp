@@ -1,4 +1,7 @@
+<?php 
+	$this->load->model('admin/Madmin', 'madmin_model');
 
+	?>
   <!-- =============================================== -->
   <?php $this->load->view('admin/header'); ?>
   <!-- Left side column. contains the sidebar -->
@@ -10,12 +13,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin Management
+        Staff Management
         <small></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Admin Management</li>
+        <li class="active">Staff Management</li>
       </ol>
     </section>
 
@@ -42,7 +45,15 @@
 					</div>
 					<div class="form-group">
 					  <label for="category">Name</label>
-					  <input type="textbox" class="form-control" id="staff_name" placeholder="Enter Name">
+					  <!-- <input type="textbox" class="form-control" id="staff_name" placeholder="Enter Name"> -->
+					  <select class="form-control" id="staff_name" placeholder="Enter Name">
+					  <?php $employees=$this->madmin_model->getEmployees();
+							foreach($employees as $employee)
+							{
+								echo '<option value="'.$employee['Name'].'">'.$employee['Name'].'</option>';
+							}
+								?>
+								</select>
 					</div>
 				  
 					<div class="form-group">
@@ -153,15 +164,30 @@
 		<div class="modal-content">
 		  <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">Edit Admin</h4>
+			<h4 class="modal-title">Edit Staff</h4>
 		  </div>
 		  <div class="modal-body">
 			<div class="row">
 			<form class="edit_form">
 				<div class="col-lg-6 col-md-6 col-sm-12">
+				<div class="form-group">
+					  <label for="category">Role</label><br/>
+						<select id="edit_staff_role" class="form-control">
+							<option value="select">Select</option>
+							<option value="0">Admin</option>
+							<option value="1">Trainer</option>
+							<option value="2">QA</option>
+							<option value="3">HM</option>
+						</select>
+		
+					</div>
 					<div class="form-group">
 					  <label for="edit_name">Name</label>
 					  <input type="textbox" class="form-control" id="edit_name" placeholder="Enter Name">
+					  
+								<!-- <option>
+								</option> -->
+							</select>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12">
@@ -377,8 +403,10 @@
 										$('#edit_name').val(obj['0'].name);
 										$('#edit_email').val(obj['0'].email);
 										$('#edit_contact').val(obj['0'].contact_number);
+										$('#edit_staff_role').find('option[value="'+obj['0'].role+'"]').attr('selected','selected');
 										$('#edit_modal').modal('show');
 										$('.overlay').hide();
+										// alert(obj['0'].role);
 									}
 						})
 						.fail(function() {
@@ -393,6 +421,7 @@
 				$('#submit_edit').click(function(){
 					
 					var edit_eid = $('#edit_eid').val();
+					var edit_staff_role = $('#edit_staff_role').val();
 					var edit_name = $('#edit_name').val();
 					var edit_email = $('#edit_email').val();
 					var edit_cnumber = $('#edit_contact').val();
@@ -440,13 +469,14 @@
 					{
 						$('#edit_cnumber').addClass("success");
 					}
-					
+					// alert(edit_staff_role);
 					$.post("<?php echo base_url(); ?>admin/staff/updatestaff", { 
 									id: edit_eid,
 									name: edit_name, 
 									email: edit_email, 
 									staff_number: edit_cnumber, 
 									password: edit_password,
+									role:edit_staff_role,
 									<?=$csrf['name'];?>: '<?=$csrf['hash'];?>'
 								}, function(data) {
 									

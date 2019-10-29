@@ -36,7 +36,7 @@
 								<th>Description</th>
 								<th>Status</th>
 								<th>Name</th>
-								<th>Course</th>
+								<th>Lesson/Slide</th>
 								<th>Date/Time</th>
 								<th>Action</th>
 							</tr>
@@ -63,7 +63,7 @@
 								<th>Description</th>
 								<th>Status</th>
 								<th>Name</th>
-								<th>Course</th>
+								<th>Lesson/Slide</th>
 								<th>Date/Time</th>
 								<th>Action</th>
 							</tr>
