@@ -63,7 +63,7 @@ class Mlesson extends CI_Model
 		{
 			$max_value = $this->db->query("SELECT MAX(lesson_version) as version FROM ad_lessons WHERE lesson_name = '".$lessionname."'");	
 			return $max_value->result_array();
-		}
+		} 
 		 
 		function getslideforlesson($lessonid)
 		{
@@ -116,5 +116,15 @@ class Mlesson extends CI_Model
 			$query = $this->db->query("Execute _sp_el_studentcoursedetails ?,?,?,?,?", $indata);
 		}
 
+		function getAssignmentForStudent($student_no)
+		{
+			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_no."'");	
+			return $query->result_array();
+		}
+
+		function updateAssignmentForStudent($student_no,$data)
+		{
+			$query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."'");	 
+		}
 		
 	}

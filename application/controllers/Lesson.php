@@ -22,7 +22,7 @@ class Lesson extends CI_Controller {
 	{
 		$this->load->view('front/lesson');
 	}
-	
+	 
 	public function view()
 	{
 		$lesson_id = $this->crc_encrypt->decode($this->uri->segment(3));
@@ -41,6 +41,19 @@ class Lesson extends CI_Controller {
 		// );
 		// $this->session->set_userdata($newdata);
 		$data['lesson_data']=$this->mlesson_model->getlessonid($lesson_id);
+		$data['lesson_code']=$lesson_code;
+		$data['student_no']=$student_no;
+		$assignment=$this->mlesson_model->getAssignmentForStudent($student_no);
+
+		foreach($assignment as $val)
+		{
+			if($assignment['LessonCode']==$lesson_code)
+			{
+				$data['current_slide']=$assignment['current_slides'];
+				$data['completed_status']=$assignment['completed_status'];
+			}
+		}
+
 		// echo $lesson_id;
 		// die();
 		// $data['slide_count']=$assigned_course[0]['slide_count'];
