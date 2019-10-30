@@ -77,7 +77,7 @@ class Mlesson extends CI_Model
 		}
 		function getlesson_code($lessonid)
 		{
-			$query = $this->db->query("SELECT * FROM ad_lessons WHERE lesson_id = '".$lessonid."' ");	
+			$query = $this->db->query("SELECT lesson_id FROM ad_lessons WHERE id = '".$lessonid."' ");	
 			return $query->result_array();
 		}
 		
@@ -118,13 +118,13 @@ class Mlesson extends CI_Model
 
 		function getAssignmentForStudent($student_no)
 		{
-			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_no."'");	
+			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_no."' and status=1");	
 			return $query->result_array();
 		}
 
 		function updateAssignmentForStudent($student_no,$data)
 		{
-			$query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."'");	 
+			$query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."' and status=1");	 
 		}
 		
 	}

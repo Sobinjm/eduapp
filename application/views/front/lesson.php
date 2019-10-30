@@ -2,11 +2,7 @@
 $this->load->view('front/header');
 $length=sizeof($result);
 $lesson=$this->uri->segment(3);
-// $val=explode("=>",$slide_count);
-// $current_row=$val['1'];
-$current_row=0;
-// print_r($lesson_data);
-
+$current_row=$current_slide-1;
 ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -429,11 +425,15 @@ $current_row=0;
                     <div class="dropdown-content">
                         <?php
                         $i=0;
-                        foreach($result as $val)
-                        {
-                            echo "<a data-slideno=".$i.">Slide ".++$i."</a>";
-                            
+                        foreach($lessons as $val)
+                        {		
+
+                            if($val['current_slide']>1 )
+                            {
+                                echo "<a data-slideno=".$i.">Slide ".++$i."</a>";
+                            }
                         }
+
                         ?>
                     </div>
                     <?php echo '<span id="nav_slide_count">'.($current_row + 1)."</span> of ".$length; ?>

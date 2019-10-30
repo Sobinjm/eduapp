@@ -27,9 +27,10 @@ class Lesson extends CI_Controller {
 	{
 		$lesson_id = $this->crc_encrypt->decode($this->uri->segment(3));
 		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
+		$lesson_code=$lesson_code['0']['lesson_id'];
 		$data['result'] = $this->mlesson_model->getslideforlesson($lesson_id);
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
-		$student_no=$this->crc_encrypt->decode($this->session->userdata('student_no'));		
+		$student_no=$this->session->userdata('student_no');	
 		$assigned_course = $this->mdashboard_model->getmycourses_code($student_no);
 		// print_r($assigned_course);
 		// $course_info = $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
@@ -44,13 +45,14 @@ class Lesson extends CI_Controller {
 		$data['lesson_code']=$lesson_code;
 		$data['student_no']=$student_no;
 		$assignment=$this->mlesson_model->getAssignmentForStudent($student_no);
-
-		foreach($assignment as $val)
-		{
-			if($assignment['LessonCode']==$lesson_code)
+		$lessons=json_decode($assignment['0']['total_lessons'], TRUE);
+		$data['lessons']=$lessons;
+		foreach($lessons as $val)
+		{		
+			if($val['LessonCode']==$lesson_code)
 			{
-				$data['current_slide']=$assignment['current_slides'];
-				$data['completed_status']=$assignment['completed_status'];
+				$data['current_slide']=$val['current_slide'];
+				$data['completed_status']=$val['completed_status'];
 			}
 		}
 
@@ -64,10 +66,30 @@ class Lesson extends CI_Controller {
 	public function get_slide(){
   
 		$student_id=$this->session->userdata('student_no');
-		// echo $student_id;
+		$slider_number=$_GET['slider_no'];
+		$lesson_id=$_GET['ls_id'];
+		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
+		$lesson_code=$lesson_code['0']['lesson_id'];
+		$assignment=$this->mlesson_model->getAssignmentForStudent($student_id);
+		$lessons=json_decode($assignment['0']['total_lessons'], TRUE);
+		
+		foreach($lessons as $val)
+		{	
+			if($val['LessonCode']==$lesson_code)	
+			{
+				if($val['current_slide']==$slider_number)
+				{
+					$val['current_slide']=$val['current_slide']+1;
+				}
+			}
+		//	$val['current_slide']=$val['current_slide']+1;
+		}
+		//$lessons['1']['current_slide']=1;
+		$lessons=json_encode($lessons);
+		$this->mlesson_model->updateAssignmentForStudent($student_id,$lessons);
 		$assigned_course = $this->mdashboard_model->getmycourses($student_id);
 		$assigned_id=$assigned_course[0]['id']; 
-		$slider_number=$_GET['slider_no'];
+		
 		$lesson_id=$_GET['ls_id'];
 		$slide_completed=$lesson_id."=>".$slider_number;
 		$update_data=array(
