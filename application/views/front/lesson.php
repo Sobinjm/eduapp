@@ -3,6 +3,13 @@ $this->load->view('front/header');
 $length=sizeof($result);
 $lesson=$this->uri->segment(3);
 $current_row=$current_slide-1;
+// echo $current_slide;
+// die();
+if($current_row==-1)
+{
+    $current_row=0;
+}
+// $current_row=0;
 ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -10,6 +17,8 @@ $current_row=$current_slide-1;
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <!-- jQuery 3 -->
+<script src="<?php echo base_url(); ?>admdist/bower_components/jquery/dist/jquery.min.js"></script>
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
@@ -148,9 +157,17 @@ $current_row=$current_slide-1;
                     //     var overlay=$('.overlay');
                     //     overlay.css("display","none");
                     // }  
-                    var slider_number=0;
-                        var currentslide=0;
-                        var total=0;
+                   
+                        var currentslide=<?php echo $current_row; ?>;
+                        if(currentslide>0)
+                        {
+                            var slider_number=currentslide+1;
+                        }
+                        else{
+                            var slider_number=0;
+                        }
+                        
+                        var total='<?php echo $length;?>';;
                         function change_vid(){
 
                             var overlay=$('.overlay');
@@ -207,6 +224,7 @@ $current_row=$current_slide-1;
                                  data: {slider_no : slider_number, ls_id : lesson_id},
                                  contentType: 'json',
                                  success: function(result){
+                                     console.log(result);
                                     var obj=JSON.parse(result);
                                     var html=obj.data;
                                     var type=obj.type;

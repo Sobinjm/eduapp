@@ -217,7 +217,7 @@ class Slide extends CI_Controller {
 			$edit_slide_duration 	= $this->security->xss_clean($this->input->post('edit_slide_duration'));
 			$edit_slide_order 		= $this->security->xss_clean($this->input->post('edit_slide_order'));
 			$no_file_upload			= $this->security->xss_clean($this->input->post('edit_file_orginal'));
-			// $lessonid	 		= $this->security->xss_clean($this->crc_encrypt->decode($this->input->post('edit_lessonid')));
+			$lessonid	 		= $this->input->post('edit_lessonid');
 			$lesson_details=$this->mlesson_model->getlessondetails($this->input->post('edit_lessonid'));
 			// print_r($lessonid);
 			// die();

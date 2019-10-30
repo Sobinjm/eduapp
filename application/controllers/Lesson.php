@@ -54,16 +54,18 @@ class Lesson extends CI_Controller {
 		{		
 			if($val['LessonCode']==$lesson_code)
 			{
+				// echo $val['LessonCode'].'=='.$lesson_code;
+		
 				$data['current_slide']=$val['current_slide'];
 				$data['completed_status']=$val['completed_status'];
 			}
 		}
-
+		// echo $val['LessonCode'].'=='.$lesson_code;
 		// echo $lesson_id;
 		// die();
 		// $data['slide_count']=$assigned_course[0]['slide_count'];
 		// $data=$qry; 
-		// print_r($this->session->course_info[0]['course_name']);
+		// print_r($data);
 		$this->load->view('front/lesson',$data);
 	}
 	public function get_slide(){
@@ -76,20 +78,34 @@ class Lesson extends CI_Controller {
 		$assignment=$this->mlesson_model->getAssignmentForStudent($student_id);
 		$lessons=json_decode($assignment['0']['total_lessons'], TRUE);
 		
+		$i=0;
 		foreach($lessons as $val)
 		{	
+		
 			if($val['LessonCode']==$lesson_code)	
 			{
+				// echo $val['LessonCode'].'=='.$lesson_code;
 				if($val['current_slide']==$slider_number)
 				{
-					$val['current_slide']=$val['current_slide']+1;
+					$lessons[$i]['current_slide']=$val['current_slide']+1;
 				}
+				$lessons[$i]['current_slide']=$val['current_slide']+1;
 			}
+			$i++;
 		//	$val['current_slide']=$val['current_slide']+1;
 		}
 		//$lessons['1']['current_slide']=1;
 		$lessons=json_encode($lessons);
-		$this->mlesson_model->updateAssignmentForStudent($student_id,$lessons);
+		$assignment['0']['total_lessons']=$lessons;
+		// print_r($assignment);
+		// echo $assignment['0']['total_lessons'];
+		// die();
+		$up_array=array_reverse($assignment[0]);
+		array_pop($up_array);
+		// array_pop($assignment[0]);
+		$assign_id=$assignment[0]['id'];
+		$assignment[0]=array_reverse($up_array);
+		$this->mlesson_model->updateAssignmentForStudent($assign_id,$assignment[0]);
 		$assigned_course = $this->mdashboard_model->getmycourses($student_id); 
 		$assigned_id=$assigned_course[0]['id']; 
 

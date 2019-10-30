@@ -118,13 +118,20 @@ class Mlesson extends CI_Model
 
 		function getAssignmentForStudent($student_no)
 		{
-			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_no."' and status=1");	
+			$query = $this->db->query("SELECT * FROM ad_assignments WHERE student_id = '".$student_no."' and status=0");	
 			return $query->result_array();
 		}
 
+		// function updateAssignmentForStudent($student_no,$data)
+		// {
+		// 	$query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."' and status=1");	 
+		// }
+
 		function updateAssignmentForStudent($student_no,$data)
 		{
-			$query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."' and status=1");	 
+			// $query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."' and status=1");	 
+			$this->db->where('id',$student_no);
+			$this->db->update('ad_assignments',$data);
 		}
 		
 	}
