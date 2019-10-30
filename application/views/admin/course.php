@@ -527,7 +527,7 @@
 				<td><i class="fa fa-fw fa-file-text-o"></i> <?php echo $lsn['slide_title']; ?></td>
 				<td>
 				<?php if($this->session->role != 2  && ($this->crc_encrypt->encode($lesson['lesson_lock'])==$this->session->userid || ($lesson['lesson_lock']==null ||$lesson['lesson_lock']==''))){ ?>
-					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
+					<a href="#!" class="lb_bg_two tab_a_pad"  data-toggle="modal" data-lessonid="<?php echo $lesson['id']; ?>" data-target="#slide_edit_now-new" data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
 						<i class="fa fa-fw fa-edit"></i> 
 					</a>
 					<a href="#!" class="lb_bg_two tab_a_pad delete_slide"   data-id="<?php echo $this->crc_encrypt->encode($lsn['id']); ?>" style="color:#000; cursor:pointer;">
@@ -1545,6 +1545,7 @@ $('.edit_now').click(function(){
 							<label for="edit_slide_title" class="col-sm-4 control-label">Slide Title</label>
 							<div class="col-sm-8">
 								<input type="hidden" name="edit_slideid" id="edit_slideid" />
+								<input type="hidden" name="edit_lessonid" id="edit_lessonid" />
  								<input type="textbox" class="form-control" id="edit_slide_title" name="edit_slide_title" placeholder="Slide Title">
 							</div>
 						</div>
@@ -2071,7 +2072,8 @@ $('.edit_now').click(function(){
 				$('#slide_edit_now-new').on('show.bs.modal', function (e) {
 					// alert();
 					var invoker = $(e.relatedTarget);
-					var lessonid = invoker.data('id');
+					var slideid = invoker.data('id');
+					var lessonid = invoker.data('lessonid');
 					//alert(lessonid);
 					if(lessonid == null || lessonid == '')
 						{
@@ -2080,7 +2082,7 @@ $('.edit_now').click(function(){
 					else 
 						{
 							$.post("<?php echo base_url(); ?>admin/slide/getslides", { 
-											id: lessonid,
+											id: slideid,
 											<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"							
 										}, function(data) {
 											
@@ -2097,7 +2099,8 @@ $('.edit_now').click(function(){
 												$(".edit_slide_form").trigger("reset");
 												var obj = JSON.parse(data);
 												console.log(obj);
-												$('#edit_slideid').val(lessonid);
+												$('#edit_slideid').val(slideid);
+												$('#edit_lessonid').val(lessonid);
 												$('#edit_slide_title').val(obj['0'].slide_title);
 												$("input[name=edit_select_media][value=" + obj['0'].slide_mode + "]").prop('checked', 'checked');
 												$('#edit_file_orginal').val(obj['0'].slide_file);

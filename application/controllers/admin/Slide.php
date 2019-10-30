@@ -217,7 +217,12 @@ class Slide extends CI_Controller {
 			$edit_slide_duration 	= $this->security->xss_clean($this->input->post('edit_slide_duration'));
 			$edit_slide_order 		= $this->security->xss_clean($this->input->post('edit_slide_order'));
 			$no_file_upload			= $this->security->xss_clean($this->input->post('edit_file_orginal'));
-			$lessonid	 		= $this->security->xss_clean($this->crc_encrypt->decode($this->input->post('id')));
+			// $lessonid	 		= $this->security->xss_clean($this->crc_encrypt->decode($this->input->post('edit_lessonid')));
+			$lesson_details=$this->mlesson_model->getlessondetails($this->input->post('edit_lessonid'));
+			// print_r($lessonid);
+			// die();
+			$lesson_name=$lesson_details[0]['description'];
+			// $lesson_name=$lesson_details[0]['description'];
 			if(isset($_FILES['edit_slide_upload']) AND !empty($_FILES["edit_slide_upload"]["name"]))
 				{
 					$errors		=	array();
@@ -323,7 +328,7 @@ class Slide extends CI_Controller {
 							'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
 							'name'=>$this->session->userdata('name'),
 							'user_type'=>$user_type,
-							'course'=>$edit_slide_title,
+							'course'=>$lesson_name.'/'.$edit_slide_title,
 							'status'=>'Slide Updated',
 							'url'=>base_url().'admin/lesson/preview/'.$this->crc_encrypt->encode($edit_slideid )
 				

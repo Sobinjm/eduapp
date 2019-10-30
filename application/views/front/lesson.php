@@ -425,6 +425,7 @@ $current_row=0;
                 </div>
                 <div class="col-lg-4">
                 <div class="dropdown" style="float:right;margin-right:10px;">
+                <?php //print_r($result); ?>
                     <button class="dropbtn">Slide</button>
                     <div class="dropdown-content">
                         <?php
