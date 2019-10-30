@@ -371,7 +371,7 @@ class Lesson extends CI_Controller {
         } 
 		else
 		{
-			$lesson_id 			    = $this->crc_encrypt->decode($this->security->xss_clean($this->input->post('edit_eid')));
+			$lesson_id 			    = $this->crc_encrypt->decode($this->security->xss_clean($this->input->post('edit_id')));
 			$lesson_name 		= $this->security->xss_clean($this->input->post('edit_lesson_name'));
 			$description 			= $this->security->xss_clean($this->input->post('edit_lesson_desc'));
 			$no_file_upload		 	= $this->security->xss_clean($this->input->post('no_file_upload'));
@@ -448,9 +448,9 @@ class Lesson extends CI_Controller {
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
-				print_r($lesson_id);
-				print_r($update_data);
-				exit();
+				// print_r($lesson_id);
+				// print_r($update_data);
+				// exit();
 				// echo 'its here';
 				// exit();
 				if($query) 
