@@ -448,11 +448,11 @@ class Lesson extends CI_Controller {
 								'updated_by'	 =>	$this->crc_encrypt->decode($this->session->userdata('userid')),
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
-				// print_r($lesson_id);
-				// print_r($query);
-				// exit();
-				echo 'its here';
+				print_r($lesson_id);
+				print_r($update_data);
 				exit();
+				// echo 'its here';
+				// exit();
 				if($query) 
 				{	
 						if($this->session->userdata('role')=='0')

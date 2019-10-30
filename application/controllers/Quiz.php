@@ -61,6 +61,7 @@ class Quiz extends CI_Controller {
     {
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 		$student_no	= $this->crc_encrypt->decode($this->session->userdata('student_no'));
+		$student_no	= $this->session->userdata('student_no');
 		$student_info=$this->mstudent_model->getProfileInformation($student_id);
 		$student_name=$this->crc_encrypt->decode($this->session->userdata('name'));
 		$lesson_id=$_GET['lesson_id'];
@@ -71,30 +72,79 @@ class Quiz extends CI_Controller {
         $update_data=array(
 			'score'=>$score_value
 		);
+
+		
+
+
+
+
+		// $lesson_id=$this->crc_encrypt->decode($_GET['ls_id'];
+		// echo $_GET['lesson_id'];
+		// die();
+		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
+		// print_r($lesson_code);
+		// die();
+		$lesson_code=$lesson_code['0']['lesson_id'];
+		$assignment=$this->mlesson_model->getAssignmentForStudent($student_no);
+
+		$lessons=json_decode($assignment['0']['total_lessons'], TRUE);
+		$order=$lessons[0]['Order'];
+		$i=0;
+		foreach($lessons as $val)
+		{	
+		
+			if($val['LessonCode']==$lesson_code)	
+			{
+				$order=$val['Order'];
+					$lessons[$i]['completed_status']=1;
+				
+			}
+			$i++;
+		//	$val['current_slide']=$val['current_slide']+1;
+		}
+		//$lessons['1']['current_slide']=1;
+		$lessons=json_encode($lessons);
+		$assignment['0']['total_lessons']=$lessons;
+		// print_r($assignment);
+		// echo $assignment['0']['total_lessons'];
+		// die();
+		$up_array=array_reverse($assignment[0]);
+		array_pop($up_array);
+		// array_pop($assignment[0]);
+		$assign_id=$assignment[0]['id'];
+		$assignment[0]=array_reverse($up_array);
+		$rs=$this->mlesson_model->updateAssignmentForStudent($assign_id,$assignment[0]);
 		// $token=$this->mapi_model->getToken();
 		// $this->mquiz_model->update_score($assigned_id,$update_data);
-		$rs1=$this->mapi_model->setStudentResult($student_no,$lesson_code,$token);
-		$rs=json_decode($rs1);
+		//$rs1=$this->mapi_model->setStudentResult($student_no,$lesson_code,$token);
+		//$rs=json_decode($rs1);
 		// print_r($rs);
 		// echo json_encode($this->session->userdata);
+		// print_r($rs);
 		// die();
-		if($rs->Succeeded==true)
+		if($assignment['0']['completed_lessons']==$order)
+		{
+			$completed=$assignment['0']['completed_lessons'];
+		}
+		else{
+			$completed=$order;
+		}
+		if($rs==true)
 		{
         $data['result'] = $this->mquiz_model->update_score($assign_id,$update_data);
         $update_data2=array(
-			'completed_lessons'=>$lesson_id
+			'completed_lessons'=>$completed
         );
 		$data['result'] = $this->mlesson_model->update_completion($assign_id,$update_data2);
 		$notification=array(
 			'user'=>$this->crc_encrypt->decode($this->session->userdata('userid')),
 			'name'=>$student_name, 
-			'course'=>$this->session->course_info[0]['course_name'],
 			'user_type'=>'Student',
 			'status'=>'Completed'
 
 		);
 		$this->mnotification_model->insert_notification($notification);
-		print_r($rs1);
+		print_r($rs);
 		// $data['sl_no']=$slider_number;
 		// $this->load->view('front/score',$data);
 	}

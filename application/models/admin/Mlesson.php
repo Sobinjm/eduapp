@@ -31,7 +31,7 @@ class Mlesson extends CI_Model
 		{
 			$this->db->where('id', $id); 
 			$this->db->update('ad_lessons',$up_data); 
-			return ($this->db->affected_rows() != 1) ? false : true;
+			return ($this->db->affected_rows() ==0) ? false : true;
 		}
 		function update_status($id, $up_data)
 		{
@@ -131,7 +131,14 @@ class Mlesson extends CI_Model
 		{
 			// $query = $this->db->query("update ad_assignments set total_lessons='".$data."' WHERE student_id = '".$student_no."' and status=1");	 
 			$this->db->where('id',$student_no);
-			$this->db->update('ad_assignments',$data);
+			// $this->db->update('ad_assignments',$data);
+			if($this->db->update('ad_assignments',$data))
+			{
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 		
 	}

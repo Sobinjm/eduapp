@@ -9,6 +9,10 @@ if($current_row==-1)
 {
     $current_row=0;
 }
+elseif($current_row>=$length)
+{
+    $current_row=$length-1;
+}
 // $current_row=0;
 ?>
 
@@ -69,9 +73,9 @@ if($current_row==-1)
                             ?>      
                                 <img src="<?php echo base_url().$result[$current_row]['slide_file']; ?>" class="img-responsive"/> <?php if(sizeof($result) >1 ){
                                     ?>
-                                <div class="overlay">
+                                <!-- <div class="overlay">
                                     <button class="blockClass fontButton fontButtonAbsolute d" id="next">Next</button>
-                                </div>
+                                </div> -->
                                 <?php
                                 }
                                 
@@ -112,16 +116,17 @@ if($current_row==-1)
                             ?>
                 <!-- Script for the video player -->
 
-                 <div class="bottom_right testdiv" <?php  if(sizeof($result) >1 ){ echo'style="display: none;"';}else{  echo'style="display: block;"'; } ?>>
-                 <?php  if(sizeof($result) >1 ){
+                 <div class="bottom_right testdiv" <?php  if((sizeof($result) >1 || sizeof($result)!= $current_row+1) && $result[$current_row]['slide_mode'] != 'image'){ echo'style="display: none;"';}else{  echo'style="display: block;"'; } ?>>
+                 <?php  if((sizeof($result) ==1 || (sizeof($result)==$current_row+1)) && ($result[$current_row]['slide_mode'] != 'video' || $result[$current_row]['slide_mode'] != 'audio')){
                      ?>
-                        <!--<button class="blockClass fontButton fontButtonAbsolute b" id="next_img" style="display:none;top:80%;left:89%;">Next
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </button>-->
-                    <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;display: none;">
+                       
+                    <a href="<?php echo base_url();?>lesson/assignment/<?php echo $lesson;?>"><button class="blockClass fontButton fontButtonAbsolute" id="last_slide" style="top:80%;left:89%;">
                         Goto Quiz
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </a>
+                    <script>
+                    $('#start').css('display','none');
+                    </script>
                      <?php
 
 
@@ -527,7 +532,9 @@ if($current_row==-1)
                     
                     <div class="col-lg-4">
                 <button class="blockClass fontButton " style="display:none;width:30%; float:left;margin-right:10px;" id="previous">Previous</button>
-                                            <button class="blockClass fontButton " style="width:30%;float:right;" id="start">Start Now
+                                            <button class="blockClass fontButton " style="width:30%;float:right;  <?php  if((sizeof($result) ==1 || (sizeof($result)==$current_row+1)) && ($result[$current_row]['slide_mode'] != 'video' || $result[$current_row]['slide_mode'] != 'audio')){
+                     ?>
+                       display:none <?php } ?>" id="start">Start Now
                                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                                 </button>
                                 <?php 

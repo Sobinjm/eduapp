@@ -85,11 +85,14 @@ class Lesson extends CI_Controller {
 			if($val['LessonCode']==$lesson_code)	
 			{
 				// echo $val['LessonCode'].'=='.$lesson_code;
-				if($val['current_slide']==$slider_number)
+				if($val['current_slide']>=$slider_number)
 				{
-					$lessons[$i]['current_slide']=$val['current_slide']+1;
+					$lessons[$i]['current_slide']=$val['current_slide'];
 				}
-				$lessons[$i]['current_slide']=$val['current_slide']+1;
+				else{
+					$lessons[$i]['current_slide']=$slider_number-1;
+				}
+				
 			}
 			$i++;
 		//	$val['current_slide']=$val['current_slide']+1;

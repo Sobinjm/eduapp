@@ -379,13 +379,13 @@
 											<div class="fourColumnBlock" style="background: url(<?php echo base_url().$getl['icon']; ?>) center no-repeat; background-size: cover;">
 												
 												<?php 
-													if($history_course['completed_lessons']>=$getl['Order'])
+													if(($history_course['completed_lessons']>=$getl['Order']) ||$getl['completed_status']==1)
 													{
 														?>
 														<div class="serialNo" style="background:green;">
 													 <strong class="serial"><?php //echo $getl['lesson_order'];
 													 $lesson_detail[0]['lesson_name']=$getl['LessonName'].' 0';
-													 $lsn_name=explode(' ',$lesson_detail[0]['LessonName']);  
+													 $lsn_name=explode(' ',$lesson_detail[0]['lesson_name']);  
 													echo  $lsn_name[1]; ?></strong>
 													<br/> Lesson
 													<?php //echo $getl['lesson_order'];
@@ -453,9 +453,24 @@
 												<div class="lessStatus" style="background:green;">
 													<i class="fa fa-clock-o" aria-hidden="true"></i>
 													Completed
+													<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($lesson_detail[0]['id']); ?>" style="color:white; text-decoration: none;">
+													<i class="fa fa-clock" aria-hidden="true"></i>Start Again
+													</a>
 												</div>
 												<?php
 												
+													}
+													elseif($getl['completed_status']==1){
+
+														?>
+												<div class="lessStatus" style="background:green;">
+													<i class="fa fa-clock-o" aria-hidden="true"></i>
+													Completed
+													<a  href="<?php echo base_url(); ?>lesson/view/<?php echo $this->crc_encrypt->encode($lesson_detail[0]['id']); ?>" style="color:white; text-decoration: none;">
+													<i class="fa fa-refresh" aria-hidden="true"></i>Start Again
+													</a>
+												</div>
+												<?php
 													}
 													else{
 														?>

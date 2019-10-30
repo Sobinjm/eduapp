@@ -38,7 +38,7 @@ $assigned_course = $this->mdashboard_model->getmycourses($student_id);
 ?>
 <input type="hidden" id="assign_id" value="<?php echo $assigned_course[0]['id'] ; ?>">
 <input type="hidden" id="lesson_no" value="<?php echo $this->crc_encrypt->decode($this->uri->segment(3)); ?>">
-<input type="hidden" id="lesson_id" value="<?php  echo $data[0]['lesson_order']; ?>">
+<input type="hidden" id="lesson_id" value="<?php  echo $data[0]['id']; ?>">
 <style>
     .correct{
         background-color:green !important;
@@ -227,7 +227,7 @@ $.ajax({
                                  },
                                  error:function(ex){
                                     alert(JSON.stringify(ex));
-                                }
+                                } 
                             });
    
 
