@@ -2069,6 +2069,7 @@ $('.edit_now').click(function(){
 				/* Edit slide information here */
 				
 				$('#slide_edit_now-new').on('show.bs.modal', function (e) {
+					// alert();
 					var invoker = $(e.relatedTarget);
 					var lessonid = invoker.data('id');
 					//alert(lessonid);
@@ -2741,7 +2742,7 @@ $('.edit_now').click(function(){
 					}
 					var edit_slide_desc = CKEDITOR.instances['edit_slide_description'].getData();
 					data.append("<?=$csrf['name'];?>", "<?=$csrf['hash'];?>");
-					data.append("edit_slide_description_n",edit_slide_desc);
+					data.append("edit_slide_description",edit_slide_desc);
 					
 						$.ajax({
 									type: "POST",
@@ -2756,11 +2757,11 @@ $('.edit_now').click(function(){
 										console.log(data);
 										swal({title: "Message", text: data, type: 
 										"info"}).then(function(){ 
-										  //  location.reload();
+										   location.reload();
 										   });
 									},
 									error: function (e) {
-										
+										console.log(e);
 										swal(e.responseText);
 										$('.loader').hide();
 										console.log("ERROR : ", e);

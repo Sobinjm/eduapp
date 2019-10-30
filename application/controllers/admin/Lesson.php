@@ -22,11 +22,13 @@ class Lesson extends CI_Controller {
 		
 	public function index()
 	{
+		// print_r($this->session->userdata);
 		$this->load->view('admin/lesson');
 	}
 	
 	public function view()
 	{
+		
 		$crs_id		= $this->crc_encrypt->decode($this->uri->segment(4));
 		$language	= $this->uri->segment(5);
 		if(empty($crs_id))
@@ -447,7 +449,9 @@ class Lesson extends CI_Controller {
 							);
 				$query = $this->mlesson_model->update_lesson($lesson_id,$update_data);
 				// print_r($lesson_id);
-				print_r($query);
+				// print_r($query);
+				// exit();
+				echo 'its here';
 				exit();
 				if($query) 
 				{	

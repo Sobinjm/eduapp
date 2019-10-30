@@ -25,6 +25,8 @@ class Lesson extends CI_Controller {
 	 
 	public function view()
 	{
+		// print_r($this->session->userdata('student_no'));
+		// die();
 		$lesson_id = $this->crc_encrypt->decode($this->uri->segment(3));
 		$lesson_code=$this->mlesson_model->getlesson_code($lesson_id);
 		$lesson_code=$lesson_code['0']['lesson_id'];
@@ -32,6 +34,7 @@ class Lesson extends CI_Controller {
 		$student_id	= $this->crc_encrypt->decode($this->session->userdata('userid'));
 		$student_no=$this->session->userdata('student_no');	
 		$assigned_course = $this->mdashboard_model->getmycourses_code($student_no);
+		
 		// print_r($assigned_course);
 		// $course_info = $this->mdashboard_model->course_info_code($assigned_course['0']['course_code']);
 		// $assigned_course = $this->mdashboard_model->getmycourses($student_id);
@@ -87,10 +90,9 @@ class Lesson extends CI_Controller {
 		//$lessons['1']['current_slide']=1;
 		$lessons=json_encode($lessons);
 		$this->mlesson_model->updateAssignmentForStudent($student_id,$lessons);
-		$assigned_course = $this->mdashboard_model->getmycourses($student_id);
+		$assigned_course = $this->mdashboard_model->getmycourses($student_id); 
 		$assigned_id=$assigned_course[0]['id']; 
-		
-		$lesson_id=$_GET['ls_id'];
+
 		$slide_completed=$lesson_id."=>".$slider_number;
 		$update_data=array(
 			'slide_count'=>$slide_completed
