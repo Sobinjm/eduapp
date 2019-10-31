@@ -26,7 +26,7 @@ elseif($current_row>=$length)
     <!--Section : Header Sub Section-->
     <section class="blockClass headerSubSection">
         <div class="container">
-        <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider > <?php // echo $course_info['0']['course_name'];?> > Lesson <?php // echo $lesson_data['0']['lesson_order'];?> -  <?php //echo $lesson_data['0']['lesson_name']; ?>
+        <a href="<?php echo base_url(); ?>dashboard/">Home</a> > E-Learning Slider >  <?php // echo $lesson_data['0']['lesson_order'];?>   <?php echo $lesson_data['0']['lesson_name']; ?>
         </div>
     </section>
     <!--Section : Header Sub Section-->
@@ -34,7 +34,7 @@ elseif($current_row>=$length)
     <!--Section : Section Heading-->
     <section class="blockClass sectionSubHeading">
         <div class="container">
-            <h3 class="heading">E-Learning Slider: <?php echo sizeof($result); ?></h3>
+            <h3 class="heading">E-Learning Slider</h3>
             <small class="smallFont">Slider display the course Content slides.</small>
         </div>
     </section>
@@ -156,12 +156,12 @@ elseif($current_row>=$length)
                  </div>  
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
                 <script>
-                    // function player_slide(){
-                    //     var myPlayer = document.getElementById("my-player");
-                    //     myPlayer.play();
-                    //     var overlay=$('.overlay');
-                    //     overlay.css("display","none");
-                    // }  
+                    function player_slide(){
+                        var myPlayer = document.getElementById("my-player");
+                        myPlayer.play();
+                        var overlay=$('.overlay');
+                        overlay.css("display","none");
+                    }  
                    
                         var currentslide=<?php echo $current_row; ?>;
                         if(currentslide>0)
@@ -177,6 +177,8 @@ elseif($current_row>=$length)
 
                             var overlay=$('.overlay');
                             $('#start').css('display','none');
+                            $('.start').css('display','block');
+                            $('#next').css('display','block');
                             overlay.css("display","block");
                             // alert(slider_number+'=='+total);
                             if(slider_number==total){
@@ -204,14 +206,14 @@ elseif($current_row>=$length)
                         var overlay=$('.overlay');
                         var sl_title='<?php echo $result[0]['slide_title'] ?>';
                         $('.slide_title').html(sl_title);
-                        $('#start').click(function(){
+                        $('.start').click(function(){
                             myPlayer=document.getElementById("my-player");
                             myPlayer.play();
                             $(this).css("display","none");
                             overlay.css("display","none");
                             
                         });
-                        $('.start').click(function(){
+                        $('#start').click(function(){
                             myPlayer=document.getElementById("my-player");
                             myPlayer.play();
                             $(this).css("display","none");
@@ -222,6 +224,7 @@ elseif($current_row>=$length)
                             // slider_number++;
                             slider_number=parseInt(currentslide)+1;
                             // alert(slider_number);
+                            var slide_ccount=$('#slide_ccount').val();
                             
                             $.ajax({
                                  type: "GET",
@@ -236,6 +239,15 @@ elseif($current_row>=$length)
                                     var last=obj.comp;
                                     var sl_html=obj.sl_title;
                                     $('.slide_title').html(sl_html);
+                                    if(slide_ccount<(parseInt(currentslide)+2))
+                                    {
+                                        var j=parseInt(slide_ccount)+1;
+                                        $('#slide_ccount').val(j);
+                                        $('.dropdown-content').append("<a data-slideno="+parseInt(slide_ccount)+">Slide "+(parseInt(j)-1)+"</a>");
+                                        
+
+
+                                    }
                                     $('#nav_slide_count').html(parseInt(currentslide)+2);
                                     if(type!='image'){
                                         // alert(type);
@@ -348,8 +360,8 @@ elseif($current_row>=$length)
 
 
                    
-                       $('a[data-slideno]').click(function(){
-                        // alert();
+                       $('a[data-slideno]').on('click',function(){
+                        alert();
                         slider_number = $(this).attr("data-slideno");   
                         currentslide = parseInt(slider_number)-1;
                             $.ajax({
@@ -449,17 +461,24 @@ elseif($current_row>=$length)
                     <div class="dropdown-content">
                         <?php
                         $i=0;
+                        $j=0;
+                        
                         foreach($lessons as $val)
                         {		
 
-                            if($val['current_slide']>1 )
+                            if($val['current_slide']>=1 )
                             {
-                                echo "<a data-slideno=".$i.">Slide ".++$i."</a>";
+                                for($i=0;$i<$val['current_slide']; $i++)
+                                {
+                                    $j=$i+1;
+                                    echo "<a data-slideno=".$i.">Slide ".$j."</a>";
+                                }
                             }
                         }
 
                         ?>
                     </div>
+                    <input type="hidden" id="slide_ccount" value="<?php echo ($current_row + 1); ?>" />
                     <?php echo '<span id="nav_slide_count">'.($current_row + 1)."</span> of ".$length; ?>
                     </div>
                     <br>
@@ -541,7 +560,7 @@ elseif($current_row>=$length)
                                 if(sizeof($result) >=1 ){
                                     ?>
                                 <button class="blockClass fontButton  c" id="next" style="display:none;width:30%; float:right">Next</button>
-                                <button class="blockClass fontButton " style="width:20%;float:right; display:none" class="start">Reload
+                                <button class="blockClass fontButton start" style="width:20%;float:right; display:none" >Reload
                                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                                 </button>
                                 <?php

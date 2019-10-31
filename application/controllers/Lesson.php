@@ -90,7 +90,7 @@ class Lesson extends CI_Controller {
 					$lessons[$i]['current_slide']=$val['current_slide'];
 				}
 				else{
-					$lessons[$i]['current_slide']=$slider_number-1;
+					$lessons[$i]['current_slide']=$slider_number+1;
 				}
 				
 			}

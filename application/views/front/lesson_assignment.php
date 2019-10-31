@@ -1,6 +1,7 @@
 
 
 
+<script src="<?php echo base_url(); ?>admdist/bower_components/jquery/dist/jquery.min.js"></script>
 
  <style>
                 .holder ul li {
@@ -286,7 +287,7 @@ function test()
 {
     var mark=0;
 // alert();
-  var eat = ['yum!', 'gulp', 'burp!', 'nom'];
+  var eat = ['yum!', 'gulp', 'burp!', 'nom','foo'];
   var yum = document.createElement('p');
   var msie = /*@cc_on!@*/0;
   yum.style.opacity = 1;
@@ -309,6 +310,7 @@ function test()
   var bin2 = document.querySelector('#bin2');
 
   var bin3 = document.querySelector('#bin3');
+  var bin4 = document.querySelector('#bin4');
 
   
   
@@ -426,6 +428,52 @@ function test()
         mark++;
         
         if(mark==3)
+        {
+            score();
+        }
+    }
+    return false;
+  });
+
+
+
+
+
+
+
+  addEvent(bin4, 'dragover', function (e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    this.className = 'v_ButtonBlock over';
+    e.dataTransfer.dropEffect = 'v_ButtonBlock copy';
+    return false;
+  });
+
+  // to get IE to work
+  addEvent(bin4, 'dragenter', function (e) {
+    this.className = 'v_ButtonBlock over';
+    return false;
+  });
+
+  addEvent(bin4, 'dragleave', function () {
+    this.className = 'v_ButtonBlock ';
+  });
+
+  addEvent(bin4, 'drop', function (e) {
+    if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
+
+    var el = document.getElementById(e.dataTransfer.getData('Text'));
+    
+    el.parentNode.removeChild(el);
+    bin4.appendChild(el);
+
+    // stupid nom text + fade effect
+    bin4.className = 'v_ButtonBlock';
+    if(el.id=='fout')
+    {
+        
+        mark++;
+        
+        if(mark==4)
         {
             score();
         }

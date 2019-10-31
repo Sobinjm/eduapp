@@ -152,10 +152,10 @@ $var='
                    <!--Buttons--> 
                    <div class="blockClass v_Buttons v_Buttons4Part ans">
                    <ul>
-                      <li> <a class="v_ButtonBlock v_ButtonDanger bin" id="bin1" data-ans="">
+                      <li> <a class="v_ButtonBlock  bin" id="bin1" data-ans="">
                          </a>
                         </li>
-                        <li> <a  class="v_ButtonBlock v_ButtonDanger">
+                        <li> <a  class="v_ButtonBlock ">
                            <span class="buttonLabels">A</span>
                            '.$d1['question_one']->question.'
                             </a>
@@ -170,7 +170,7 @@ $var='
                         </li>
                         <li>
                        <a  class="v_ButtonBlock v_ButtonSuccess">
-                           <span class="buttonLabels">C</span>
+                           <span class="buttonLabels">B</span>
                            '.$d1['question_two']->question.'
                        </a>
                        </li>
@@ -185,7 +185,7 @@ $var='
                     </li>
                     <li>
                        <a  class="v_ButtonBlock">
-                           <span class="buttonLabels">D</span>
+                           <span class="buttonLabels">C</span>
                            '.$d1['question_three']->question.'
                        </a>
                     </li>
@@ -245,32 +245,37 @@ else{
                        <!--Buttons--> 
                        <div class="blockClass v_Buttons v_Buttons4Part ans">
                        <ul>
-                          <li> <a class="v_ButtonBlock v_ButtonDanger bin" id="bin3" data-ans="">
+                          <li> <a class="v_ButtonBlock bin" id="bin1" data-ans="">
+                          <span class="buttonLabels">1</span>
                              </a>
                             </li>
                        </ul>
+                       <br>
                        <ul>
                            <li>
                            <a  class="v_ButtonBlock bin" id="bin2" data-ans="">
+                           <span class="buttonLabels">2</span>
                               
                            </a>
                             </li>
                             
     
                        </ul>
+                       <br>
                        <ul>
                         <li>
-                           <a  class="v_ButtonBlock" id="bin4" data-ans="">
-                               
+                           <a  class="v_ButtonBlock" id="bin3" data-ans="">
+                           <span class="buttonLabels">3</span>
                                
                            </a>
                         </li>
                         
                            </ul>
+                           <br>
                            <ul>
                            <li>
-                              <a  class="v_ButtonBlock" id="bin1" data-ans="">
-                                  
+                              <a  class="v_ButtonBlock" id="bin4" data-ans="">
+                              <span class="buttonLabels">4</span>
                                   
                               </a>
                            </li>
