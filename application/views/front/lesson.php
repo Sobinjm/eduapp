@@ -225,6 +225,7 @@ elseif($current_row>=$length)
                             slider_number=parseInt(currentslide)+1;
                             // alert(slider_number);
                             var slide_ccount=$('#slide_ccount').val();
+                            slider_number=slide_ccount;
                             
                             $.ajax({
                                  type: "GET",
