@@ -361,7 +361,7 @@ elseif($current_row>=$length)
 
                    
                        $('a[data-slideno]').on('click',function(){
-                        alert();
+                        // alert();
                         slider_number = $(this).attr("data-slideno");   
                         currentslide = parseInt(slider_number)-1;
                             $.ajax({

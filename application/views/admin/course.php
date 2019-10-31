@@ -14,6 +14,7 @@
 	$this->load->model('admin/Mfaculty', 'mfaculty_model');
 	$this->load->model('student/Mapi', 'mapi_model');
 	$this->load->model('admin/Mcourse', 'mcourse_model');
+	$this->load->model('admin/Madmin', 'madmin_model');
 	$this->load->model('admin/Mnotification', 'mnotification_model');
 ?>
   <!-- =============================================== -->
@@ -219,7 +220,7 @@
 
 
 <div class="card mb-2">
-	<div class="card-header tab_main_height" <?php if($this->crc_encrypt->encode($lesson['lesson_lock'])!=$this->session->userid && ($lesson['lesson_lock']!=null ||$lesson['lesson_lock']!='')){ echo 'style="background-color: #a9a9a9;"'; }?>>
+	<div class="card-header tab_main_height <?php if($this->crc_encrypt->encode($lesson['lesson_lock'])!=$this->session->userid && ($lesson['lesson_lock']!=null ||$lesson['lesson_lock']!='')){ $lock_name=$this->madmin_model->getStaff($lesson['lesson_lock']); echo ' locked " data-name="'.$lock_name[0]['name'].'" style="background-color: #a9a9a9;"'; }?>">
 		<div class="row padd_4e">
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 				<form id="form_<?php echo $lesson['id']; ?>" enctype="multipart/form-data" name="form_<?php echo $lesson['id']; ?>" method="post" >
@@ -671,8 +672,8 @@
 				</div>
 			  </div>
 		</div>
-		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">	
-			<div class="box box-danger">
+		<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="detail_container">	
+			<div class="box box-danger" id="detail_box">
 				<?php 
 					if(!empty($lessons))
 						{ 
@@ -2570,7 +2571,7 @@ $('.edit_now').click(function(){
 					// {	
 					// 	swal('Please enter the lesson order.');
 					// 	$('#edit_no_lessons2').addClass("error");
-					// 	return false;
+					// 	return false; 
 					// }
 					// else 
 					// {
@@ -3096,43 +3097,27 @@ $('.edit_now').click(function(){
 						event.preventDefault();	
 						
 				 });
+
+				 $('.locked').click(function()
+				 {
+					 var locked_name=$(this).attr('data-name');
+					swal(locked_name+' locked this lesson.');
+				 });
 				
 			
 
 
 
-
-
-
-// 				 var myVideos = [];
-
-// window.URL = window.URL || window.webkitURL;
-
-// document.getElementById('slide_media_file').onchange = setFileInfo;
-
-// function setFileInfo() {
-//   var files = this.files;
-//   myVideos.push(files[0]);
-//   var video = document.createElement('video');
-//   video.preload = 'metadata';
-
-//   video.onloadedmetadata = function() {
-//     window.URL.revokeObjectURL(video.src);
-//     var duration = video.duration;
-//     myVideos[myVideos.length - 1].duration = duration;
-//     updateInfos();
-//   }
-
-//   video.src = URL.createObjectURL(files[0]);;
-// }
-
-
-// function updateInfos() {
-//   var infos = document.getElementById('infos1');
-//   infos.textContent = "";
-//   for (var i = 0; i < myVideos.length; i++) {
-//     infos.textContent += myVideos[i].name + " duration: " + myVideos[i].duration + '\n';
-//   }
-// }
 	</script>
 	<script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+
+	<style>
+	#detail_container {
+position:relative;
+}
+
+#detail_box{
+position:fixed;
+width:18%;
+}
+	</style>
