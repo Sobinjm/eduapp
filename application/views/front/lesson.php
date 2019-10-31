@@ -204,7 +204,7 @@ elseif($current_row>=$length)
                          var lesson_id='<?php echo $lesson_id ?>';
                         var myPlayer=document.getElementById("my-player");
                         var overlay=$('.overlay');
-                        var sl_title='<?php echo $result[0]['slide_title'] ?>';
+                        var sl_title='<?php echo $result[$current_row]['slide_title'] ?>';
                         $('.slide_title').html(sl_title);
                         $('.start').click(function(){
                             myPlayer=document.getElementById("my-player");
@@ -462,18 +462,12 @@ elseif($current_row>=$length)
                     <div class="dropdown-content">
                         <?php
                         $i=0;
-                        $j=0;
-                        
+
                         foreach($lessons as $val)
                         {		
-
-                            if($val['current_slide']>=1 )
-                            {
-                                for($i=0;$i<$val['current_slide']; $i++)
-                                {
-                                    $j=$i+1;
-                                    echo "<a data-slideno=".$i.">Slide ".$j."</a>";
-                                }
+                            if($val['current_slide']>=$i )
+                            {         
+                            echo "<a data-slideno=".$i.">Slide ".++$i."</a>";         
                             }
                         }
 
