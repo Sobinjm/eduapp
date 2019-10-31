@@ -265,19 +265,15 @@
 <div class="modal-body">
 <form class="form-horizontal add_quiz_form"  data-id="<?php echo $lesson['id'].$j; ?>" enctype="multipart/form-data" id="add_quiz_form_<?php echo $lesson['id'].$j; ?>">
 <div class="form-group">
-	<label for="quiz_lesson_id" class="col-sm-4 control-label">Select Lesson</label>
+	<label for="quiz_lesson_id" class="col-sm-4 control-label">Lesson</label>
 	<div class="col-sm-8">
 	<?php 
 	// print_r($course_result[$adm['id']]['english'][0]);
 	$list_lesson=$lessons;
 	// print_r($list_lesson);
 	?>
-		<select class="form-control" name="quiz_lesson_id" id="quiz_lesson_id_<?php echo $lesson['id'].$j; ?>" >
-		<?php foreach($list_lesson as $lsn_drop) { 
-		?>
-			<option value="<?php echo $lsn_drop['id']; ?>"><?php echo $lsn_drop['lesson_name']; ?></option>
-		<?php } ?>
-		</select>
+	<input type="text" readonly name="txt_lesson_name" value="<?php echo $lesson['lesson_name']; ?>: <?php echo $lesson['description']; ?>" />
+		<input type="hidden" name="quiz_lesson_id" value="<?php echo $lesson['id']; ?>"/>
 	</div>
 </div>
 <div class="form-group">
