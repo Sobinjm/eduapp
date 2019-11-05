@@ -55,7 +55,7 @@ elseif($current_row>=$length)
                                 if($result[$current_row]['slide_mode'] == 'video' || $result[$current_row]['slide_mode'] == 'audio' )
                                 {                                   
                             ?>
-                            <video style="min-height:540px; max-height:540px;" id="my-player" class="video-js vjs-big-play-centered" data-setup='{"fluid": true}' controls preload="auto" poster="<?php echo base_url(); ?>front/images/elearnvid.png" onended="change_vid()">
+                            <video style="min-height:540px; max-height:540px;" id="my-player" class="video-js vjs-big-play-centered" data-setup='{"fluid": true}' controls preload="auto" controlsList="nodownload" poster="<?php echo base_url(); ?>front/images/elearnvid.png" onended="change_vid()">
                               <source src="<?php echo base_url().$result[$current_row]['slide_file']; ?>" type="video/mp4"></source>
                               <p class="vjs-no-js">
                                 To view this video please enable JavaScript, and consider upgrading to a

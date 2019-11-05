@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="<?php echo base_url(); ?>front/fonts/bootstrap.min.css" />
     <link href="<?php echo base_url(); ?>front/css/reset.css" type="text/css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>front/css/main.css" type="text/css" rel="stylesheet" />
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
 </head>
 
 <body>
