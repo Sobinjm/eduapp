@@ -493,16 +493,21 @@ class Lesson extends CI_Controller {
 
 	public function update_status()
 		{
+			
 			$id = $this->security->xss_clean($this->input->post('id'));
+			
 			if(empty($id))
 			{
 				echo 'Sorry, we are not able to approve this lesson now.';	
 			}
 			else 
 			{
+				
 				$id = $this->crc_encrypt->decode($id);
 				$data = array('publish_status' => '2');
 				$query = $this->mlesson_model->update_status($id, $data);
+			// 	echo $query;
+			// die();
 				if($query) 
 				{		
 					echo 'Lesson approved.';

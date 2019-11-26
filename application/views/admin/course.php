@@ -1199,6 +1199,7 @@ $('.edit_now').click(function(){
 			$(document).on("click", ".approve_lesson_main", function(event){
 					//alert('Hello');
 					var course_id = $(this).attr("data-id");
+					// alert(course_id);
 					Swal({
 					  title: 'Are you sure?',
 					  text: "You want to approve this lesson?",
@@ -1220,7 +1221,8 @@ $('.edit_now').click(function(){
 								   }
 								);
 						})
-						.fail(function() {
+						.fail(function(e) {
+						console.log(e);
 							swal('Something went wrong. Please check whether you are connected to Internet.');
 						});
 						
@@ -1397,8 +1399,8 @@ $('.edit_now').click(function(){
 			  </form>	
               <div class="modal-footer">
 				<button type="button" class="btn btn-flat btn-default pull-left" data-dismiss="modal">Close</button>
-				<button type="button" style="display:none" id="draft_lesson_main" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Draft</button>
-				<button type="button" style="display:none" id="approve_lesson_main" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Approve</button>
+				<button type="button" style="display:none" id="draft_lesson_main" data-id="" class="btn btn-flat btn-info draft_lesson_main"  data-action="add_version">Draft</button>
+				<button type="button" style="display:none" id="approve_lesson_main" data-id="" class="btn btn-flat btn-info approve_lesson_main"  data-action="add_version">Approve</button>
 				<button type="button" style="display:none" id="lock_btn" data-id="" class="btn btn-flat btn-info lock_btn"  data-action="add_version">Lock Lesson</button>
 				<button type="button" style="display:none" id="unlock_btn" data-id="" class="btn btn-flat btn-info unlock_btn"  data-action="add_version">Unlock Lesson</button>
 				<button type="button" class="btn btn-flat btn-success save_edit_now-new" data-action="edit_publish">Save Changes</button>
@@ -2458,6 +2460,8 @@ $('.edit_now').click(function(){
 				$('.edit_now-new').click(function(){
 					var etid = $(this).attr("data-id");
 					var status = $(this).attr("data-status");
+					$('#draft_lesson_main').attr("data-id",etid);
+					$('#approve_lesson_main').attr("data-id",etid);
 					$('#lock_btn').attr("data-id",etid);
 					$('#unlock_btn').attr("data-id",etid);
 					var lock = $(this).attr("data-lock");
