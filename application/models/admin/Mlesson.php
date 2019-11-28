@@ -36,7 +36,7 @@ class Mlesson extends CI_Model
 		function update_status($id, $up_data)
 		{
 			$this->db->where('id', $id); 
-			$this->db->update('ad_lesson',$up_data); 
+			$this->db->update('ad_lessons',$up_data); 
 			return ($this->db->affected_rows() != 1) ? false : true;
 		}
 		

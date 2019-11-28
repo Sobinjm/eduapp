@@ -507,6 +507,7 @@ class Lesson extends CI_Controller {
 				$data = array('publish_status' => '2');
 				$query = $this->mlesson_model->update_status($id, $data);
 			// 	echo $query;
+			// print_r($data);
 			// die();
 				if($query) 
 				{		

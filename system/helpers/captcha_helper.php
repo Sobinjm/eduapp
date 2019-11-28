@@ -70,18 +70,18 @@ if ( ! function_exists('create_captcha'))
 			'img_height'	=> '30',
 			'font_path'	=> '',
 			'expiration'	=> 7200,
-			'word_length'	=> 8,
-			'font_size'	=> 16,
+			'word_length'	=> 4,
+			'font_size'	=> 38,
 			'img_id'	=> '',
 			'pool'		=> '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 			'colors'	=> array(
 				'background'	=> array(255,255,255),
-				'border'	=> array(153,102,102),
-				'text'		=> array(204,153,153),
-				'grid'		=> array(255,182,182)
+				'border'	=> array(000,000,000),
+				'text'		=> array(000,000,000),
+				'grid'		=> array(200,220,224)
 			)
-		);
-
+		); 
+		// 'border'	=> array(153,102,102),
 		foreach ($defaults as $key => $val)
 		{
 			if ( ! is_array($data) && empty($$key))
