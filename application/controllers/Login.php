@@ -220,12 +220,14 @@ class Login extends CI_Controller {
 													// $status_array=array('completed_slides'=>'0','lesson_status'=>'0');
 													// array_push($inr_lsn,'completed_slides':'0','lesson_status':'0');
 													$lesson_details=$this->mlesson_model->getlessondetails($inner_lesson['LessonCode']);
-													
+													if(isset($lesson_details[0]) || $lesson_details[0])
+													{
 													// print_r($lesson_details);
 													$inr_lsn["LessonCode"]=$inner_lesson['LessonCode'];
 													$inr_lsn["CourseRef"]=$inner_lesson['CourseRef'];
 													$inr_lsn["LessonName"]=$inner_lesson['LessonDescription'];
 													$inr_lsn["language"]=$lesson_language;
+													
 													$inr_lsn["LessonDescription"]=$lesson_details[0]['description'];
 													$inr_lsn["ByPass"]=$inner_lesson['ByPass'];
 													$inr_lsn["Order"]	=$inner_lesson['Order'];
@@ -236,6 +238,7 @@ class Login extends CI_Controller {
 													$inr_lsn['current_slide']=0;
 													$inr_lsn['completed_status']=0;
 													array_push($lesson_infos,$inr_lsn);
+												}
 														
 												}
 												// print_r($inr_lsn);
