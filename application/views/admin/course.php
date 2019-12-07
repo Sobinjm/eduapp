@@ -776,6 +776,10 @@
 						case 'jpg':
 						case 'jpeg':
 						case 'png':
+						case 'GIF':
+						case 'JPG':
+						case 'JPEG':
+						case 'PNG':
 						case 'gif':
 						case 'mp4':
 						case 'webm':
@@ -1320,9 +1324,9 @@ $('.edit_now').click(function(){
 							<!-- <input type="textbox" class="form-control" id="lesson_name_new" name="lesson_name" placeholder="Lesson Name"> -->
 							<select class="form-control" id="lesson_lang" name="lesson_lang">
 								<option value="english">English</option>
-								<option value="english">Malayalam</option>
-								<option value="english">Arabic</option>
-								<option value="english">Urudu</option>
+								<option value="malayalam">Malayalam</option>
+								<option value="arabic">Arabic</option>
+								<option value="urudu">Urudu</option>
 					
 							</select>
 						</div>
@@ -2084,6 +2088,8 @@ $('.edit_now').click(function(){
 											id: slideid,
 											<?=$csrf['name'];?>: "<?=$csrf['hash'];?>"							
 										}, function(data) {
+											// var obj = JSON.parse(data);
+												console.log(data);
 											
 											if(data == 'empty_id')
 											{
@@ -2108,7 +2114,8 @@ $('.edit_now').click(function(){
 												$('#edit_slide_order').val(obj['0'].slide_order);
 											}
 								})
-								.fail(function() {
+								.fail(function(e) {
+								console.log(e);
 									swal({title: "Message", text: 'Sorry! We are not able to process lesson information concerned with this edit', type: 
 										"info"}).then(function(){ 
 										   location.reload();
@@ -2122,11 +2129,16 @@ $('.edit_now').click(function(){
 				
 				$('#edit_icon_file, #icon_file').change(function () {
 					var ext = this.value.match(/\.(.+)$/)[1];
+					
 					switch (ext) {
 						case 'jpg':
 						case 'jpeg':
 						case 'png':
 						case 'gif':
+						case 'GIF':
+						case 'JPG':
+						case 'JPEG':
+						case 'PNG':
 							$('#uploadButton').attr('disabled', false);
 							break;
 						default:
