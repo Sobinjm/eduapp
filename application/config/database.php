@@ -97,7 +97,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => 'LAPTOP-KJ1GLSC1\SQLEXPRESS',
 	'username' => 'sa',
 	'password' => 'password',
 	'database' => 'educationapp',

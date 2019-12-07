@@ -2122,6 +2122,7 @@ $('.edit_now').click(function(){
 				
 				$('#edit_icon_file, #icon_file').change(function () {
 					var ext = this.value.match(/\.(.+)$/)[1];
+					alert(ext);
 					switch (ext) {
 						case 'jpg':
 						case 'jpeg':

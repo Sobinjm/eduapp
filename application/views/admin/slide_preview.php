@@ -107,7 +107,7 @@
 								}
 							?>
 						</div>
-						<div class="table_padding bordered_video_desc" <?php if (strpos($result['0']['slide_description'], 'dir="rtl"') !== false) {    echo 'dir="rtl"';
+						<div class="table_padding bordered_video_desc" <?php if (strpos($result['0']['slide_description'], 'dir="rtl"') != false) {    echo 'dir="rtl"';
 } ?> >
 							<?php echo $result['0']['slide_description']; ?>
 						</div>
