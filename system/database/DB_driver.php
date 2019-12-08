@@ -1474,8 +1474,17 @@ abstract class CI_DB_driver {
 	 */
 	protected function _insert($table, $keys, $values)
 	{
-		return 'INSERT INTO '.$table.' ('.implode(', ', $keys).') VALUES ('.implode(', ', $values).')';
-	}
+		foreach($values as $key => $value)
+    {
+        if(substr($value,0,1) == "'")
+        {
+            $values[$key] = "N". $value;
+        }
+    }
+
+    return 'INSERT INTO '.$table.' ('.implode(', ', $keys).') VALUES ('.implode(', ', $values).')';
+}
+
 
 	// --------------------------------------------------------------------
 
@@ -1520,16 +1529,26 @@ abstract class CI_DB_driver {
 	 */
 	protected function _update($table, $values)
 	{
-		foreach ($values as $key => $val)
-		{
-			$valstr[] = $key.' = '.$val;
-		}
+		foreach($values as $key => $value)
+        {
+            if(substr($value,0,1) == "'")
+            {
+                $values[$key] = "N". $value;
+            }
+        }
 
-		return 'UPDATE '.$table.' SET '.implode(', ', $valstr)
-			.$this->_compile_wh('qb_where')
-			.$this->_compile_order_by()
-			.($this->qb_limit !== FALSE ? ' LIMIT '.$this->qb_limit : '');
-	}
+        foreach ($values as $key => $val)
+        {
+            $valstr[] = $key.' = '.$val;
+        }
+
+
+
+        return 'UPDATE '.$table.' SET '.implode(', ', $valstr)
+            .$this->_compile_wh('qb_where')
+            .$this->_compile_order_by()
+            .($this->qb_limit ? ' LIMIT '.$this->qb_limit : '');
+}
 
 	// --------------------------------------------------------------------
 
