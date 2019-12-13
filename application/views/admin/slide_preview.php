@@ -42,7 +42,8 @@
 						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<h3 class="box-title"><?php echo $result['0']['slide_title']; ?></h3>
 				  </div>
-					<?php if($this->session->userdata('role')!=0)
+				  
+					<?php if($this->session->userdata('role')!=1)
 					{
 						?>
 					
