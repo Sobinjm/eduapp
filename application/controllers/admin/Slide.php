@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+header('Content-type: text/plain; charset=utf-8');
 
 class Slide extends CI_Controller {
 
@@ -209,11 +210,13 @@ class Slide extends CI_Controller {
         } 
 		else
 		{
+			@ini_set('mssql.charset', 'utf-8');
 			$edit_slideid 			= $this->security->xss_clean($this->input->post('edit_slideid'));
 			$edit_slideid 			= $this->crc_encrypt->decode($this->input->post('edit_slideid'));
 			$edit_slide_title 		= $this->security->xss_clean($this->input->post('edit_slide_title'));
 			$edit_select_media		= $this->security->xss_clean($this->input->post('edit_select_media'));
-			$edit_slide_description	= $this->security->xss_clean($this->input->post('edit_slide_description'));
+			$edit_slide_description	= $this->input->post('edit_slide_description');
+
 			$edit_slide_duration 	= $this->security->xss_clean($this->input->post('edit_slide_duration'));
 			$edit_slide_order 		= $this->security->xss_clean($this->input->post('edit_slide_order'));
 			$no_file_upload			= $this->security->xss_clean($this->input->post('edit_file_orginal'));
@@ -309,12 +312,16 @@ class Slide extends CI_Controller {
 								'slide_title'		=>	$edit_slide_title,
 								'slide_mode'	 	=>	$edit_select_media,
 								'slide_file'		=>	$target_file_galry,
-								'slide_description'	=> 	$edit_slide_description,	
+								'slide_description'	=>  $edit_slide_description,
 								'slide_duration'	=>	$edit_slide_duration,
 								'slide_order'		=>	$edit_slide_order,
 								'created_by'		=>	$this->crc_encrypt->decode($this->session->userdata('userid'))
 							);
+
 				$query = $this->mslide_model->update_slide($update_data,$edit_slideid);
+				// print_r($this->db->last_query());
+				// print_r($update_data['slide_description']);
+			// die();
 				if($query) 
 				{		
 					if($this->session->userdata('role')=='0')
