@@ -3,6 +3,24 @@ $this->load->view('front/header');
 $length=sizeof($result);
 $lesson=$this->uri->segment(3);
 $current_row=$current_slide-1;
+$completed_slides=0;
+/*
+print_r($completed_status);
+echo "</br>";
+print_r($current_slide);
+echo "</br>";
+print_r($lessons);
+echo "</br>";
+print_r($lesson_data);
+echo "</br>";
+print_r($lesson_code);
+echo "</br>";
+print_r($student_no);
+echo "</br>";
+print_r($result);
+echo "</br>";
+print_r($lessons);
+*/
 // echo $current_slide;
 // die();
 if($current_row==-1)
@@ -462,14 +480,24 @@ elseif($current_row>=$length)
                     <div class="dropdown-content">
                         <?php
                         $i=0;
-
-                        foreach($lessons as $val)
-                        {		
-                            if($val['current_slide']>=$i )
-                            {         
-                            echo "<a data-slideno=".$i.">Slide ".++$i."</a>";         
+                        if($completed_status==1)
+                        {
+                            foreach($lessons as $val)
+                            {		      
+                                echo "<a data-slideno=".$i.">Slide ".++$i."</a>";         
                             }
                         }
+                        else
+                        {
+                            foreach($lessons as $val)
+                            {		
+                                if($val['current_slide']>=$i )
+                                {         
+                                echo "<a data-slideno=".$i.">Slide ".++$i."</a>";         
+                                }
+                            }
+                        }
+                        
 
                         ?>
                     </div>
